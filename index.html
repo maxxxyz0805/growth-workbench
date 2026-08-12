@@ -63,7 +63,7 @@ svg{display:block}
 .mt{margin-top:12px}.mb{margin-bottom:12px}
 .hb-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .hb-q{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--fg);font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s}
-.hb-q:hover{transform:translateY(-2px);border-color:var(--cy-neon)}
+.hb-q:hover{transform:translateY(-2px);border-color:var(--sage)}
 .hb-q small{font-size:.6rem;color:var(--muted);font-weight:400}
 @media(max-width:560px){.hb-quick{grid-template-columns:repeat(2,1fr)}}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -326,10 +326,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
   <!-- PC 侧边栏 -->
   <nav class="side">
     <div class="brand">Max<span>·成长台</span></div>
-    <button class="nav-item on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日</button>
+    <button class="nav-item on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日看板</button>
     <button class="nav-item" data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账账本</button>
     <button class="nav-item" data-p="health"><svg class="ic"><use href="#i-heart"/></svg>健康追踪</button>
-    <button class="nav-item" data-p="eng"><svg class="ic"><use href="#i-book"/></svg>英语学习</button>
+    <button class="nav-item" data-p="eng"><svg class="ic"><use href="#i-book"/></svg>学习中心</button>
     <button class="nav-item" data-p="kb"><svg class="ic"><use href="#i-inbox"/></svg>知识库</button>
   </nav>
 
@@ -510,10 +510,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         </div>
 
         <div class="hb-quick">
-          <button class="hb-q" onclick="openHealthSheet('food')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-amber)"><use href="#i-food"/></svg><span>饮食</span></button>
-          <button class="hb-q" onclick="openHealthSheet('sport')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-neon)"><use href="#i-zap"/></svg><span>运动</span></button>
-          <button class="hb-q" onclick="openHealthSheet('sleep')"><svg class="ic" style="width:20px;height:20px;color:var(--kb-neon)"><use href="#i-moon"/></svg><span>睡眠</span></button>
-          <button class="hb-q" onclick="openHealthSheet('weight')"><svg class="ic" style="width:20px;height:20px;color:var(--sage-d)"><use href="#i-scale"/></svg><span>体重</span><small>周/月</small></button>
+          <button class="hb-q" onclick="openHealthSheet('food')"><svg class="ic" style="width:20px;height:20px;color:var(--sand)"><use href="#i-food"/></svg><span>饮食</span></button>
+          <button class="hb-q" onclick="openHealthSheet('sport')"><svg class="ic" style="width:20px;height:20px;color:var(--sage-d)"><use href="#i-zap"/></svg><span>运动</span></button>
+          <button class="hb-q" onclick="openHealthSheet('sleep')"><svg class="ic" style="width:20px;height:20px;color:var(--blue-d)"><use href="#i-moon"/></svg><span>睡眠</span></button>
+          <button class="hb-q" onclick="openHealthSheet('weight')"><svg class="ic" style="width:20px;height:20px;color:var(--rose)"><use href="#i-scale"/></svg><span>体重</span><small>周/月</small></button>
         </div>
         <p class="mt" style="font-size:.72rem;color:var(--cy-dim);line-height:1.7">四个入口各记各的，<b style="color:var(--cy-cyan)">同一天会自动合并</b>到一条记录。体重建议每周或每月更新一次即可。</p>
         <div id="healthList" class="mt"></div>
@@ -578,10 +578,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 
 <!-- 移动端底部 Tab -->
 <nav class="tabbar">
-  <button class="on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日</button>
+  <button class="on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日看板</button>
   <button data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账</button>
   <button data-p="health"><svg class="ic"><use href="#i-heart"/></svg>健康</button>
-  <button data-p="eng"><svg class="ic"><use href="#i-book"/></svg>英语</button>
+  <button data-p="eng"><svg class="ic"><use href="#i-book"/></svg>学习中心</button>
   <button data-p="kb"><svg class="ic"><use href="#i-inbox"/></svg>知识库</button>
 </nav>
 
@@ -749,7 +749,7 @@ function seed(){
     {id:'hb2',name:'工作时每小时起身活动',grp:'life',restAllow:true,sample:true},
     {id:'hb3',name:'运动 30 分钟',grp:'life',restAllow:true,sample:true},
     {id:'hb5',name:'23:30 前睡觉',grp:'life',restAllow:true,sample:true},
-    {id:'hb4',name:'英语学习 30 分钟',grp:'study',restAllow:true,sample:true},
+    {id:'hb4',name:'学习中心 30 分钟',grp:'study',restAllow:true,sample:true},
     {id:'hb6',name:'拉伸 5 分钟',grp:'life',restAllow:true,sample:true},
     {id:'hb7',name:'晒太阳 10 分钟',grp:'life',restAllow:true,sample:true},
     {id:'hb8',name:'19:30 前吃完晚餐',grp:'life',restAllow:true,sample:true},
@@ -825,7 +825,7 @@ function renderToday(){
   let cd='--',cdL='雅思倒计时';
   if(set.examDate){cd=Math.max(0,Math.ceil((new Date(set.examDate)-new Date(today()))/864e5))}
   else{const sids=new Set(habits.filter(h=>h.grp==='study').map(h=>h.id));
-    cd=Object.values(checks).filter(rec=>Object.keys(rec).some(k=>sids.has(k))).length;cdL='英语学习天数'}
+    cd=Object.values(checks).filter(rec=>Object.keys(rec).some(k=>sids.has(k))).length;cdL='学习中心天数'}
   document.getElementById('todayStats').innerHTML=
     `<div class="stat"><div class="v exp">${money(monExp)}</div><div class="l">本月支出</div></div>
      <div class="stat"><div class="v" style="color:#C94830">${streak} 天</div><div class="l">最佳连续打卡</div></div>
