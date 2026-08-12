@@ -114,6 +114,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 #page-today .ink-item .itxt{font-size:.85rem;word-break:break-word;margin-top:3px;white-space:pre-wrap}
 #page-today .ink-item .idel{background:transparent;border:none;color:#C94830;cursor:pointer;min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 #page-today .ink-item .iphoto{width:60px;height:60px;border-radius:6px;object-fit:cover;flex-shrink:0}
+#page-today .ink-item .ink-actions{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+#page-today .ink-item .icls{background:#5EE0A0;border:none;color:#0D2A1C;cursor:pointer;min-height:32px;padding:0 10px;border-radius:8px;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+#page-today .ink-item.done{opacity:.7}
+#page-today .ink-item .itag.ok{background:#9BD9B8;color:#0D2A1C}
 #page-today .hero{background:linear-gradient(135deg,#F5A872 0%,#E8765A 55%,#C94830 100%);box-shadow:0 4px 22px rgba(201,72,48,.22)}
 #page-today .hero h1{color:#FFF5ED}
 #page-today .hero h1 span{color:#FFF5ED}
@@ -1274,7 +1278,44 @@ function setInkTag(btn){_inkTag=btn.dataset.t;document.querySelectorAll('.ink-ta
 function addInkPhotos(input){const files=Array.from(input.files||[]).slice(0,3-_inkPhotos.length);if(!files.length)return;let done=0;files.forEach(f=>{const r=new FileReader();r.onload=()=>{_inkPhotos.push(r.result);done++;if(done===files.length)toast('已加 '+files.length+' 张图')};r.readAsDataURL(f)});input.value=''}
 function saveInk(){const t=document.getElementById('inkText').value.trim();if(!t&&!_inkPhotos.length)return toast('写点什么或拍张照');const arr=g(K.ink,[]);arr.unshift({id:uid(),ts:Date.now(),type:_inkTag||'未分类',text:t,photos:_inkPhotos.slice()});sv(K.ink,arr);document.getElementById('inkText').value='';_inkPhotos=[];_inkTag='';document.querySelectorAll('.ink-tag').forEach(b=>b.classList.remove('on'));toast('已加入草稿');renderInkPool()}
 function delInk(id){sv(K.ink,g(K.ink,[]).filter(x=>x.id!==id));renderInkPool();toast('已删除')}
-function renderInkPool(){const list=g(K.ink,[]);const el=document.getElementById('inkList');if(!el)return;el.innerHTML=list.length?list.map(x=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());const photo=x.photos&&x.photos[0]?'<img class="iphoto" src="'+x.photos[0]+'" alt="">':'';return '<div class="ink-item"><div class="imeta"><span class="itag">'+esc(x.type)+'</span><span class="itim">'+time+'</span>'+(x.text?'<div class="itxt">'+esc(x.text)+'</div>':'')+(x.photos&&x.photos.length>1?'<div class="itim">+'+((x.photos.length-1))+' 张图</div>':'')+'</div>'+photo+'<button class="idel" onclick="delInk('+"'"+''+x.id+''+"'"+')" title="删除"><svg class="ic" style="width:14px;height:14px"><use href="#i-x"/></svg></button></div>'}).join(''):'<div class="muted" style="font-size:.75rem">还没有草稿。写点灵感、吃了啥、跑了多久，一键复制给 Ace 汇总。</div>'}
+// ===== 灵光池 · 一键归类 =====
+function todayHealth(){const arr=g(K.health,[]);let rec=arr.find(x=>x.date===today());if(!rec){rec={id:uid(),date:today()};arr.push(rec)}return {arr,rec}}
+function extractNum(s){const m=String(s||'').match(/(\d+(?:\.\d+)?)/);return m?parseFloat(m[1]):null}
+function extractKcal(s){const ms=String(s||'').match(/(\d+(?:\.\d+)?)\s*kcal/gi)||[];if(ms.length)return Math.round(ms.reduce((a,m)=>a+parseFloat(m),0));const all=String(s||'').match(/(\d+(?:\.\d+)?)/g)||[];return all.length?Math.round(all.reduce((a,m)=>a+parseFloat(m),0)):0}
+function extractSport(s){const kws=['跑步','瑜伽','健身','骑行','步行','拉伸','游泳','跳绳','篮球','足球','网球','羽毛球','力量','普拉提','深蹲'];for(const k of kws)if(String(s||'').includes(k))return k;return ''}
+function guessCat(s){if(/食|吃|餐|咖啡|饭|面|外卖|奶茶|水果/.test(s))return'食';if(/地铁|公交|打车|加油|车|交通/.test(s))return'行';if(/书|课|学|资料/.test(s))return'自我提升';return'其他'}
+function classifyInk(id){
+  const arr=g(K.ink,[]), x=arr.find(i=>i.id===id);
+  if(!x)return;
+  const t=(x.text||'').trim();
+  let msg='';
+  if(x.type==='食物'){
+    const kcal=extractKcal(t);
+    const {arr:ha,rec}=todayHealth();
+    rec.calIn=(rec.calIn||0)+kcal;
+    rec.note=(rec.note?rec.note+'；':'')+t;
+    sv(K.health,ha); msg='已归到健康·摄入 '+kcal+' kcal';
+  }else if(x.type==='运动'){
+    const min=extractNum(t), sport=extractSport(t);
+    const {arr:ha,rec}=todayHealth();
+    if(sport)rec.sport=sport; if(min)rec.min=min;
+    sv(K.health,ha); msg='已归到健康·运动 '+(sport||'')+(min?(' '+min+'分钟'):'');
+  }else if(x.type==='睡眠'){
+    const h=extractNum(t);
+    const {arr:ha,rec}=todayHealth();
+    if(h)rec.sleep=h; sv(K.health,ha); msg='已归到健康·睡眠 '+h+' 小时';
+  }else if(x.type==='灵感'){
+    const kb=g(K.kb,[]); kb.unshift({id:uid(),title:(t.slice(0,40)||'灵感速记'),link:'',cat:'灵感笔记',note:t,date:today(),links:[]}); sv(K.kb,kb); msg='已归到知识库';
+  }else if(x.type==='记账'){
+    const amt=extractNum(t);
+    const tx=g(K.tx,[]); tx.unshift({id:uid(),type:'expense',amount:amt,cat:guessCat(t),note:t,date:today()}); sv(K.tx,tx); msg='已归到记账 '+amt+' 元';
+  }else{
+    return toast('「'+x.type+'」暂不支持自动归类，已保留草稿');
+  }
+  x.classified=true; sv(K.ink,arr); renderInkPool();
+  toast(msg||'已归类');
+}
+function renderInkPool(){const list=g(K.ink,[]);const el=document.getElementById('inkList');if(!el)return;el.innerHTML=list.length?list.map(x=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());const photo=x.photos&&x.photos[0]?'<img class="iphoto" src="'+x.photos[0]+'" alt="">':'';return '<div class="ink-item'+(x.classified?' done':'')+'"><div class="imeta"><span class="itag">'+esc(x.type)+'</span>'+(x.classified?'<span class="itag ok">已归类</span>':'')+'<span class="itim">'+time+'</span>'+(x.text?'<div class="itxt">'+esc(x.text)+'</div>':'')+(x.photos&&x.photos.length>1?'<div class="itim">+'+((x.photos.length-1))+' 张图</div>':'')+'</div>'+photo+'<div class="ink-actions">'+(x.classified?'':'<button class="icls" onclick="classifyInk(\''+x.id+'\')">🚀 归类</button>')+'<button class="idel" onclick="delInk(\''+x.id+'\')" title="删除"><svg class="ic" style="width:14px;height:14px"><use href="#i-x"/></svg></button></div></div>'}).join(''):'<div class="muted" style="font-size:.75rem">还没有草稿。写点灵感、吃了啥、跑了多久，一键复制给 Ace 汇总。</div>'}
 async function copyInkToAce(){const list=g(K.ink,[]);if(!list.length)return toast('草稿是空的');const NL=String.fromCharCode(10);const md=list.map((x,i)=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());let s=(i+1)+'. ['+x.type+'] '+time+(x.text?' — '+x.text:'');if(x.photos&&x.photos.length)s+='（含 '+x.photos.length+' 张照片）';return s}).join(NL);const wrap='【Max 的灵光池 · '+list.length+' 条】请帮我归类到工作台各板块（饮食/运动/知识库/灵感/记账等）。'+NL+NL+md+NL+NL+'⚠️ 照片未在文本里（base64 太长），如需同步请告诉我哪些条要附图。';try{await navigator.clipboard.writeText(wrap);toast('已复制 '+list.length+' 条到剪贴板，去对话粘贴给 Ace')}catch(e){const ta=document.createElement('textarea');ta.value=wrap;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制（兼容模式）')}}
 
 /* KB 接口预留（Obsidian 风格基础，v1） */
