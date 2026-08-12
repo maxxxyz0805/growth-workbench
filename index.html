@@ -632,7 +632,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 </div></div>
 
 <div class="mask" id="habitDetailMask" onclick="if(event.target===this)closeHabitDetail()"><div class="sheet">
-  <div class="row between"><h3 id="habitDetailTitle" style="margin:0"></h3><button onclick="closeHabitDetail()" style="min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;color:var(--muted)"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <div class="row between"><h3 id="habitDetailTitle" style="margin:0;flex:1;cursor:text;border-radius:6px;padding:1px 4px;margin-left:-4px" title="点击修改标题" onclick="startEditHabitTitle()"></h3><button onclick="closeHabitDetail()" style="min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;color:var(--muted)"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <div id="habitDetailStreak" class="muted" style="font-size:.78rem;margin:4px 0 12px"></div>
   <p class="muted" style="font-size:.72rem;line-height:1.6;margin-bottom:10px">点击任意一天可补记/取消。绿=已打卡，黄=本周休息日（系统自动算，不打断连续）。</p>
   <div id="habitDetailDays"></div>
@@ -1113,6 +1113,38 @@ function toggleHabitDay(id,ds){
   sv(K.checks,c);openHabitDetail(id);toast(ds===today()?'已打卡':ds+' 已补记');
 }
 function closeHabitDetail(){document.getElementById('habitDetailMask').classList.remove('show')}
+// 点习惯标题 → 直接进入编辑态：回车保存 / Esc 取消 / 点别处也保存
+function startEditHabitTitle(){
+  const el=document.getElementById('habitDetailTitle');
+  if(el.querySelector('input'))return; // 已经在编辑
+  const cur=el.textContent;
+  const hid=document.getElementById('habitDetailDays').dataset.hid;
+  if(!hid)return;
+  const safe=cur.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  el.innerHTML=`<input id="habitTitleEdit" value="${safe}" maxlength="60" style="font:inherit;font-weight:700;width:100%;padding:4px 8px;border:1px solid var(--cy-neon);border-radius:6px;background:var(--bg);color:var(--fg);outline:none;font-size:inherit">`;
+  const inp=document.getElementById('habitTitleEdit');
+  inp.focus();inp.select();
+  let cancel=false;
+  const finish=(commit)=>{
+    if(!document.getElementById('habitTitleEdit'))return;
+    const v=inp.value.trim();
+    if(commit && v && v!==cur){
+      const hs=g(K.habits,[]).map(h=>h.id===hid?{...h,name:v}:h);
+      sv(K.habits,hs);
+      el.textContent=v;
+      render();
+      toast('已改名');
+    }else{
+      el.textContent=cur;
+    }
+  };
+  inp.addEventListener('click',e=>e.stopPropagation()); // 不要冒泡到 mask 关闭
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();inp.blur()}            // 走 blur → 保存
+    else if(e.key==='Escape'){e.preventDefault();cancel=true;inp.blur()} // 走 blur → 取消
+  });
+  inp.addEventListener('blur',()=>finish(!cancel));
+}
 function toggleHabit(id){const c=g(K.checks,{}),t=today();c[t]=c[t]||{};
   if(c[t][id])delete c[t][id];else{c[t][id]=1;toast('打卡成功')}
   sv(K.checks,c);render()}
