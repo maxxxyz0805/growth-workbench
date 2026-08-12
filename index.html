@@ -1,0 +1,1434 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#C94830">
+<title>Max 的成长工作台</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="成长台">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<!-- 多设备同步工作台 v2：Supabase 云存储 + PWA 离线优先，全内联零外链，无任何 localStorage -->
+<style>
+:root{
+  --bg:#F4F1EC; --card:#FFFFFF; --ink:#3F3D3A; --muted:#9B958C; --line:#E8E3DA;
+  --sage:#9CAF9B; --sage-d:#7A9279; --blue:#8FA6B8; --blue-d:#6E8899;
+  --rose:#C4A29E; --sand:#D6C7B0; --red:#D96C5F; --green:#7BAE7F;
+  --cy-bg:#111714; --cy-card:#182019; --cy-line:#26332A; --cy-neon:#5EE0A0; --cy-cyan:#56D8D8; --cy-dim:#7A9384; --cy-amber:#F5C86B;
+  --kb-bg:#14192A; --kb-card:#1B2236; --kb-line:#2A3349; --kb-neon:#B0A6E8; --kb-cyan:#8AA8D6; --kb-dim:#8E97B5; --kb-amber:#E8B7D8;
+  --r:16px; --shadow:0 2px 12px rgba(63,61,58,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:16px;color:var(--ink)}
+svg{display:block}
+.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== 布局 ===== */
+.app{display:flex;min-height:100vh}
+.side{width:200px;flex-shrink:0;padding:28px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.brand{font-size:1.15rem;font-weight:700;padding:0 12px 20px;letter-spacing:.5px}
+.brand span{color:var(--sage-d)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;color:var(--muted);font-size:.95rem;min-height:44px;transition:.15s;text-align:left;width:100%}
+.nav-item:hover{background:#EDE9E1}
+.nav-item.on{background:var(--ink);color:#fff}
+.main{flex:1;max-width:860px;margin:0 auto;padding:28px 20px 100px;width:100%}
+.page{display:none;animation:fade .25s ease}
+.page.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===== 通用组件 ===== */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.card h3{font-size:1rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3 .ic{width:18px;height:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:12px;font-size:.9rem;min-height:44px;transition:.15s;font-weight:500}
+.btn-p{background:var(--ink);color:#fff}
+.btn-p:active{transform:scale(.97)}
+.btn-g{background:#EDE9E1;color:var(--ink)}
+.btn-danger{background:#FBEAE8;color:var(--red)}
+.btn-sm{padding:7px 14px;min-height:36px;font-size:.82rem;border-radius:10px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;padding:4px 10px;border-radius:99px;background:#EDE9E1;color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.muted{color:var(--muted);font-size:.82rem}
+.mt{margin-top:12px}.mb{margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;text-align:center}
+.stat .v{font-size:1.25rem;font-weight:700}
+.stat .l{font-size:.72rem;color:var(--muted);margin-top:4px}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#FBFAF7;outline:none;min-height:44px}
+input:focus,select:focus,textarea:focus{border-color:var(--sage)}
+label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
+.list-item{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.list-item:last-child{border-bottom:none}
+.tag{font-size:.7rem;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.empty{text-align:center;color:var(--muted);font-size:.85rem;padding:26px 0}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:99px;font-size:.85rem;z-index:99;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;bottom:110px}
+
+/* ===== 今日页 ===== */
+.hero{background:linear-gradient(135deg,#B7A8E8,#9F8DD4);border-radius:var(--r);padding:22px;color:#fff;margin-bottom:16px;box-shadow:0 4px 18px rgba(159,141,212,.25);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 100% 0%,rgba(255,255,255,.18),transparent 60%);pointer-events:none}
+.hero>*{position:relative;z-index:1}
+.hero-banner{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hero-left{flex:1;min-width:200px}
+.hero h1{font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hero .sub{opacity:.85;font-size:.85rem;margin-top:6px}
+.hero-streak{font-size:.7rem;background:rgba(255,255,255,.22);color:#fff;padding:3px 10px;border-radius:99px;font-weight:500;backdrop-filter:blur(4px);letter-spacing:.5px}
+.hero-progress{margin-top:14px}
+.hp-text{font-size:.78rem;opacity:.92;margin-bottom:6px;letter-spacing:1px}
+.hp-bar{height:6px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden}
+.hp-bar i{display:block;height:100%;background:#fff;border-radius:99px;transition:width .5s}
+.hero-ring{width:92px;height:92px;flex-shrink:0;position:relative}
+.hero-ring svg{width:100%;height:100%}
+.hr-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:700;color:#fff}
+@media(max-width:540px){.hero-banner{flex-direction:column;text-align:center}.hero h1{justify-content:center}.hero-progress{width:100%}.hero-ring{width:80px;height:80px}}
+
+/* ===== 今日页 · 暖阳落日主题 ===== */
+#page-today{
+  --bg:#FFF5ED; --card:#FFFFFF; --ink:#5C3320; --muted:#C4906F; --line:#F5DCC8;
+  --sun-honey:#F5A872; --sun-coral:#E8765A; --sun-brick:#C94830; --sun-gold:#D4A24A; --sun-cream:#FFF5ED;
+}
+#page-today.page.on{display:block;background:linear-gradient(180deg,#FFF5ED 0%,#FBE9D8 100%);padding:28px 20px 100px;margin:-28px -20px -100px}
+#page-today .ink-pool{background:#FFFFFF;border:1px solid #F5DCC8;border-radius:14px;padding:14px}
+#page-today .ink-pool-title{font-size:.82rem;color:#C94830;font-weight:600;letter-spacing:1px;margin-bottom:10px}
+#page-today .ink-pool textarea{width:100%;background:#FFF5ED;border:1px solid #F5DCC8;border-radius:10px;padding:10px;font-size:.92rem;color:#5C3320;font-family:inherit;resize:vertical;min-height:44px}
+#page-today .ink-pool textarea:focus{outline:none;border-color:#E8765A}
+#page-today .ink-tag,#page-today .ink-tag-photo{background:#FBE3D2;color:#8B4520;border:1px solid transparent;border-radius:99px;padding:6px 12px;font-size:.78rem;cursor:pointer;min-height:32px;display:flex;align-items:center;gap:4px}
+#page-today .ink-tag.on{background:#E8765A;color:#FFF5ED;border-color:#C94830}
+#page-today .ink-tag-photo{background:#F5DCC8;color:#5C3320}
+#page-today .ink-item{background:#FFF5ED;border:1px solid #F5DCC8;border-radius:10px;padding:10px;margin-top:8px;font-size:.82rem;color:#5C3320;display:flex;gap:8px;align-items:flex-start}
+#page-today .ink-item .imeta{flex:1;min-width:0}
+#page-today .ink-item .itag{font-size:.68rem;background:#E8765A;color:#FFF5ED;padding:2px 8px;border-radius:99px;margin-right:5px}
+#page-today .ink-item .itim{font-size:.7rem;color:#8B4520;margin-top:2px}
+#page-today .ink-item .itxt{font-size:.85rem;word-break:break-word;margin-top:3px;white-space:pre-wrap}
+#page-today .ink-item .idel{background:transparent;border:none;color:#C94830;cursor:pointer;min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#page-today .ink-item .iphoto{width:60px;height:60px;border-radius:6px;object-fit:cover;flex-shrink:0}
+#page-today .hero{background:linear-gradient(135deg,#F5A872 0%,#E8765A 55%,#C94830 100%);box-shadow:0 4px 22px rgba(201,72,48,.22)}
+#page-today .hero h1{color:#FFF5ED}
+#page-today .hero h1 span{color:#FFF5ED}
+#page-today .hero .sub{color:rgba(255,245,237,.92)}
+#page-today .hero-streak{background:rgba(255,245,237,.22);color:#FFF5ED}
+#page-today .hero-ring svg circle:nth-child(1){stroke:rgba(255,245,237,.26)}
+#page-today #heroRing{stroke:#FFF5ED}
+#page-today .hr-num{color:#FFF5ED}
+#page-today .water-card{background:#FFFFFF;border:1px solid #F5DCC8}
+.rest-banner{margin:14px 0;padding:13px 16px;border-radius:14px;background:linear-gradient(135deg,#FBE3A0,#F7C98E);border:1px solid #E8B36A;color:#7A4A12;font-size:.9rem;font-weight:600;box-shadow:0 3px 14px rgba(201,72,48,.12)}
+#page-today .water-card b{color:#C94830}
+#page-today #waterText{color:#C4906F}
+#page-today #waterTip{color:#C4906F}
+#page-today .stat{background:#FFFFFF;border:1px solid #F5DCC8}
+#page-today .stat .v{color:#C94830}
+#page-today .psy{background:linear-gradient(135deg,#FBE3D2,#F5DCC8);border:1px solid #E8B98E}
+#page-today .psy .t{color:#C94830}
+#page-today .psy .c{color:#5C3320}
+#page-today .psy .c b{color:#C94830}
+#page-today .backup-bar{background:linear-gradient(135deg,#FBE3D2,#F5DCC8);border-color:#E8B98E;color:#8B4520}
+#page-today .backup-bar .bb-text b{color:#5C3320}
+#page-today .btn-g{background:#FBE3D2;color:#5C3320}
+#page-today .btn-g:hover{background:#F5D2BA}
+#page-today .btn-p{background:#C94830;color:#FFF5ED}
+#page-today .btn-p:active{background:#A83A24}
+#page-today .btn-danger{background:#FBE3D2;color:#C94830}
+#page-today .card h3{color:#5C3320}
+#page-today .todo-item .tt{color:#5C3320}
+#page-today .todo-item .ds{color:#C4906F}
+#page-today .list-item{border-color:#F5DCC8}
+#page-today .chip{background:#FBE3D2;color:#8B4520}
+#page-today .chk{border-color:#F5DCC8;color:#D4B09A}
+#page-today .chk.on{background:#C94830;border-color:#C94830;box-shadow:0 2px 8px rgba(201,72,48,.3)}
+#page-today .chk.cy.on{background:#E8765A;border-color:#E8765A}
+#page-today .hg-label{color:#C4906F}
+#page-today .st{color:#B07A45}
+.backup-bar{background:linear-gradient(135deg,#FBEFD8,#F2E0BD);border:1px solid #E0BC7A;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;color:#7A5A2A;font-size:.85rem;line-height:1.4}
+.backup-bar .bb-icon{font-size:1.2rem;flex-shrink:0}
+.backup-bar .bb-text{flex:1}
+.backup-bar .bb-text b{color:#5A4020;font-weight:700}
+.backup-bar .btn{padding:7px 14px;min-height:34px;font-size:.78rem}
+.water-card{padding:14px 16px}
+.todo-item{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line)}
+.todo-item:last-child{border-bottom:none}
+.todo-item.overdue .tt{color:var(--red)}
+.todo-item .tt{flex:1;font-size:.92rem}
+.todo-item .ds{font-size:.72rem;color:var(--muted);margin-top:2px}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.psy{background:linear-gradient(135deg,#FBF7F1,#F4EFE7);border:1px solid var(--sand);border-radius:var(--r);padding:16px}
+.psy .t{font-size:.78rem;color:#A08C6A;font-weight:600;letter-spacing:1px;margin-bottom:8px}
+.psy .c{font-size:.9rem;line-height:1.7;color:#6B5F4E}
+
+/* ===== 记账页 ===== */
+.exp{color:var(--red)} .inc{color:var(--green)}
+.bar{height:10px;background:#EDE9E1;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .4s}
+.bar i.warn{background:var(--red)}
+.donut-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.legend{flex:1;min-width:150px}
+.legend .li{display:flex;align-items:center;gap:8px;font-size:.82rem;padding:5px 0}
+.legend .li b{margin-left:auto;font-weight:600}
+.seg{display:flex;gap:6px;background:#EDE9E1;border-radius:12px;padding:4px}
+.seg button{flex:1;padding:9px;border-radius:9px;font-size:.85rem;color:var(--muted);min-height:40px}
+.seg button.on{background:#fff;color:var(--ink);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+/* ===== 赛博区（健康+打卡） ===== */
+.cyber{background:var(--cy-bg);border-radius:20px;padding:18px;margin-bottom:16px;color:#D8E4DC;box-shadow:0 4px 24px rgba(17,23,20,.25);position:relative;overflow:hidden}
+.cyber::before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(94,224,160,.04) 28px),
+  repeating-linear-gradient(90deg,transparent,transparent 27px,rgba(94,224,160,.04) 28px);pointer-events:none}
+.cyber>*{position:relative}
+.cyber h3{color:var(--cy-neon);font-size:.95rem;letter-spacing:1.5px;display:flex;align-items:center;gap:8px;margin-bottom:14px;text-transform:uppercase}
+.cyber h3::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--cy-line),transparent)}
+.cy-card{background:var(--cy-card);border:1px solid var(--cy-line);border-radius:14px;padding:14px;margin-bottom:12px}
+.cy-stat{background:var(--cy-card);border:1px solid var(--cy-line);border-radius:14px;padding:12px;text-align:center}
+.cy-stat .v{font-size:1.2rem;font-weight:700;color:var(--cy-neon);font-variant-numeric:tabular-nums}
+.cy-stat .v.cy{color:var(--cy-cyan)}
+.cy-stat .v.am{color:var(--cy-amber)}
+.cy-stat .l{font-size:.68rem;color:var(--cy-dim);margin-top:4px;letter-spacing:.5px}
+.cyber input,.cyber select{background:#0D1210;border:1px solid var(--cy-line);color:#D8E4DC;border-radius:10px}
+.cyber input:focus,.cyber select:focus{border-color:var(--cy-neon)}
+.cyber label.f{color:var(--cy-dim)}
+.cyber .btn-p{background:var(--cy-neon);color:#0D1210;font-weight:700}
+.cyber .btn-g{background:var(--cy-line);color:#D8E4DC}
+.neon-line{font-variant-numeric:tabular-nums}
+/* 知识库赛博风（紫品红系，区别于健康青绿系） */
+.kb-cyber{background:var(--kb-bg);border-radius:20px;padding:18px;margin-bottom:16px;color:#DCE3F0;box-shadow:0 4px 24px rgba(20,25,42,.25);position:relative;overflow:hidden}
+.kb-cyber::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 60% at 50% 0%,rgba(176,166,232,.06),transparent 60%);pointer-events:none}
+.kb-cyber>*{position:relative}
+.kb-cyber h3{color:var(--kb-neon);font-size:.95rem;letter-spacing:1.5px;display:flex;align-items:center;gap:8px;margin-bottom:14px;text-transform:uppercase}
+.kb-cyber h3::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--kb-line),transparent)}
+.kb-cyber input,.kb-cyber select{background:#10162A;border:1px solid var(--kb-line);color:#DCE3F0;border-radius:10px}
+.kb-cyber input:focus{border-color:var(--kb-neon)}
+.kb-cyber .btn-p{background:var(--kb-neon);color:#120E1B;font-weight:700}
+.kb-cyber .btn-g{background:var(--kb-line);color:#E6DDF5}
+.kb-cyber .chip{background:var(--kb-line);color:#D8CCEC;border:1px solid transparent}
+.kb-item{background:var(--kb-card);border:1px solid var(--kb-line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.kb-item .mt{color:#B9AED3}
+.kb-item .src{color:var(--kb-dim);font-size:.7rem;text-align:right;margin-top:6px}
+.kb-item .task-type{background:rgba(138,125,255,.15);color:var(--kb-cyan);border:1px solid var(--kb-line);border-radius:8px;padding:3px 8px;font-size:.7rem;flex-shrink:0}
+.kb-item .kb-del{color:#E07090;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid transparent;border-radius:10px;transition:.15s}
+.kb-item .kb-del:hover,.kb-item .kb-del:active{background:rgba(224,112,144,.12);border-color:rgba(224,112,144,.3)}
+.habit-card{display:flex;align-items:center;gap:12px;background:var(--cy-card);border:1px solid var(--cy-line);border-radius:14px;padding:14px;margin-bottom:10px;transition:.2s}
+.habit-card.done{border-color:var(--cy-neon);box-shadow:0 0 14px rgba(94,224,160,.15)}
+.habit-card .hn{flex:1;font-size:.92rem}
+.habit-card .st{font-size:.72rem;color:var(--cy-amber);margin-top:3px;display:flex;align-items:center;gap:4px}
+.hb-row{cursor:pointer;border-radius:12px;transition:.15s}
+.hb-row:hover{background:rgba(122,146,121,.06)}
+.hd-day{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#FBFAF7;border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px;transition:.15s}
+.hd-day.done{background:rgba(156,175,155,.18);border-color:var(--sage)}
+.hd-day.rest{background:rgba(245,200,107,.12);border-color:#E0BC7A;border-style:dashed}
+.hd-day.today{outline:2px solid var(--blue);outline-offset:-2px}
+.hd-day .hd-label{flex:1;font-size:.85rem}
+.hd-day .hd-resttag{font-size:.68rem;color:#A07A3A;background:rgba(245,200,107,.25);padding:2px 8px;border-radius:6px;letter-spacing:.5px}
+.hd-chk{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;background:#fff;transition:.15s}
+.hd-chk.on{background:var(--sage);border-color:var(--sage);color:#fff}
+.check-btn{width:48px;height:48px;border-radius:14px;border:2px solid var(--cy-line);display:flex;align-items:center;justify-content:center;color:var(--cy-dim);transition:.2s;flex-shrink:0}
+.check-btn.on{background:var(--cy-neon);border-color:var(--cy-neon);color:#0D1210;box-shadow:0 0 12px rgba(94,224,160,.4)}
+.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.heat .d{aspect-ratio:1;border-radius:5px;background:#0D1210;border:1px solid var(--cy-line);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--cy-dim)}
+.heat .h{gap:5px;font-size:.65rem;color:var(--cy-dim);text-align:center}
+.heat-head{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px;font-size:.62rem;color:var(--cy-dim);text-align:center}
+
+/* ===== 英语页 ===== */
+.countdown{background:linear-gradient(135deg,#E8B6BA,#C97C8F);border-radius:var(--r);padding:20px;color:#fff;text-align:center;box-shadow:0 4px 18px rgba(201,124,143,.25);position:relative;overflow:hidden}
+.countdown::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 100% 0%,rgba(255,255,255,.2),transparent 60%);pointer-events:none}
+.countdown>*{position:relative;z-index:1}
+.countdown .days{font-size:2.8rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.countdown-sub{font-size:.78rem;opacity:.92;margin-top:6px;letter-spacing:.5px}
+.task-type{font-size:.68rem;padding:3px 9px;border-radius:99px;background:#F0E9E4;color:#9A7B6B;white-space:nowrap}
+.mat-item{background:#FBFAF7;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:.88rem;line-height:1.6}
+.mat-item .src{font-size:.72rem;color:var(--muted);margin-top:6px}
+
+/* 今日页 · 浅色打卡样式 */
+.hg-label{font-size:.72rem;letter-spacing:2px;color:var(--muted);margin:16px 0 2px;font-weight:600}
+.hb-row{display:flex;align-items:center;gap:12px;padding:9px 4px;border-bottom:1px solid var(--line)}
+.hb-row.last{border-bottom:none}
+.chk{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:#C4BDB2;transition:.2s;flex-shrink:0}
+.chk.on{background:var(--sage);border-color:var(--sage);color:#fff;box-shadow:0 2px 8px rgba(156,175,155,.35)}
+.chk.cy.on{background:var(--blue)}
+.hb-name{flex:1;font-size:.92rem}
+.hb-name .st{font-size:.72rem;color:#C99A3C;margin-top:3px;display:flex;align-items:center;gap:4px}
+.heat-light .d{background:#F0EDE6;border:1px solid var(--line);color:#B5AFA5}
+.heat-light{gap:5px}
+.heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px;font-size:.62rem;color:var(--muted);text-align:center}
+
+/* ===== 弹层 ===== */
+.mask{position:fixed;inset:0;background:rgba(40,38,35,.4);z-index:50;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.mask.show{display:flex}
+.sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;padding:22px 20px calc(24px + env(safe-area-inset-bottom));animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+.sheet h3{margin-bottom:14px;font-size:1.05rem}
+@media(min-width:768px){.mask{align-items:center}.sheet{border-radius:20px}}
+
+/* ===== 移动端 ===== */
+.tabbar{display:none}
+@media(max-width:767px){
+  .side{display:none}
+  .main{padding:18px 14px calc(96px + env(safe-area-inset-bottom))}
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .tabbar{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);z-index:40;padding-bottom:env(safe-area-inset-bottom)}
+  .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 6px;color:var(--muted);font-size:.62rem;min-height:52px}
+  .tabbar button.on{color:var(--ink);font-weight:600}
+  .tabbar .ic{width:22px;height:22px}
+  .hero h1{font-size:1.15rem}
+}
+</style>
+</head>
+<body>
+
+<!-- SVG 图标库 -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18"/><path d="M16 15h2"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21C7 16.5 3 13 3 8.8 3 6 5.2 4 7.8 4c1.7 0 3.2.9 4.2 2.3C13 4.9 14.5 4 16.2 4 18.8 4 21 6 21 8.8c0 4.2-4 7.7-9 12.2z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17.5H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3v13m0 0 5-5m-5 5-5-5"/><path d="M4 21h16"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 21V8m0 0 5 5m-5-5-5 5"/><path d="M4 3h16"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.8 7-7 0-3-2-5.5-3.5-7C15 9.5 14 11 12.5 11 12.5 8 11 5 8 3c.5 3-1 5-2.5 7C4 12 5 14 5 15c0 4.2 3 7 7 7z"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 13.5A8.5 8.5 0 0 1 10.5 4 7.5 7.5 0 1 0 20 13.5z"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><circle cx="12" cy="6" r="2.5"/><path d="M12 8.5V21M5 12h14M5 12l-2 5h4zm14 0-2 5h4z"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 5 3 8.5 7 10 4-1.5 7-5 7-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"/><path d="M3 13 5.5 4h13L21 13"/><path d="M3 13h6a3 3 0 0 0 6 0h6"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.5-4.5"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <!-- PC 侧边栏 -->
+  <nav class="side">
+    <div class="brand">Max<span>·成长台</span></div>
+    <button class="nav-item on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日</button>
+    <button class="nav-item" data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账账本</button>
+    <button class="nav-item" data-p="health"><svg class="ic"><use href="#i-heart"/></svg>健康追踪</button>
+    <button class="nav-item" data-p="eng"><svg class="ic"><use href="#i-book"/></svg>英语学习</button>
+    <button class="nav-item" data-p="kb"><svg class="ic"><use href="#i-inbox"/></svg>知识库</button>
+  </nav>
+
+  <main class="main">
+
+    <!-- ================= 今日 ================= -->
+    <section class="page on" id="page-today">
+      <div class="hero">
+        <div class="hero-banner">
+          <div class="hero-left">
+            <h1><span id="greet">今天也要加油</span> <span class="hero-streak">🔥 <span id="heroStreak">0</span> 天最长连续</span></h1>
+            <div class="sub" id="todayStr"></div>
+            <div class="hero-progress">
+              <div class="hp-text">今日完成 <b id="heroDone">0</b> / <b id="heroTotal">0</b></div>
+              <div class="hp-bar"><i id="heroBar" style="width:0%"></i></div>
+            </div>
+          </div>
+          <div class="hero-ring">
+            <svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="9"/><circle id="heroRing" cx="42" cy="42" r="36" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 226.2" transform="rotate(-90 42 42)"/></svg>
+            <div class="hr-num" id="heroPct">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rest-banner" id="restBanner" style="display:none">📚 今天休息日，时间更自由 —— 多点时间学习吧！💪</div>
+
+      <div class="card water-card mb">
+        <div class="row between">
+          <div><b style="font-size:.95rem">💧 今日喝水</b> <span class="muted" id="waterText">0 / 1600 ml</span></div>
+          <div class="row" style="gap:6px;flex-wrap:wrap">
+            <button class="btn btn-p btn-sm" onclick="addWater(500)">+1 杯（500ml）</button>
+            <button class="btn btn-g btn-sm" onclick="addWater(100)">+100 精调</button>
+            <button class="btn btn-g btn-sm" onclick="addWater(-100)" id="waterMinusBtn" style="display:none">−100</button>
+          </div>
+        </div>
+        <div class="hero-bar mt"><i id="waterBar" style="width:0%;background:#E8765A"></i></div>
+        <div class="muted mt" style="font-size:.72rem" id="waterTip">每喝一杯点一下（≈500ml）· 不够或多了就用 100ml 精调 · 满 1600ml 自动完成</div>
+      </div>
+
+      <div class="grid4 mb" id="todayStats"></div>
+
+      <div class="card">
+        <div class="row between">
+          <h3 style="margin:0"><svg class="ic" style="color:var(--red)"><use href="#i-target"/></svg>今日待办</h3>
+          <button class="btn btn-g btn-sm" onclick="openHabitSheet()"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg>加习惯</button>
+        </div>
+        <div id="todoList"></div>
+        <div id="habitGroups"></div>
+        <div class="mt">
+          <div class="muted mb" style="letter-spacing:1px">本月打卡热力 · 颜色越深完成越多</div>
+          <div class="heat-head-l"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="heat heat-light" id="heatmap"></div>
+        </div>
+      </div>
+
+      <div class="psy mb">
+        <div class="t">每日心理学 · DAILY PSYCHOLOGY</div>
+        <div class="c" id="psyTip"></div>
+      </div>
+
+      <div class="ink-pool mb">
+        <div class="ink-pool-title">💡 灵光池 · 随手丢给 Ace</div>
+        <textarea id="inkText" rows="2" placeholder="灵感/吃了啥/跑了多久…一句话就行"></textarea>
+        <div class="row mt" style="gap:6px;flex-wrap:wrap">
+          <button class="ink-tag" data-t="灵感" onclick="setInkTag(this)">💡 灵感</button>
+          <button class="ink-tag" data-t="食物" onclick="setInkTag(this)">🍽 食物</button>
+          <button class="ink-tag" data-t="运动" onclick="setInkTag(this)">🏃 运动</button>
+          <button class="ink-tag" data-t="学习" onclick="setInkTag(this)">📚 学习</button>
+          <button class="ink-tag" data-t="睡眠" onclick="setInkTag(this)">🌙 睡眠</button>
+          <button class="ink-tag" data-t="记账" onclick="setInkTag(this)">💰 记账</button>
+          <button class="ink-tag" data-t="其他" onclick="setInkTag(this)">📌 其他</button>
+          <button class="ink-tag-photo" onclick="document.getElementById('inkFile').click()">📷 拍照</button>
+          <input type="file" id="inkFile" accept="image/*" capture="environment" multiple style="display:none" onchange="addInkPhotos(this)">
+        </div>
+        <div class="row mt" style="gap:8px">
+          <button class="btn btn-p" style="flex:1" onclick="saveInk()"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg>加入草稿</button>
+          <button class="btn btn-g" style="flex:1" onclick="copyInkToAce()">📋 复制给 Ace</button>
+        </div>
+        <div class="muted mt" style="font-size:.7rem;line-height:1.6">点「复制给 Ace」→ 到 WorkBuddy 对话粘贴 → Ace 帮你归类到对应板块</div>
+
+        <!-- 回填粘贴框（不依赖点长链接） -->
+        <details class="mt" style="margin-top:10px;background:rgba(94,224,160,.06);border:1px dashed rgba(94,224,160,.35);border-radius:8px;padding:8px 10px">
+          <summary style="cursor:pointer;font-size:.78rem;color:#5EE0A0;font-weight:600">📥 粘贴 Ace 回填数据（无需点链接）</summary>
+          <div class="mt" style="font-size:.7rem;color:var(--muted);line-height:1.6;margin-top:6px">Ace 给你的回填链接末尾有一段长 base64（…<code style="background:rgba(0,0,0,.1);padding:1px 4px;border-radius:3px;font-size:.85em">eyJ2...</code>），复制它粘到下面点导入即可。</div>
+          <div class="row mt" style="gap:6px;margin-top:8px;align-items:flex-start">
+            <textarea id="importPaste" rows="2" placeholder="把 Ace 给你的 base64 字符串粘贴到这里" style="flex:1;font:inherit;padding:6px 8px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);min-height:36px;font-family:ui-monospace,Menlo,monospace;font-size:.72rem;resize:vertical"></textarea>
+            <button class="btn btn-p btn-sm" style="min-height:36px;white-space:nowrap" onclick="manualImport()">📥 导入</button>
+          </div>
+          <div id="importPasteLog" class="mt" style="font-size:.7rem;color:var(--cy-cyan);margin-top:4px"></div>
+        </details>
+
+        <div id="inkList" class="mt"></div>
+      </div>
+
+      <div class="card">
+        <h3><svg class="ic" style="color:var(--sage-d)"><use href="#i-shield"/></svg>数据安全</h3>
+        <p class="muted mb">数据实时保存在云端（Supabase），多设备自动同步；换手机/电脑登录同一账号即可延续。仍建议每周导出一次 JSON 备份防丢失。</p>
+        <div class="row" style="flex-wrap:wrap">
+          <button class="btn btn-g btn-sm" onclick="exportJSON()"><svg class="ic" style="width:15px;height:15px"><use href="#i-down"/></svg>导出 JSON 备份</button>
+          <button class="btn btn-g btn-sm" onclick="document.getElementById('impFile').click()"><svg class="ic" style="width:15px;height:15px"><use href="#i-up"/></svg>导入恢复</button>
+          <button class="btn btn-g btn-sm" id="clearSampleBtn" onclick="clearSample()"><svg class="ic" style="width:15px;height:15px"><use href="#i-trash"/></svg>清空示例数据</button>
+          <button class="btn btn-danger btn-sm" onclick="clearAll()"><svg class="ic" style="width:15px;height:15px"><use href="#i-trash"/></svg>清空全部数据</button>
+          <input type="file" id="impFile" accept=".json" style="display:none" onchange="importJSON(this)">
+        </div>
+        <div class="mt" id="backupHint"></div>
+      </div>
+    </section>
+
+    <!-- ================= 记账 ================= -->
+    <section class="page" id="page-money">
+      <div class="card">
+        <div class="row between">
+          <h3 style="margin:0"><svg class="ic" style="color:var(--blue-d)"><use href="#i-wallet"/></svg>记账账本</h3>
+          <button class="btn btn-p btn-sm" onclick="openTxSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>记一笔</button>
+        </div>
+        <div class="row between mt">
+          <button class="btn btn-g btn-sm" onclick="shiftMonth(-1)">‹ 上月</button>
+          <b id="monLabel"></b>
+          <button class="btn btn-g btn-sm" onclick="shiftMonth(1)">下月 ›</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row between mb">
+          <span class="muted">月预算 <b id="budgetText" style="color:var(--ink)"></b></span>
+          <button class="btn btn-g btn-sm" onclick="editBudget()"><svg class="ic" style="width:13px;height:13px"><use href="#i-edit"/></svg>改预算</button>
+        </div>
+        <div class="bar"><i id="budgetBar"></i></div>
+        <div class="row between mt">
+          <span class="muted" id="budgetPct"></span>
+          <span class="muted">支出 <b class="exp" id="monExp"></b> · 收入 <b class="inc" id="monInc"></b></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><svg class="ic" style="color:var(--blue-d)"><use href="#i-target"/></svg>钱花在哪儿了</h3>
+        <div class="donut-wrap">
+          <div id="donut"></div>
+          <div class="legend" id="legend"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row between">
+          <h3 style="margin:0"><svg class="ic" style="color:var(--blue-d)"><use href="#i-cal"/></svg>明细</h3>
+          <button class="btn btn-g btn-sm" onclick="exportCSV()"><svg class="ic" style="width:14px;height:14px"><use href="#i-down"/></svg>导出 CSV</button>
+        </div>
+        <div id="txList" class="mt"></div>
+      </div>
+    </section>
+
+    <!-- ================= 健康 ================= -->
+    <section class="page" id="page-health">
+      <div class="cyber">
+        <h3><svg class="ic"><use href="#i-zap"/></svg>HEALTH CORE · 健康追踪</h3>
+        <div class="grid4 mb" id="healthStats" style="gap:10px"></div>
+
+        <div class="cy-card">
+          <div class="row between">
+            <span style="font-size:.85rem;color:var(--cy-cyan)">每日热量建议</span>
+            <button class="btn btn-g btn-sm" onclick="editProfile()">身高/目标</button>
+          </div>
+          <div class="mt" style="font-size:.85rem;line-height:1.9;color:#B9CBBF" id="tdeeBox"></div>
+        </div>
+
+        <div class="cy-card">
+          <div class="row between">
+            <span style="font-size:.85rem;color:var(--cy-cyan)">今日食谱推荐 · 约 <span id="recipeKcal"></span> kcal</span>
+            <button class="btn btn-g btn-sm" onclick="nextRecipe()">换一条</button>
+          </div>
+          <div class="mt" style="font-size:.85rem;line-height:1.9;color:#B9CBBF" id="recipeBox"></div>
+        </div>
+
+        <div class="cy-card">
+          <div class="row between">
+            <span style="font-size:.85rem;color:var(--cy-cyan)">运动类型分布 · 近 30 天</span>
+            <span class="muted" id="sportSummary" style="color:var(--cy-dim);font-size:.72rem"></span>
+          </div>
+          <div class="mt" style="display:flex;align-items:center;gap:16px">
+            <div id="sportChart" style="flex-shrink:0"></div>
+            <div id="sportLegend" style="flex:1;display:flex;flex-direction:column;gap:5px;font-size:.75rem;color:#B9CBBF"></div>
+          </div>
+        </div>
+
+        <div class="cy-card">
+          <div style="font-size:.85rem;color:var(--cy-cyan);margin-bottom:10px">体重曲线 · 近14天 (kg)</div>
+          <div id="wChart"></div>
+        </div>
+
+        <div class="cy-card">
+          <div style="font-size:.85rem;color:var(--cy-cyan);margin-bottom:10px">睡眠 · 近7天 (小时)</div>
+          <div id="sChart"></div>
+        </div>
+
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <button class="btn btn-p" style="flex:1;min-width:140px" onclick="openHealthSheet()"><svg class="ic" style="width:16px;height:16px"><use href="#i-plus"/></svg>记录今日数据</button>
+          <button class="btn btn-g" style="flex:1;min-width:140px" onclick="openHealthSheet('sport')"><svg class="ic" style="width:16px;height:16px;color:var(--cy-neon)"><use href="#i-zap"/></svg>只记运动</button>
+        </div>
+        <p class="mt" style="font-size:.72rem;color:var(--cy-dim);line-height:1.7">记录今天的<b style="color:var(--cy-cyan)">体重 / 睡眠 / 饮食 / 运动</b>，至少填一项就生效。手环数据：小米运动健康 App → 活动消耗 + 昨晚睡眠，填进来；吃的卡路里拍照发我帮你估；运动只填类型+时长（≥30 分钟自动勾选「运动 30 分钟」习惯）。</p>
+        <div id="healthList" class="mt"></div>
+      </div>
+    </section>
+
+    <!-- ================= 知识库 ================= -->
+    <section class="page" id="page-kb">
+      <div class="kb-cyber">
+        <h3><svg class="ic" style="color:var(--kb-neon)"><use href="#i-inbox"/></svg>SECOND BRAIN · 我的第二大脑</h3>
+        <p style="line-height:1.8;font-size:.85rem;color:var(--kb-dim)">播客、小红书、公众号、B站/YouTube 看到的好东西，先把链接+一句话感想丢进来防忘。<b style="color:#F3ECFF">想深度提炼的内容，直接把链接或原文发给我（Ace），我帮你拆要点、写好归档笔记，你再贴回来。</b></p>
+      </div>
+
+      <div class="kb-cyber">
+        <div class="ai-tip" style="background:linear-gradient(135deg,rgba(199,125,255,.20),rgba(138,125,255,.10));border:1px solid var(--kb-neon);border-radius:12px;padding:12px 14px;margin-bottom:14px;color:#F3ECFF;font-size:.82rem;line-height:1.7">
+          <div style="font-size:.78rem;color:var(--kb-amber);letter-spacing:1.5px;margin-bottom:5px">⚡ AI 提炼入口</div>
+          <b>想让我帮你总结链接？</b>复制链接回到对话发给我（Ace），我整理成结构化笔记，你拿到后点「收一条」粘贴归档即可。下面的搜索框<b>只搜已归档的标题/笔记</b>，不是 AI 对话窗口。
+          <button id="aceImportBtn" class="btn btn-p" style="width:100%;margin-top:10px;display:none" onclick="importAceKB()"><svg class="ic" style="width:15px;height:15px"><use href="#i-down"/></svg>导入 Ace 最新整理（2条）</button>
+        </div>
+        <div class="row between mb">
+          <div style="position:relative;flex:1;margin-right:10px">
+            <input type="text" id="kbSearch" placeholder="搜索已归档的标题 / 笔记…（不是 AI 对话框）" oninput="renderKB()" style="padding-left:38px">
+            <svg class="ic" style="position:absolute;left:12px;top:12px;width:18px;height:18px;color:var(--kb-dim)"><use href="#i-search"/></svg>
+          </div>
+          <button class="btn btn-g btn-sm" onclick="toast('🕸️ 图谱视图开发中，预计 KB 50+ 条时启用双向链接')" title="知识图谱（开发中）" style="margin-right:6px;font-size:1rem">🕸️</button>
+          <button class="btn btn-p btn-sm" onclick="openKBSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>收一条</button>
+        </div>
+        <div class="row mb" style="flex-wrap:wrap;gap:6px" id="kbChips"></div>
+        <div id="kbList"></div>
+      </div>
+    </section>
+
+    <!-- ================= 英语 ================= -->
+    <section class="page" id="page-eng">
+      <div class="countdown mb">
+        <div class="muted" style="color:rgba(255,255,255,.85);font-size:.78rem;letter-spacing:1px" id="cdLabel">IELTS COUNTDOWN</div>
+        <div class="days" id="cdDays">--</div>
+        <div style="font-size:.8rem;opacity:.85" id="cdDate">设置考试日期</div>
+        <div class="countdown-sub mt" id="cdSub"></div>
+        <button class="btn btn-sm mt" style="background:rgba(255,255,255,.22);color:#fff" onclick="setExamDate()">设置/修改日期</button>
+      </div>
+
+      <div class="card">
+        <div class="row between">
+          <h3 style="margin:0"><svg class="ic" style="color:var(--rose)"><use href="#i-target"/></svg>学习任务</h3>
+          <button class="btn btn-p btn-sm" onclick="openStudySheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加任务</button>
+        </div>
+        <div id="studyList" class="mt"></div>
+      </div>
+
+      <div class="card">
+        <div class="row between">
+          <h3 style="margin:0"><svg class="ic" style="color:var(--rose)"><use href="#i-book"/></svg>口语素材库</h3>
+          <button class="btn btn-g btn-sm" onclick="openMatSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>收一句</button>
+        </div>
+        <div id="matList" class="mt"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- 移动端底部 Tab -->
+<nav class="tabbar">
+  <button class="on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日</button>
+  <button data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账</button>
+  <button data-p="health"><svg class="ic"><use href="#i-heart"/></svg>健康</button>
+  <button data-p="eng"><svg class="ic"><use href="#i-book"/></svg>英语</button>
+  <button data-p="kb"><svg class="ic"><use href="#i-inbox"/></svg>知识库</button>
+</nav>
+
+<!-- ============ 弹层们 ============ -->
+<div class="mask" id="txMask"><div class="sheet">
+  <div class="row between"><h3>记一笔</h3><button onclick="closeMask('txMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <div class="seg mb">
+    <button id="segExp" class="on" onclick="setTxType('expense')">支出</button>
+    <button id="segInc" onclick="setTxType('income')">收入</button>
+  </div>
+  <label class="f">金额 (¥)</label>
+  <input type="number" id="txAmt" inputmode="decimal" placeholder="0.00" min="0" step="0.01">
+  <label class="f">分类</label>
+  <select id="txCat"></select>
+  <label class="f">备注（选填）</label>
+  <input type="text" id="txNote" placeholder="比如：和客户午餐">
+  <label class="f">日期</label>
+  <input type="date" id="txDate">
+  <button class="btn btn-p mt" style="width:100%" onclick="saveTx()">保存</button>
+</div></div>
+
+<div class="mask" id="hMask"><div class="sheet">
+  <div class="row between"><h3>记录健康数据</h3><button onclick="closeMask('hMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">日期</label><input type="date" id="hDate">
+  <label class="f">运动类型（选填）</label>
+  <select id="hSport">
+    <option value="">没运动 / 不记</option>
+    <option value="跑步">跑步</option>
+    <option value="骑行">骑行</option>
+    <option value="游泳">游泳</option>
+    <option value="健身">健身 / 力量训练</option>
+    <option value="瑜伽">瑜伽 / 拉伸</option>
+    <option value="步行">步行 / 散步</option>
+    <option value="篮球">篮球 / 球类</option>
+    <option value="其他">其他运动</option>
+  </select>
+  <label class="f">运动时长（分钟，选填）</label><input type="number" id="hMin" inputmode="numeric" placeholder="比如 30，≥30 自动勾选「运动30分钟」习惯">
+  <label class="f">体重 (kg，选填)</label><input type="number" id="hWeight" inputmode="decimal" step="0.1" placeholder="59.0">
+  <label class="f">摄入卡路里 (kcal，选填)</label><input type="number" id="hIn" inputmode="numeric" placeholder="把吃的拍照发我，我帮你估">
+  <label class="f">消耗卡路里 (kcal，选填·手环数据)</label><input type="number" id="hOut" inputmode="numeric" placeholder="手环 App 里的「活动消耗」">
+  <label class="f">睡眠 (小时，选填)</label><input type="number" id="hSleep" inputmode="decimal" step="0.5" placeholder="7.5">
+  <label class="f">饮食 / 备注（选填）</label>
+  <textarea id="hNote" rows="2" placeholder="比如：早餐 玉米+烧卖+菜包子；中餐 一顿；5 瓶水" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);min-height:44px;resize:vertical"></textarea>
+  <button class="btn btn-p mt" style="width:100%;background:var(--cy-neon);color:#0D1210;font-weight:700" onclick="saveHealth()">保存</button>
+</div></div>
+
+<div class="mask" id="habitDetailMask" onclick="if(event.target===this)closeHabitDetail()"><div class="sheet">
+  <div class="row between"><h3 id="habitDetailTitle" style="margin:0"></h3><button onclick="closeHabitDetail()" style="min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;color:var(--muted)"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <div id="habitDetailStreak" class="muted" style="font-size:.78rem;margin:4px 0 12px"></div>
+  <p class="muted" style="font-size:.72rem;line-height:1.6;margin-bottom:10px">点击任意一天可补记/取消。绿=已打卡，黄=本周休息日（系统自动算，不打断连续）。</p>
+  <div id="habitDetailDays"></div>
+  <button class="btn btn-g mt" style="width:100%;margin-top:14px;color:var(--cy-amber)" onclick="if(confirm('删除这个习惯？历史打卡记录会保留')){const id=document.getElementById('habitDetailDays').dataset.hid;closeHabitDetail();delHabit(id)}"><svg class="ic" style="width:14px;height:14px"><use href="#i-trash"/></svg>删除这个习惯</button>
+</div></div>
+
+<div class="mask" id="hbMask"><div class="sheet">
+  <div class="row between"><h3>添加习惯</h3><button onclick="closeMask('hbMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">习惯名称</label>
+  <input type="text" id="hbName" placeholder="比如：冥想 10 分钟">
+  <label class="f">分组</label>
+  <select id="hbGrp"><option value="life">健康生活</option><option value="study">学习</option><option value="money">记账</option></select>
+  <button class="btn btn-p mt" style="width:100%" onclick="saveHabit()">添加</button>
+</div></div>
+
+<div class="mask" id="stMask"><div class="sheet">
+  <div class="row between"><h3>加学习任务</h3><button onclick="closeMask('stMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">类型</label>
+  <select id="stType"><option>口语</option><option>单词</option><option>听力</option><option>阅读</option><option>写作</option></select>
+  <label class="f">任务内容</label>
+  <input type="text" id="stTask" placeholder="比如：影子跟读 20 分钟">
+  <label class="f">截止日期</label>
+  <input type="date" id="stDate">
+  <button class="btn btn-p mt" style="width:100%" onclick="saveStudy()">保存</button>
+</div></div>
+
+<div class="mask" id="mtMask"><div class="sheet">
+  <div class="row between"><h3>收一句素材</h3><button onclick="closeMask('mtMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">好句子 / 地道表达</label>
+  <textarea id="mtText" rows="3" placeholder="Could you walk me through the maintenance schedule?"></textarea>
+  <label class="f">来源（选填）</label>
+  <input type="text" id="mtSrc" placeholder="客户邮件 / 播客 / YouTube">
+  <button class="btn btn-p mt" style="width:100%" onclick="saveMat()">收进库里</button>
+</div></div>
+
+<div class="mask" id="kbMask"><div class="sheet">
+  <div class="row between"><h3>收进知识库</h3><button onclick="closeMask('kbMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">标题</label>
+  <input type="text" id="kbTitle" placeholder="比如：这期播客讲外贸获客">
+  <label class="f">链接（选填）</label>
+  <input type="text" id="kbLink" placeholder="https://…">
+  <label class="f">分类</label>
+  <select id="kbCat"><option>播客</option><option>小红书</option><option>公众号</option><option>视频</option><option>书籍</option><option>灵感笔记</option><option>其他</option></select>
+  <label class="f">一句话感想 / 提炼要点（选填，可稍后找 Ace 提炼后补）</label>
+  <textarea id="kbNote" rows="3" placeholder="这篇值得记住的是…"></textarea>
+  <button class="btn btn-p mt" style="width:100%" onclick="saveKB()">收进去</button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+/* ================= 启动期错误捕获 ================= */
+window.addEventListener('error',function(e){
+  var b=document.createElement('div');
+  b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#C94830;color:#fff;padding:10px 12px;font:13px/1.5 -apple-system,sans-serif;white-space:pre-wrap;word-break:break-all';
+  b.textContent='[JS 错误] '+e.message+(e.filename?' @ '+e.filename.split('/').pop()+':'+e.lineno:'');
+  document.body.appendChild(b);
+});
+/* ================= 数据层 ================= */
+
+
+
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const pad=n=>String(n).padStart(2,'0');
+
+/* KB 数据迁移：ensure 每条 entry 有 links 字段（双向链接预留） */
+(function(){const kb=g(K.kb,[]);let dirty=false;
+  kb.forEach(x=>{if(!Array.isArray(x.links)){x.links=[];dirty=true}});
+  if(dirty)sv(K.kb,kb)})();
+const dstr=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>dstr(new Date());
+const dAdd=(ds,n)=>{const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()+n);return dstr(d)};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isSameWeek=(d1,d2)=>{const a=new Date(d1+'T12:00:00'),b=new Date(d2+'T12:00:00');const m=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return dstr(x)};return m(a)===m(b)};
+/* 休息日 = 周六/周日 + 2026 法定节假日（剔除调休上班日）。来源：国务院办公厅2026年放假安排通知 */
+const HL_2026=['01-01','01-02','01-03','02-15','02-16','02-17','02-18','02-19','02-20','02-21','02-22','02-23','04-04','04-05','04-06','05-01','05-02','05-03','05-04','05-05','06-19','06-20','06-21','09-25','09-26','09-27','10-01','10-02','10-03','10-04','10-05','10-06','10-07'];
+const WORK_WKND_2026=['01-04','02-14','02-28','05-09','09-20','10-10'];
+const isRestDay=ds=>{const md=ds.slice(5);if(WORK_WKND_2026.includes(md))return false;if(HL_2026.includes(md))return true;const d=new Date(ds+'T12:00:00');const w=d.getDay();return w===0||w===6};
+const money=n=>'¥'+Number(n).toFixed(n%1?2:0);
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),1800)}
+
+/* ================= 示例数据 ================= */
+function seed(){
+  if(g(K.set,null))return;
+  const t=today(),y=dAdd(t,-1),y2=dAdd(t,-2),tm=dAdd(t,2);
+  sv(K.set,{budget:3000,height:154,age:26,targetWeight:54,goalDate:'2026-12-31',examDate:'',sample:true});
+  sv(K.tx,[
+    {id:uid(),type:'expense',amount:199,cat:'自我提升',note:'雅思词汇书+口语课',date:y,sample:true},
+    {id:uid(),type:'expense',amount:86,cat:'食',note:'和朋友聚餐',date:y,sample:true},
+    {id:uid(),type:'expense',amount:12,cat:'行',note:'地铁通勤',date:t,sample:true},
+    {id:uid(),type:'expense',amount:45,cat:'食',note:'午餐轻食',date:t,sample:true}
+  ]);
+  sv(K.health,[
+    {id:uid(),date:dAdd(t,-22),weight:59.8,calIn:1520,calOut:2100,sleep:7,sport:'跑步',min:40,sample:true},
+    {id:uid(),date:dAdd(t,-18),weight:59.7,calIn:1450,calOut:1850,sleep:7.5,sport:'瑜伽',min:45,sample:true},
+    {id:uid(),date:dAdd(t,-15),weight:59.6,calIn:1500,calOut:1950,sleep:6.5,sport:'跑步',min:35,sample:true},
+    {id:uid(),date:dAdd(t,-10),weight:59.5,calIn:1430,calOut:2200,sleep:7.5,sport:'健身',min:50,sample:true},
+    {id:uid(),date:dAdd(t,-7),weight:59.4,calIn:1380,calOut:1750,sleep:8,sport:'瑜伽',min:30,sample:true},
+    {id:uid(),date:dAdd(t,-5),weight:59.3,calIn:1460,calOut:1900,sleep:7,sport:'步行',min:40,sample:true},
+    {id:uid(),date:dAdd(t,-3),weight:59.4,calIn:1620,calOut:1850,sleep:6.5,sport:'骑行',min:60,sample:true},
+    {id:uid(),date:y2,weight:59.4,calIn:1620,calOut:1850,sleep:6.5,sample:true},
+    {id:uid(),date:y,weight:59.2,calIn:1480,calOut:1790,sleep:7,sport:'健身',min:45,sample:true},
+    {id:uid(),date:t,weight:59.0,calIn:0,calOut:0,sleep:7.5,sample:true}
+  ]);
+  const habits=[
+    {id:'hb2',name:'工作时每小时起身活动',grp:'life',restAllow:true,sample:true},
+    {id:'hb3',name:'运动 30 分钟',grp:'life',restAllow:true,sample:true},
+    {id:'hb5',name:'23:30 前睡觉',grp:'life',restAllow:true,sample:true},
+    {id:'hb4',name:'英语学习 30 分钟',grp:'study',restAllow:true,sample:true},
+    {id:'hb6',name:'拉伸 5 分钟',grp:'life',restAllow:true,sample:true},
+    {id:'hb7',name:'晒太阳 10 分钟',grp:'life',restAllow:true,sample:true},
+    {id:'hb8',name:'19:30 前吃完晚餐',grp:'life',restAllow:true,sample:true},
+    {id:'hb9',name:'每日记一笔账',grp:'money',restAllow:true,sample:true}
+  ];
+  sv(K.habits,habits);
+  const c={};c[y]={hb2:1,hb4:1};c[y2]={hb3:1,hb5:1};
+  sv(K.checks,c);
+  sv(K.study,[]);
+  sv(K.mats,[{id:uid(),text:"Could you walk me through the troubleshooting steps? （能带我过一遍故障排查步骤吗——售后万能句）",src:'工作邮件常用',date:t,sample:true}]);
+  sv(K.kb,[
+    {id:uid(),title:'示例：小宇宙播客《知行小酒馆》E150',link:'',cat:'播客',note:'讲存钱心态的一期，「先支付给自己」这个概念值得记住',date:t,sample:true,links:[]},
+    {id:uid(),title:'示例：看到好内容先丢进来，再找 Ace 提炼',link:'',cat:'灵感笔记',note:'这是示例条目，点右上角「收一条」开始建你自己的知识库',date:t,sample:true,links:[]}
+  ]);
+}
+
+/* ================= 导航 ================= */
+document.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.p)));
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  document.getElementById('page-'+p).classList.add('on');
+  document.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x.dataset.p===p));
+  window.scrollTo(0,0);render();
+}
+function render(){renderToday();renderMoney();renderHealth();renderHabit();renderEng();renderKB();renderInkPool()}
+function closeMask(id){document.getElementById(id).classList.remove('show')}
+document.querySelectorAll('.mask').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
+
+/* ================= 今日页 ================= */
+const PSY=[
+ ['两分钟法则','想养成新习惯，先把门槛降到「两分钟就能完成」：不是「学英语 1 小时」，而是「开口读 2 句」。大脑不抗拒小任务，而开始之后往往会自然做下去。'],
+ ['损失厌恶','人对「失去」的痛感约是「得到」快感的 2 倍。所以打卡别只看「获得了几天连续」，试试想「断一天就前功尽弃」——这会更能驱动你行动。'],
+ ['执行意图','「我要多运动」几乎注定失败；「如果到了 21:00，我就换上运动鞋出门走 10 分钟」成功率翻倍。给行为绑定具体的时间和场景，心理学叫 Implementation Intention。'],
+ ['峰终定律','一段体验的记忆主要由「最高峰」和「结尾」决定。学习或运动结束时，安排一件小开心的事（喝杯喜欢的茶），大脑会把整段经历标记为「还不错」，下次更愿意开始。'],
+ ['自我决定论','持久的内在动机来自三样东西：自主感（我自己选的）、胜任感（我在变强）、联结感（我和他人有连接）。给自己做记录和看板，就是在强化「胜任感」。'],
+ ['蔡格尼克效应','大脑对「未完成的事」记得特别牢。利用它：学习时故意在一个小高潮处停下，明天你会迫不及待想继续。'],
+ ['习惯堆叠','把新习惯挂在旧习惯后面：「刷完牙之后，我就背 5 个单词」。旧习惯是稳定的触发器，新习惯更容易存活。'],
+ ['多巴胺与奖励预测','让人坚持的不是奖励本身，而是「期待奖励」。打卡的勾选、热力图的变色，就是在给大脑制造即时的期待反馈——所以记录本身就有效。'],
+ ['成长型思维','把「我口语不行」换成「我口语暂时不行」。Dweck 的研究发现：相信能力可成长的人，面对挫折坚持更久。语言学习尤其吃这一套。'],
+ ['环境设计','意志力是稀缺资源，环境才是隐形的手。想多喝水就把水杯放在视线内；想少刷手机就把它放另一个房间。改造环境比改造自己容易得多。']
+];
+function renderToday(){
+  document.getElementById('restBanner').style.display=isRestDay(today())?'':'none';
+  const d=new Date(),h=d.getHours();
+  document.getElementById('greet').textContent=h<6?'夜深了，早点休息':h<12?'早上好，Max':h<18?'下午好，Max':'晚上好，Max';
+  const wk=['日','一','二','三','四','五','六'];
+  document.getElementById('todayStr').textContent=`${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日 · 星期${wk[d.getDay()]}`;
+  const di=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);
+  const p=PSY[di%PSY.length];
+  document.getElementById('psyTip').innerHTML=`<b>${p[0]}</b> — ${p[1]}`;
+
+  // Hero 今日完成度 + streak
+  const tx=g(K.tx,[]),mm=today().slice(0,7);
+  const monExp=tx.filter(x=>x.type==='expense'&&x.date.startsWith(mm)).reduce((a,b)=>a+b.amount,0);
+  const habits=g(K.habits,[]),checks=g(K.checks,{});
+  const t=today(),tc=checks[t]||{};
+  const doneN=habits.filter(h=>tc[h.id]).length;
+  const totalN=habits.length;
+  const pct=totalN?Math.round(doneN/totalN*100):0;
+  document.getElementById('heroDone').textContent=doneN;
+  document.getElementById('heroTotal').textContent=totalN;
+  document.getElementById('heroPct').textContent=pct+'%';
+  document.getElementById('heroBar').style.width=pct+'%';
+  const C=2*Math.PI*36;
+  document.getElementById('heroRing').setAttribute('stroke-dasharray',`${(C*pct/100).toFixed(2)} ${C.toFixed(2)}`);
+  const streak=bestStreakAny(habits,checks);
+  document.getElementById('heroStreak').textContent=streak;
+
+  // 概览（4 个 chip）
+  const hs=g(K.health,[]).filter(x=>x.weight).sort((a,b)=>a.date<b.date?-1:1);
+  const w=hs.length?hs[hs.length-1].weight:'--';
+  const set=g(K.set,{});
+  let cd='--',cdL='雅思倒计时';
+  if(set.examDate){cd=Math.max(0,Math.ceil((new Date(set.examDate)-new Date(today()))/864e5))}
+  else{const sids=new Set(habits.filter(h=>h.grp==='study').map(h=>h.id));
+    cd=Object.values(checks).filter(rec=>Object.keys(rec).some(k=>sids.has(k))).length;cdL='英语学习天数'}
+  document.getElementById('todayStats').innerHTML=
+    `<div class="stat"><div class="v exp">${money(monExp)}</div><div class="l">本月支出</div></div>
+     <div class="stat"><div class="v" style="color:#C94830">${streak} 天</div><div class="l">最佳连续打卡</div></div>
+     <div class="stat"><div class="v" style="color:#D4A24A">${w}${w!=='--'?' kg':''}</div><div class="l">最新体重</div></div>
+     <div class="stat"><div class="v" style="color:#E8765A">${cd}</div><div class="l">${cdL}</div></div>`;
+
+  // 今日待办
+  let html='';
+  g(K.study,[]).filter(x=>!x.done&&x.date<=t).sort((a,b)=>a.date<b.date?-1:1).forEach(x=>{
+    const od=x.date<t;
+    html+=`<div class="todo-item${od?' overdue':''}"><span class="dot" style="background:${od?'var(--red)':'var(--rose)'}"></span>
+      <div class="tt">${esc(x.task)}<div class="ds">${od?'已逾期 · 截止 '+x.date:'今天 · '+x.type}</div></div>
+      <button class="btn btn-sm ${od?'btn-danger':'btn-g'}" onclick="doneStudy('${x.id}')">完成</button></div>`;
+  });
+  const todayHRec=g(K.health,[]).find(x=>x.date===t);
+  if(!todayHRec)html+=`<div class="todo-item"><span class="dot" style="background:var(--cy-cyan)"></span>
+    <div class="tt">记录今日健康数据<div class="ds">饮食 / 体重 / 运动 / 睡眠 任填一项即可</div></div>
+    <button class="btn btn-sm btn-g" onclick="openHealthSheet()">去记录</button></div>`;
+  document.getElementById('todoList').innerHTML=html||'<div class="empty" style="padding:14px 0 4px">没有待办任务，好习惯在下面等你打卡</div>';
+
+  // 备份提示（橙色横条）
+  const total=tx.length+g(K.health,[]).length+g(K.study,[]).length;
+  const dismissed=g(K.backup,null)===today();
+  document.getElementById('backupHint').innerHTML=(total>=30&&!dismissed)?
+    `<div class="backup-bar">
+      <span class="bb-icon">⚠️</span>
+      <div class="bb-text">已积累 <b>${total}</b> 条数据，建议导出 JSON 备份防丢失</div>
+      <button class="btn btn-sm" style="background:#A07A3A;color:#fff" onclick="exportJSON()">导出</button>
+      <button class="btn btn-sm btn-g" onclick="dismissBackup()">知道了</button>
+    </div>`:'';
+  document.getElementById('clearSampleBtn').style.display=g(K.set,{}).sample?'':'none';
+  renderWater();
+}
+function bestStreakAny(habits,checks){
+  let best=0;
+  habits.forEach(hb=>{
+    let s=0,usedRest=false,d=today();
+    if(!(checks[d]||{})[hb.id])d=dAdd(d,-1);
+    while(true){
+      if(s>730)break;
+      const got=(checks[d]||{})[hb.id];
+      if(got){s++;d=dAdd(d,-1);continue}
+      if(hb.restAllow!==false && isRestDay(d)){d=dAdd(d,-1);continue}
+      break;
+    }
+    best=Math.max(best,s)});
+  return best;
+}
+function addWater(ml){
+  const w=g(K.water,{}),t=today();
+  w[t]=Math.max(0,(w[t]||0)+ml);
+  sv(K.water,w);
+  if(w[t]>=1600)toast('🎉 今日喝水达标 1600ml！');
+  render();
+}
+function renderWater(){
+  const w=g(K.water,{}),t=today(),cur=w[t]||0;
+  document.getElementById('waterText').textContent=`${cur} / 1600 ml`;
+  document.getElementById('waterBar').style.width=Math.min(100,cur/1600*100)+'%';
+  document.getElementById('waterTip').textContent=cur>=1600?'🎉 已达标！今天喝水足够啦':cur>=1200?'还差 '+(1600-cur)+' ml 就达标了':'每喝一杯点一下（≈500ml）· 不够或多了就用 100ml 精调';
+  const mb=document.getElementById('waterMinusBtn');if(mb)mb.style.display=cur>0?'':'none';
+}
+function dismissBackup(){sv(K.backup,today());document.getElementById('backupHint').innerHTML=''}
+
+/* ================= 记账 ================= */
+const CATS_E=['食','衣','住','行','旅行游玩','自我提升','医疗健康','人情社交','其他'];
+const CATS_I=['工资','副业','理财','红包','其他收入'];
+const CCOL={'食':'#C4A29E','衣':'#A8B8C9','住':'#9CAF9B','行':'#8FA6B8','旅行游玩':'#D6B48F','自我提升':'#B49CC4','医疗健康':'#D98F8F','人情社交':'#C9BC8F','其他':'#B8B0A4'};
+let txType='expense',curMon=today().slice(0,7);
+function shiftMonth(n){const[y,m]=curMon.split('-').map(Number);const d=new Date(y,m-1+n,1);curMon=d.getFullYear()+'-'+pad(d.getMonth()+1);renderMoney()}
+function openTxSheet(){document.getElementById('txDate').value=today();setTxType('expense');document.getElementById('txAmt').value='';document.getElementById('txNote').value='';document.getElementById('txMask').classList.add('show')}
+function setTxType(t){txType=t;document.getElementById('segExp').classList.toggle('on',t==='expense');document.getElementById('segInc').classList.toggle('on',t==='income');
+  document.getElementById('txCat').innerHTML=(t==='expense'?CATS_E:CATS_I).map(c=>`<option>${c}</option>`).join('')}
+function saveTx(){
+  const a=parseFloat(document.getElementById('txAmt').value);
+  if(!a||a<=0)return toast('请输入金额');
+  const tx=g(K.tx,[]);
+  tx.push({id:uid(),type:txType,amount:a,cat:document.getElementById('txCat').value,note:document.getElementById('txNote').value.trim(),date:document.getElementById('txDate').value||today()});
+  sv(K.tx,tx);closeMask('txMask');toast('已记账');curMon=(document.getElementById('txDate').value||today()).slice(0,7);render();
+}
+function delTx(id){const tx=g(K.tx,[]).filter(x=>x.id!==id);sv(K.tx,tx);render();toast('已删除')}
+function editBudget(){const set=g(K.set,{});const v=prompt('每月预算 (¥)',set.budget||3000);if(v&&+v>0){set.budget=+v;sv(K.set,set);renderMoney()}}
+function renderMoney(){
+  const tx=g(K.tx,[]).filter(x=>x.date.startsWith(curMon));
+  document.getElementById('monLabel').textContent=curMon.replace('-',' 年 ')+' 月';
+  const exp=tx.filter(x=>x.type==='expense').reduce((a,b)=>a+b.amount,0);
+  const inc=tx.filter(x=>x.type==='income').reduce((a,b)=>a+b.amount,0);
+  const set=g(K.set,{}),budget=set.budget||3000;
+  const pct=Math.min(100,exp/budget*100);
+  document.getElementById('budgetText').textContent=money(budget);
+  document.getElementById('monExp').textContent=money(exp);
+  document.getElementById('monInc').textContent=money(inc);
+  const bar=document.getElementById('budgetBar');bar.style.width=pct+'%';bar.classList.toggle('warn',pct>=90);
+  document.getElementById('budgetPct').textContent='已用 '+pct.toFixed(0)+'%'+(pct>=100?' · 超预算啦':pct>=90?' · 接近预算':'');
+  // 甜甜圈
+  const byCat={};tx.filter(x=>x.type==='expense').forEach(x=>byCat[x.cat]=(byCat[x.cat]||0)+x.amount);
+  const entries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  const C=2*Math.PI*40;let off=0,svg='';
+  if(exp>0){entries.forEach(([c,v])=>{const len=v/exp*C;
+    svg+=`<circle cx="55" cy="55" r="40" fill="none" stroke="${CCOL[c]||'#B8B0A4'}" stroke-width="18" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 55 55)"/>`;off+=len});
+    svg+=`<text x="55" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#3F3D3A">${money(exp)}</text><text x="55" y="68" text-anchor="middle" font-size="9" fill="#9B958C">本月支出</text>`;
+  }else svg=`<circle cx="55" cy="55" r="40" fill="none" stroke="#EDE9E1" stroke-width="18"/><text x="55" y="58" text-anchor="middle" font-size="10" fill="#9B958C">暂无支出</text>`;
+  document.getElementById('donut').innerHTML=`<svg width="110" height="110" viewBox="0 0 110 110">${svg}</svg>`;
+  document.getElementById('legend').innerHTML=entries.map(([c,v])=>`<div class="li"><span class="dot" style="background:${CCOL[c]||'#B8B0A4'}"></span>${esc(c)}<b>${money(v)}</b></div>`).join('')||'<div class="empty">记一笔就开始统计</div>';
+  // 明细
+  const sorted=[...tx].sort((a,b)=>a.date<b.date?1:-1);
+  let html='',lastD='';
+  sorted.forEach(x=>{if(x.date!==lastD){html+=`<div class="muted" style="padding:10px 4px 2px">${x.date}</div>`;lastD=x.date}
+    html+=`<div class="list-item"><span class="tag" style="background:${(CCOL[x.cat]||'#B8B0A4')}22;color:${CCOL[x.cat]||'#8A827A'}">${esc(x.cat)}</span>
+      <div style="flex:1"><div style="font-size:.88rem">${esc(x.note)||esc(x.cat)}</div></div>
+      <b class="${x.type==='expense'?'exp':'inc'}">${x.type==='expense'?'-':'+'}${money(x.amount)}</b>
+      <button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delTx('${x.id}')"><svg class="ic" style="width:15px;height:15px"><use href="#i-trash"/></svg></button></div>`});
+  document.getElementById('txList').innerHTML=html||'<div class="empty">这个月还没有记录</div>';
+}
+function exportCSV(){
+  const tx=g(K.tx,[]).sort((a,b)=>a.date<b.date?-1:1);
+  let csv='\ufeff日期,类型,分类,金额,备注\n';
+  tx.forEach(x=>csv+=`${x.date},${x.type==='expense'?'支出':'收入'},${x.cat},${x.amount},"${(x.note||'').replace(/"/g,'""')}"\n`);
+  dl(new Blob([csv],{type:'text/csv'}),'记账明细-'+today()+'.csv');
+}
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+
+/* ================= 健康 ================= */
+let recipeIdx=-1;
+const RECIPES=[
+{k:1430,t:'早：全麦面包 2 片 + 水煮蛋 2 个 + 无糖豆浆<br>午：糙米饭半碗 + 清蒸鱼 + 白灼时蔬<br>晚：鸡胸肉沙拉（橄榄油醋汁）+ 玉米半根（19:30 前吃完）'},
+{k:1460,t:'早：燕麦牛奶粥 + 蓝莓一小把<br>午：荞麦面 + 虾仁 + 西兰花 + 煎蛋 1 个<br>晚：番茄豆腐汤 + 杂粮馒头半个 + 凉拌黄瓜（19:30 前吃完）'},
+{k:1440,t:'早：红薯 1 个 + 鸡蛋 1 个 + 黑咖啡<br>午：藜麦饭半碗 + 瘦牛肉炒彩椒 + 蒜蓉生菜<br>晚：冬瓜海带汤 + 香煎三文鱼一小块（19:30 前吃完）'},
+{k:1380,t:'早：无糖希腊酸奶 + 燕麦 + 半根香蕉<br>午：越南春卷（虾仁+生菜+米粉）<br>晚：菌菇鸡汤（去皮）+ 凉拌菠菜 + 玉米半根（19:30 前吃完）'},
+{k:1480,t:'早：玉米 1 根 + 鸡蛋 1 个 + 无糖酸奶<br>午：杂粮饭半碗 + 宫保鸡丁（少油版）+ 清炒油麦菜<br>晚：海鲜菇豆腐煲 + 蒸南瓜 + 紫薯小块（19:30 前吃完）'}
+];
+function openHealthSheet(focus){
+  document.getElementById('hDate').value=today();
+  ['hWeight','hIn','hOut','hSleep','hMin'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('hSport').value='';
+  document.getElementById('hMask').classList.add('show');
+  if(focus==='sport'){
+    setTimeout(()=>{
+      const sel=document.getElementById('hSport');
+      if(sel){sel.scrollIntoView({behavior:'smooth',block:'center'});try{sel.focus({preventScroll:true})}catch(e){sel.focus()}}
+    },80);
+  }
+}
+function saveHealth(){
+  const date=document.getElementById('hDate').value||today();
+  const rec={id:uid(),date,
+    weight:parseFloat(document.getElementById('hWeight').value)||0,
+    calIn:parseInt(document.getElementById('hIn').value)||0,
+    calOut:parseInt(document.getElementById('hOut').value)||0,
+    sleep:parseFloat(document.getElementById('hSleep').value)||0,
+    sport:document.getElementById('hSport').value||'',
+    min:parseInt(document.getElementById('hMin').value)||0,
+    note:(document.getElementById('hNote').value||'').trim()};
+  if(!rec.weight&&!rec.calIn&&!rec.calOut&&!rec.sleep&&!rec.sport&&!rec.note)return toast('至少填一项');
+  const hs=g(K.health,[]);hs.push(rec);sv(K.health,hs);closeMask('hMask');
+  // 联动 hb3「运动 30 分钟」
+  if(rec.sport && rec.min>=30){
+    const c=g(K.checks,{});if(!c[date])c[date]={};
+    if(!c[date]['hb3']){c[date]['hb3']=1;sv(K.checks,c);toast(rec.min>=60?'🏃 已记录 + 自动勾选 30分钟运动':'🏃 已记录 + 自动勾选运动')}
+    else toast('已记录');
+  }else toast('已记录');
+  render();
+}
+function delHealth(id){sv(K.health,g(K.health,[]).filter(x=>x.id!==id));render();toast('已删除')}
+function editProfile(){const set=g(K.set,{});
+  const h=prompt('身高 (cm)',set.height||154);if(!h||+h<=0)return;
+  const a=prompt('年龄',set.age||26);if(!a||+a<=0)return;
+  const tw=prompt('目标体重 (kg)',set.targetWeight||54);if(!tw||+tw<=0)return;
+  const gd=prompt('目标达成日期 (YYYY-MM-DD)',set.goalDate||'2026-12-31');if(!/^\d{4}-\d{2}-\d{2}$/.test(gd))return;
+  set.height=+h;set.age=+a;set.targetWeight=+tw;set.goalDate=gd;sv(K.set,set);renderHealth();renderToday();
+}
+function nextRecipe(){recipeIdx++;renderHealth()}
+function renderHealth(){
+  const hs=g(K.health,[]),set=g(K.set,{});
+  const withW=hs.filter(x=>x.weight).sort((a,b)=>a.date<b.date?-1:1);
+  const w=withW.length?withW[withW.length-1].weight:0;
+  const h=set.height||154,bmi=w?(w/((h/100)**2)).toFixed(1):'--';
+  const t=today(),td=hs.filter(x=>x.date===t);
+  const inT=td.reduce((a,b)=>a+b.calIn,0),outT=td.reduce((a,b)=>a+b.calOut,0);
+  const sleeps=hs.filter(x=>x.sleep).sort((a,b)=>a.date<b.date?-1:1);
+  const lastSleep=sleeps.length?sleeps[sleeps.length-1].sleep:'--';
+  // TDEE（Mifflin-St Jeor，女性）
+  const age=set.age||26,bmr=w?Math.round(10*w+6.25*h-5*age-161):0;
+  const tdee=Math.round(bmr*1.375);
+  const tw=set.targetWeight||54, gd=set.goalDate||'2026-12-31';
+  const daysLeft=Math.max(1,Math.ceil((new Date(gd)-new Date(today()))/864e5));
+  const needLose=Math.max(0,w-tw);
+  const idealDef=needLose>0?Math.round(needLose*7700/daysLeft):300;
+  const deficit=Math.max(200,Math.min(700,idealDef)), target=Math.round(tdee-deficit);
+  document.getElementById('healthStats').innerHTML=
+   `<div class="cy-stat"><div class="v">${w||'--'}</div><div class="l">体重 kg</div></div>
+    <div class="cy-stat"><div class="v cy">${bmi}</div><div class="l">BMI</div></div>
+    <div class="cy-stat"><div class="v am">${inT||'--'}</div><div class="l">今日摄入 kcal</div></div>
+    <div class="cy-stat"><div class="v cy">${lastSleep}</div><div class="l">睡眠 h</div></div>`;
+  // 运动类型分布（近 30 天，按分钟数）
+  const SPORT_COL={'跑步':'#5EE0A0','骑行':'#56D8D8','游泳':'#8AA8D6','健身':'#F5C86B','瑜伽':'#E8B7D8','步行':'#7A9384','篮球':'#D96C5F','其他':'#B8B0A4'};
+  const SPORT_ICO={'跑步':'▶','骑行':'◐','游泳':'≈','健身':'✦','瑜伽':'◉','步行':'•','篮球':'●','其他':'◆'};
+  const spCutoff=dAdd(t,-29);
+  const sportRecs=hs.filter(x=>x.sport && x.date>=spCutoff);
+  if(sportRecs.length){
+    const byType={};sportRecs.forEach(x=>{byType[x.sport]=(byType[x.sport]||0)+(x.min||30)});
+    const entries=Object.entries(byType).sort((a,b)=>b[1]-a[1]);
+    const totalM=entries.reduce((a,b)=>a+b[1],0);
+    const C=2*Math.PI*42;let off=0,svg='';
+    entries.forEach(([s,m])=>{const len=m/totalM*C;
+      svg+=`<circle cx="50" cy="50" r="42" fill="none" stroke="${SPORT_COL[s]||'#B8B0A4'}" stroke-width="16" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${-off}" transform="rotate(-90 50 50)"/>`;off+=len});
+    svg+=`<text x="50" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="#5EE0A0">${Math.round(totalM/6)/10}</text><text x="50" y="63" text-anchor="middle" font-size="8" fill="#7A9384">总小时</text>`;
+    document.getElementById('sportChart').innerHTML=`<svg width="100" height="100" viewBox="0 0 100 100">${svg}</svg>`;
+    document.getElementById('sportLegend').innerHTML=entries.map(([s,m])=>{
+      const pct=Math.round(m/totalM*100);
+      return `<div class="row" style="gap:6px"><span style="color:${SPORT_COL[s]||'#B8B0A4'};font-size:.85rem;width:14px;text-align:center">${SPORT_ICO[s]||'•'}</span><span style="flex:1">${esc(s)}</span><b style="color:#E0EAE3;font-variant-numeric:tabular-nums">${m}<span style="color:#7A9384;font-weight:400;font-size:.68rem"> 分 · ${pct}%</span></b></div>`;
+    }).join('');
+    document.getElementById('sportSummary').textContent=`共 ${entries.length} 种 · ${sportRecs.length} 次`;
+  }else{
+    document.getElementById('sportChart').innerHTML='<svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#26332A" stroke-width="16"/><text x="50" y="52" text-anchor="middle" font-size="9" fill="#7A9384">暂无</text></svg>';
+    document.getElementById('sportLegend').innerHTML='<div class="muted" style="font-size:.72rem;color:var(--cy-dim);line-height:1.7">在底部选「只记运动」，或「记录今日数据」里选运动类型 + 时长。<br><b style="color:var(--cy-amber)">≥30 分钟自动勾选</b>「运动 30 分钟」习惯。</div>';
+    document.getElementById('sportSummary').textContent='';
+  }
+  document.getElementById('tdeeBox').innerHTML=w?
+   `减脂目标 <b class="neon-line" style="color:var(--cy-neon)">${w} → ${tw}kg</b>（${gd} 前 · 约 ${daysLeft} 天）<br>
+    基础代谢约 <b class="neon-line" style="color:var(--cy-neon)">${bmr}</b> · 日常总消耗约 <b class="neon-line" style="color:var(--cy-neon)">${tdee}</b> kcal<br>
+    建议每日摄入 <b class="neon-line" style="color:var(--cy-amber)">${target}</b> kcal（缺口约 ${deficit}）<br>
+    今日已摄入 <b class="neon-line" style="color:var(--cy-cyan)">${inT}</b> kcal${inT?`，${inT<=target?'在范围内，很好':'超目标 '+(inT-target)+' kcal，晚餐清淡点'}`:'，吃了什么拍照发我帮你估'}`:'先记录一次体重，我来算你的每日热量';
+  // 食谱
+  if(recipeIdx<0)recipeIdx=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/864e5)%RECIPES.length;
+  const r=RECIPES[recipeIdx%RECIPES.length];
+  document.getElementById('recipeKcal').textContent=r.k;
+  document.getElementById('recipeBox').innerHTML=r.t;
+  // 体重曲线
+  const last14=withW.slice(-14);
+  if(last14.length>=2){
+    const W=320,H=110,P=24,ws=last14.map(x=>x.weight),mn=Math.min(...ws)-0.3,mx=Math.max(...ws)+0.3;
+    const px=i=>P+i*(W-2*P)/(last14.length-1),py=v=>H-P-(v-mn)/(mx-mn)*(H-2*P);
+    let pts=last14.map((x,i)=>`${px(i)},${py(x.weight)}`).join(' ');
+    let dots=last14.map((x,i)=>`<circle cx="${px(i)}" cy="${py(x.weight)}" r="3" fill="#5EE0A0"/><text x="${px(i)}" y="${py(x.weight)-8}" text-anchor="middle" font-size="8" fill="#7A9384">${x.weight}</text>`).join('');
+    document.getElementById('wChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%"><polyline points="${pts}" fill="none" stroke="#5EE0A0" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
+  }else document.getElementById('wChart').innerHTML='<div class="empty" style="color:var(--cy-dim)">记录 2 次以上体重就有曲线了</div>';
+  // 睡眠柱状
+  const last7=[];for(let i=6;i>=0;i--){const d=dAdd(t,-i);const r7=hs.filter(x=>x.date===d&&x.sleep);last7.push({d,v:r7.length?r7[r7.length-1].sleep:0})}
+  const mxS=Math.max(8,...last7.map(x=>x.v));
+  document.getElementById('sChart').innerHTML='<div style="display:flex;align-items:flex-end;gap:8px;height:90px">'+last7.map(x=>{
+    const hh=x.v?x.v/mxS*78:2;
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:flex-end;height:100%">
+      <span style="font-size:.6rem;color:#7A9384">${x.v||''}</span>
+      <div style="width:100%;max-width:28px;height:${hh}px;border-radius:4px;background:${x.v>=7?'#5EE0A0':x.v>=6?'#56D8D8':'#F5C86B'}"></div>
+      <span style="font-size:.6rem;color:#7A9384">${x.d.slice(5)}</span></div>`}).join('')+'</div>';
+  // 历史
+  const hist=[...hs].sort((a,b)=>a.date<b.date?1:-1).slice(0,10);
+  document.getElementById('healthList').innerHTML=hist.map(x=>`<div class="list-item" style="border-color:var(--cy-line);flex-direction:column;align-items:stretch;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="muted" style="color:var(--cy-dim);font-size:.75rem;min-width:74px">${x.date}</span>
+      <div style="flex:1;font-size:.8rem;color:#B9CBBF;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        ${x.sport?`<span class="tag" style="background:${(SPORT_COL[x.sport]||'#B8B0A4')}22;color:${SPORT_COL[x.sport]||'#B8B0A4'};font-weight:600">${SPORT_ICO[x.sport]||'•'} ${esc(x.sport)}${x.min?' '+x.min+'分':''}</span>`:''}
+        <span>${[x.weight&&x.weight+'kg',x.calIn&&'入'+x.calIn,x.calOut&&'耗'+x.calOut,x.sleep&&'睡'+x.sleep+'h'].filter(Boolean).join(' · ')}</span>
+      </div>
+      <button style="color:var(--cy-dim);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delHealth('${x.id}')"><svg class="ic" style="width:14px;height:14px"><use href="#i-trash"/></svg></button>
+    </div>
+    ${x.note?`<div style="font-size:.76rem;color:var(--cy-cyan);background:rgba(86,216,216,.06);padding:5px 8px;border-radius:6px;margin-left:82px;line-height:1.5">📝 ${esc(x.note)}</div>`:''}
+  </div>`).join('');
+}
+
+/* ================= 打卡 ================= */
+function openHabitSheet(){document.getElementById('hbName').value='';document.getElementById('hbMask').classList.add('show')}
+function saveHabit(){const n=document.getElementById('hbName').value.trim();if(!n)return toast('写个名字先');
+  const hs=g(K.habits,[]);hs.push({id:uid(),name:n,grp:document.getElementById('hbGrp').value});sv(K.habits,hs);closeMask('hbMask');toast('已添加');render()}
+function delHabit(id){sv(K.habits,g(K.habits,[]).filter(x=>x.id!==id));render();toast('已删除')}
+function openHabitDetail(id){
+  const habits=g(K.habits,[]),hb=habits.find(h=>h.id===id);if(!hb)return;
+  document.getElementById('habitDetailTitle').textContent=hb.name;
+  document.getElementById('habitDetailDays').dataset.hid=id;
+  const c=g(K.checks,{}),t=today();let html='';
+  const wk=['日','一','二','三','四','五','六'];
+  for(let i=0;i<7;i++){
+    const d=dAdd(t,-i),rec=(c[d]||{})[id],dt=new Date(d+'T12:00:00');
+    const isToday=d===t;
+    const isRest=!rec && hb.restAllow!==false && isRestDay(d) && !isToday;
+    html+=`<div class="hd-day${rec?' done':''}${isRest?' rest':''}${isToday?' today':''}">
+      <div class="hd-label">${isToday?'今天':(i===1?'昨天':(dt.getMonth()+1)+'/'+dt.getDate())+' · 周'+wk[dt.getDay()]}</div>
+      ${isRest?'<div class="hd-resttag">休息日·不计入断卡</div>':''}
+      <button class="hd-chk${rec?' on':''}" onclick="toggleHabitDay('${id}','${d}')"><svg class="ic" style="width:18px;height:18px"><use href="#i-check"/></svg></button>
+    </div>`;
+  }
+  document.getElementById('habitDetailDays').innerHTML=html;
+  document.getElementById('habitDetailStreak').innerHTML='🔥 当前连续 <b>'+habitStreak(id)+'</b> 天'+(hb.restAllow!==false?' · 休息日(周六/节假日)免断卡':'');
+  document.getElementById('habitDetailMask').classList.add('show');
+}
+function toggleHabitDay(id,ds){
+  const c=g(K.checks,{});c[ds]=c[ds]||{};
+  if(c[ds][id])delete c[ds][id];else c[ds][id]=1;
+  sv(K.checks,c);openHabitDetail(id);toast(ds===today()?'已打卡':ds+' 已补记');
+}
+function closeHabitDetail(){document.getElementById('habitDetailMask').classList.remove('show')}
+function toggleHabit(id){const c=g(K.checks,{}),t=today();c[t]=c[t]||{};
+  if(c[t][id])delete c[t][id];else{c[t][id]=1;toast('打卡成功')}
+  sv(K.checks,c);render()}
+function habitStreak(id){
+  const habits=g(K.habits,[]),hb=habits.find(h=>h.id===id);
+  const restAllow=hb?hb.restAllow!==false:true;
+  const c=g(K.checks,{});let s=0,d=today();
+  if(!(c[d]||{})[id])d=dAdd(d,-1);
+  while(true){
+    if(s>730)break;
+    const got=(c[d]||{})[id];
+    if(got){s++;d=dAdd(d,-1);continue}
+    if(restAllow && isRestDay(d)){d=dAdd(d,-1);continue}
+    break;
+  }
+  return s;
+}
+function renderHabit(){
+  const habits=g(K.habits,[]),c=g(K.checks,{}),t=today(),tc=c[t]||{};
+  const card=hb=>{
+    const on=!!tc[hb.id],st=habitStreak(hb.id);
+    return `<div class="hb-row" onclick="openHabitDetail('${hb.id}')">
+      <button class="chk${on?' on':''}${hb.grp==='study'?' cy':''}" onclick="event.stopPropagation();toggleHabit('${hb.id}')"><svg class="ic" style="width:20px;height:20px"><use href="#i-check"/></svg></button>
+      <div class="hb-name">${esc(hb.name)}<div class="st"><svg class="ic" style="width:12px;height:12px;fill:#C99A3C;stroke:none"><use href="#i-flame"/></svg>连续 ${st} 天${hb.restAllow!==false?' · 休息日(周六/节假日)免断卡':''}</div></div>
+      <button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="event.stopPropagation();openHabitDetail('${hb.id}')" title="查看/补记"><svg class="ic" style="width:16px;height:16px"><use href="#i-edit"/></svg></button></div>`};
+  const grp=(key,label)=>{
+    const list=habits.filter(h=>(h.grp||'life')===key);
+    if(!list.length)return'';
+    return `<div class="hg-label">${label}</div>`+list.map(card).join('')};
+  const html=grp('study','学习 · STUDY')+grp('life','健康生活 · LIFE')+grp('money','记账 · MONEY');
+  document.getElementById('habitGroups').innerHTML=html||'<div class="empty">点右上角「加习惯」开始</div>';
+  // 热力图（浅色）
+  const[y,m]=t.slice(0,7).split('-').map(Number);
+  const first=new Date(y,m-1,1);let startW=(first.getDay()+6)%7;
+  const dim=new Date(y,m,0).getDate(),total=habits.length||1;
+  let cells='';for(let i=0;i<startW;i++)cells+='<span class="d" style="visibility:hidden"></span>';
+  for(let dd=1;dd<=dim;dd++){const ds=`${y}-${pad(m)}-${pad(dd)}`;
+    const n=Object.keys(c[ds]||{}).filter(k=>habits.some(h=>h.id===k)).length;
+    const op=n?Math.min(1,0.25+0.75*n/total):0;
+    const isT=ds===t;
+    cells+=`<span class="d" style="${n?`background:rgba(200,72,48,${op});border-color:transparent;color:#fff`:''}${isT?';outline:2px solid #C94830;outline-offset:1px':''}">${dd}</span>`}
+  document.getElementById('heatmap').innerHTML=cells;
+}
+
+/* ================= 英语 ================= */
+function setExamDate(){const set=g(K.set,{});const v=prompt('雅思考试日期 (YYYY-MM-DD)',set.examDate||'2026-12-05');
+  if(v&&/^\d{4}-\d{2}-\d{2}$/.test(v)){set.examDate=v;sv(K.set,set);renderEng();renderToday()}}
+function openStudySheet(){document.getElementById('stDate').value=today();document.getElementById('stTask').value='';document.getElementById('stMask').classList.add('show')}
+function saveStudy(){const task=document.getElementById('stTask').value.trim();if(!task)return toast('写个任务先');
+  const ss=g(K.study,[]);ss.push({id:uid(),type:document.getElementById('stType').value,task,date:document.getElementById('stDate').value||today(),done:false});
+  sv(K.study,ss);closeMask('stMask');toast('已添加');render()}
+function doneStudy(id){const ss=g(K.study,[]);const x=ss.find(s=>s.id===id);if(x){x.done=true;x.doneDate=today();sv(K.study,ss);toast('完成 +1');render()}}
+function delStudy(id){sv(K.study,g(K.study,[]).filter(x=>x.id!==id));render();toast('已删除')}
+function openMatSheet(){document.getElementById('mtText').value='';document.getElementById('mtSrc').value='';document.getElementById('mtMask').classList.add('show')}
+function saveMat(){const t=document.getElementById('mtText').value.trim();if(!t)return toast('先写一句');
+  const ms=g(K.mats,[]);ms.unshift({id:uid(),text:t,src:document.getElementById('mtSrc').value.trim(),date:today()});
+  sv(K.mats,ms);closeMask('mtMask');toast('已收进素材库');render()}
+function delMat(id){sv(K.mats,g(K.mats,[]).filter(x=>x.id!==id));render();toast('已删除')}
+function renderEng(){
+  const set=g(K.set,{});
+  if(set.examDate){const dd=Math.max(0,Math.ceil((new Date(set.examDate)-new Date(today()))/864e5));
+    document.getElementById('cdLabel').textContent='IELTS COUNTDOWN';
+    document.getElementById('cdDays').textContent=dd;
+    document.getElementById('cdDate').textContent='距离 '+set.examDate+' 考试'+(dd===0?' · 就是今天！':' 天');
+  }else{
+    // 未设考期：显示英语学习累计（按「学习」分组习惯的打卡天数）
+    const checks=g(K.checks,{}),studyIds=new Set(g(K.habits,[]).filter(h=>h.grp==='study').map(h=>h.id));
+    let days=0;Object.values(checks).forEach(rec=>{if(Object.keys(rec).some(k=>studyIds.has(k)))days++});
+    const hrs=Math.round(days*0.5*10)/10;
+    document.getElementById('cdLabel').textContent='ENGLISH STREAK · 英语积累中';
+    document.getElementById('cdDays').textContent=days;
+    document.getElementById('cdDate').textContent=days?`已打卡学习 ${days} 天 · 累计约 ${hrs} 小时`:'还没开始打卡，今天就是第 1 天';
+  }
+  const ss=[...g(K.study,[])].sort((a,b)=>a.done-b.done||(a.date<b.date?-1:1)),t=today();
+  // 副信息
+  const doneT=ss.filter(x=>x.done&&x.doneDate===t).length,totalT=ss.length;
+  document.getElementById('cdSub').textContent=totalT?`今日完成 ${doneT} · 总任务 ${totalT} 个`:'在下方添加第一个学习任务开始积累';
+  document.getElementById('studyList').innerHTML=ss.map(x=>{
+    const od=!x.done&&x.date<t;
+    return `<div class="todo-item${od?' overdue':''}">
+      <span class="task-type">${esc(x.type)}</span>
+      <div class="tt" style="${x.done?'text-decoration:line-through;color:var(--muted)':''}">${esc(x.task)}
+        <div class="ds">${x.done?'已完成 '+x.doneDate:od?'已逾期 · '+x.date:'截止 '+x.date}</div></div>
+      ${x.done?'':`<button class="btn btn-sm ${od?'btn-danger':'btn-g'}" onclick="doneStudy('${x.id}')">完成</button>`}
+      <button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这个任务？'))delStudy('${x.id}')"><svg class="ic" style="width:14px;height:14px"><use href="#i-trash"/></svg></button></div>`}).join('')||'<div class="empty">暂无任务</div>';
+  document.getElementById('matList').innerHTML=g(K.mats,[]).map(m=>`<div class="mat-item">${esc(m.text)}<div class="src row between"><span>${m.date}${m.src?' · '+esc(m.src):''}</span>
+    <button style="color:var(--muted)" onclick="if(confirm('删除这条素材？'))delMat('${m.id}')"><svg class="ic" style="width:13px;height:13px"><use href="#i-trash"/></svg></button></div></div>`).join('')||'<div class="empty">听到好句子就丢进来</div>';
+}
+
+/* ================= 知识库 ================= */
+const KBCATS=['全部','播客','小红书','公众号','视频','书籍','灵感笔记','其他'];
+const ACE_KB_VER='20260812b';
+const ACE_KB_PENDING=[
+{id:uid(),title:'EP83《少有人走的路》：每个人都有自己的奥德赛',link:'https://www.xiaoyuzhoufm.com/episode/6a1e7a9f7460cabdeb59d161',cat:'播客',date:'2026-08-12',
+note:'主播携隐Melody（纵横四海），242分钟超长解读 M.Scott Peck 心理学经典《少有人走的路》。\n\n【核心命题：奥德赛时期与心灵地图】\n• 奥德赛时期 = 人生迷茫困惑的一段时期，本质是提醒你"旧地图已过期"的碰壁时期。\n• 心灵地图（life map）= 人生导航地图。随人生阶段与世界不停歇改变，必须持续修订；拿旧地图适配新阶段新世界，注定处处碰壁。\n• 多数人过了青春期地图就不再更新，过了中年更不更新。修订地图需要承受心智成长的痛苦（试炼），而人类天生懒惰懦弱，所以少有人走。\n• 持续修订的人能拓宽视野、增加体验，从"兽性"趋近"人性"，最终获得足够的人生智慧，彻底了悟"爱"的真谛，贴近"神性"。\n\n【奥德赛时期平稳航行的压舱石】\n• 最重要的压舱石 = 自律（discipline）。自律不是强迫，而是主动承受该承受的痛苦、主动规避该规避的快乐。\n\n【修订心灵地图的四个自律原则】\n1. 延迟满足（Delayed Gratification）\n   - 重置快乐与痛苦的次序：先承受该承受的痛苦（该做的事），就能享受到后置的快乐。\n   - "只要你花足时间，你就能学会"——任何值得掌握的技能、习惯、心智模式都需要时间沉淀。\n   - 拖延症的本质 = 用短期快乐逃避长期痛苦。\n\n2. 承担责任（Taking Responsibility）\n   - 做自己人生的掌舵人：遇到问题先看自己有什么责任，而非把责任推给他人。\n   - 责任心"太强"反而给自己很多压力怎么办？区分"我的责任"vs"不是我的责任"，把后者真正交还他人，不背负他人的情绪与选择。\n\n3. 忠于事实（Commitment to Truth）\n   - 避开具有强大破坏性的"移情"——带着旧的情感滤镜解读新的人和事。\n   - "允许一切发生"听起来治愈，但具体怎么落地？承认现实本来的样子，不抗拒、不脑补、不编故事，是忠于事实的实操。\n\n4. 保持平衡（Balancing）\n   - 简单、正确，但艰难的事。是灵活不是僵化，是张弛有度不是走极端。\n   - 过度的自律会失去弹性，过度的放任会失去方向。\n\n【奥德赛时期三个重要思维转变】\n1. 目的导向（Purpose-driven）\n   - 不是"我能做什么"，而是"我要去哪里"。先定目的再配手段，反过来会被手段绑架。\n\n2. 世界愿意为你买单的技能\n   - 找出"市场稀缺 × 你擅长 × 你愿意做"三圈交集 = 你的核心竞争力。\n\n3. 股东思维（Ownership）\n   - 不把自己当打工者而是股东——把工作当自己的事业，主动推动结果而非等指令。\n\n【两个职场黄金技能】\n1. 预期管理\n   - 主动管理他人的预期（老板/同事/客户），提早沟通进度、风险、可能性，比最后惊喜或惊吓都有效。\n\n2. Networking\n   - 不是功利性社交，而是持续、真实、双向地建立弱关系网。今天随手帮的小忙，可能是未来十年的关键连接。\n\n【爱是自律的源动力】\n• 坠入情网（fall in love）≠ 爱：坠入情网是激素和想象的产物，注定消退。\n• 依赖性 ≠ 爱：依赖是恐惧驱动的共生，不是爱。\n• 真正的爱 = 主动的、持续的关注与付出。既爱自己也爱他人，是自律的终极源动力（因为真正的爱需要勇气与自律）。\n\n【修订心灵地图的两大暗礁】\n1. 信仰：愿意相信某些超越自身经验的事物，给地图更新提供方向。\n2. 恩典：当你足够努力仍然碰壁时，允许"被给予"的力量——不放弃也不强求。\n\n一句话：自律的本质是承受心智成长的痛苦，少有人走的路 = 持续修订地图。'},
+{id:uid(),title:'how to 成为不吃压力之人（小红书）',link:'https://www.xiaohongshu.com/explore/6a6b1a090000000025008961',cat:'小红书',date:'2026-08-12',
+note:'引弗兰克尔：刺激与反应之间有一片空间，那里有成长与自由。\n\n核心视角：情绪是"传话的媒人"，烦躁不是要你调整，而是内心小孩在提需求。\n\n内心小孩需求三层：①底层安全感（对失控的恐惧、讨好回避冲突）②中间归属感（过度依赖认可、分离焦虑或假性独立）③上层实现感（"我必须完美才能被爱"）。这些不是弱点，是内心小孩活下来的策略。\n\n当下可做练习：①带内心小孩参观你现在的房间，告诉ta你已有安全空间 ②问ta想和你做什么，选舒服的活动 ③主动牵ta的手，做小时候喜欢的事。\n\n长期重建安全路径：①认知上区分成人自我 vs 旧日投射 ②情绪上允许愤怒悲伤表达 ③行为上在安全关系里渐进练习做选择。\n\n一句话：重新养育自己的第一步不是给予，而是看见。'}
+];
+function importAceKB(){
+  const kb=g(K.kb,[]);
+  let added=0,updated=0;
+  ACE_KB_PENDING.forEach(p=>{
+    const ex=kb.find(x=>x.link===p.link);
+    if(ex){ex.title=p.title;ex.cat=p.cat;ex.note=p.note;updated++}
+    else{kb.unshift(p);added++}
+  });
+  sv(K.kb,kb);
+  sv(K.kbImport,ACE_KB_VER);
+  renderKB();toast(added||updated?`新增 ${added} 条 · 更新 ${updated} 条`:'这批已经导过了');
+}
+let kbCat='全部';
+function openKBSheet(){['kbTitle','kbLink','kbNote'].forEach(i=>document.getElementById(i).value='');document.getElementById('kbMask').classList.add('show')}
+function saveKB(){
+  const title=document.getElementById('kbTitle').value.trim();
+  if(!title)return toast('先写个标题');
+  const kb=g(K.kb,[]);
+  kb.unshift({id:uid(),title,link:document.getElementById('kbLink').value.trim(),cat:document.getElementById('kbCat').value,note:document.getElementById('kbNote').value.trim(),date:today()});
+  sv(K.kb,kb);closeMask('kbMask');toast('已收进知识库');renderKB();
+}
+function delKB(id){sv(K.kb,g(K.kb,[]).filter(x=>x.id!==id));renderKB();toast('已删除')}
+function setKBCat(c){kbCat=c;renderKB()}
+
+/* ========== 灵光池 v1 ========== */
+let _inkPhotos=[];
+let _inkTag='';
+function setInkTag(btn){_inkTag=btn.dataset.t;document.querySelectorAll('.ink-tag').forEach(b=>b.classList.toggle('on',b===btn))}
+function addInkPhotos(input){const files=Array.from(input.files||[]).slice(0,3-_inkPhotos.length);if(!files.length)return;let done=0;files.forEach(f=>{const r=new FileReader();r.onload=()=>{_inkPhotos.push(r.result);done++;if(done===files.length)toast('已加 '+files.length+' 张图')};r.readAsDataURL(f)});input.value=''}
+function saveInk(){const t=document.getElementById('inkText').value.trim();if(!t&&!_inkPhotos.length)return toast('写点什么或拍张照');const arr=g(K.ink,[]);arr.unshift({id:uid(),ts:Date.now(),type:_inkTag||'未分类',text:t,photos:_inkPhotos.slice()});sv(K.ink,arr);document.getElementById('inkText').value='';_inkPhotos=[];_inkTag='';document.querySelectorAll('.ink-tag').forEach(b=>b.classList.remove('on'));toast('已加入草稿');renderInkPool()}
+function delInk(id){sv(K.ink,g(K.ink,[]).filter(x=>x.id!==id));renderInkPool();toast('已删除')}
+function renderInkPool(){const list=g(K.ink,[]);const el=document.getElementById('inkList');if(!el)return;el.innerHTML=list.length?list.map(x=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());const photo=x.photos&&x.photos[0]?'<img class="iphoto" src="'+x.photos[0]+'" alt="">':'';return '<div class="ink-item"><div class="imeta"><span class="itag">'+esc(x.type)+'</span><span class="itim">'+time+'</span>'+(x.text?'<div class="itxt">'+esc(x.text)+'</div>':'')+(x.photos&&x.photos.length>1?'<div class="itim">+'+((x.photos.length-1))+' 张图</div>':'')+'</div>'+photo+'<button class="idel" onclick="delInk('+"'"+''+x.id+''+"'"+')" title="删除"><svg class="ic" style="width:14px;height:14px"><use href="#i-x"/></svg></button></div>'}).join(''):'<div class="muted" style="font-size:.75rem">还没有草稿。写点灵感、吃了啥、跑了多久，一键复制给 Ace 汇总。</div>'}
+async function copyInkToAce(){const list=g(K.ink,[]);if(!list.length)return toast('草稿是空的');const NL=String.fromCharCode(10);const md=list.map((x,i)=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());let s=(i+1)+'. ['+x.type+'] '+time+(x.text?' — '+x.text:'');if(x.photos&&x.photos.length)s+='（含 '+x.photos.length+' 张照片）';return s}).join(NL);const wrap='【Max 的灵光池 · '+list.length+' 条】请帮我归类到工作台各板块（饮食/运动/知识库/灵感/记账等）。'+NL+NL+md+NL+NL+'⚠️ 照片未在文本里（base64 太长），如需同步请告诉我哪些条要附图。';try{await navigator.clipboard.writeText(wrap);toast('已复制 '+list.length+' 条到剪贴板，去对话粘贴给 Ace')}catch(e){const ta=document.createElement('textarea');ta.value=wrap;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制（兼容模式）')}}
+
+/* KB 接口预留（Obsidian 风格基础，v1） */
+const parseWikilinks=t=>{const m=String(t||'').match(/\[\[([^\]\n]+)\]\]/g)||[];return m.map(s=>s.slice(2,-2).trim())};
+const kbRenderNote=t=>{let h=esc(t||'').replace(/\n/g,'<br>');
+  h=h.replace(/\[\[([^\]\n]+)\]\]/g,'<span class="kb-wikilink" data-target="$1" title="未来双向链接：$1">$1</span>');
+  return h};
+
+function renderKB(){
+  const kb=g(K.kb,[]);
+  const aceBtn=document.getElementById('aceImportBtn');
+  if(aceBtn)aceBtn.style.display=g(K.kbImport,null)===ACE_KB_VER?'none':'';
+  document.getElementById('kbChips').innerHTML=KBCATS.map(c=>{
+    const n=c==='全部'?kb.length:kb.filter(x=>x.cat===c).length;
+    if(c!=='全部'&&!n)return'';
+    return `<button class="chip" style="min-height:32px;${kbCat===c?'background:var(--kb-neon);color:#120E1B':''}" onclick="setKBCat('${c}')">${c} ${n}</button>`}).join('');
+  const q=(document.getElementById('kbSearch').value||'').trim().toLowerCase();
+  const list=kb.filter(x=>(kbCat==='全部'||x.cat===kbCat)&&(!q||(x.title+x.note).toLowerCase().includes(q)));
+  document.getElementById('kbList').innerHTML=list.map(x=>`<div class="kb-item">
+    <div class="row" style="align-items:flex-start;gap:8px">
+      <div style="flex:1"><b style="font-size:.92rem">${esc(x.title)}</b>
+      ${x.link?`<div class="mt"><a href="${esc(x.link)}" target="_blank" rel="noopener" style="color:var(--kb-cyan);font-size:.78rem;word-break:break-all;display:flex;align-items:center;gap:4px"><svg class="ic" style="width:12px;height:12px;flex-shrink:0"><use href="#i-link"/></svg>${esc(x.link)}</a></div>`:''}
+      ${x.note?`<div class="mt">${kbRenderNote(x.note)}</div>`:''}
+      <div class="kb-backlinks" style="margin-top:5px;font-size:.72rem;color:var(--kb-dim)">🔙 <span>暂无反向链接</span> · 50 条启用双向链接</div>
+      <div class="src">${x.date}</div></div>
+      <span class="task-type">${esc(x.cat)}</span>
+      <button class="kb-del" onclick="if(confirm('删除这条？'))delKB('${x.id}')"><svg class="ic" style="width:16px;height:16px"><use href="#i-trash"/></svg></button>
+    </div></div>`).join('')||'<div class="empty" style="color:var(--kb-dim)">'+(q||kbCat!=='全部'?'没有匹配的条目':'知识库还是空的，收第一条吧')+'</div>';
+}
+
+/* ================= 备份 ================= */
+function exportJSON(){
+  const data={};Object.values(K).forEach(k=>{const v=g(k,null);if(v!==null)data[k]=v});
+  dl(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'成长工作台备份-'+today()+'.json');
+  toast('已导出备份文件');
+}
+function importJSON(input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{const data=JSON.parse(r.result);
+    let n=0;Object.values(K).forEach(k=>{if(data[k]!==undefined){sv(k,data[k]);n++}});
+    if(n){toast('导入成功');render()}else toast('文件格式不对')}catch(e){toast('文件解析失败')}};
+  r.readAsText(f);input.value='';
+}
+function clearSample(){
+  if(!confirm('清空所有示例数据？你自己录入的数据会保留。'))return;
+  const filterS=arr=>g(arr,[]).filter(x=>!x.sample);
+  sv(K.tx,filterS(K.tx));sv(K.health,filterS(K.health));sv(K.study,filterS(K.study));sv(K.mats,filterS(K.mats));sv(K.kb,filterS(K.kb));
+  sv(K.habits,g(K.habits,[]).filter(h=>!h.sample));
+  const c=g(K.checks,{});Object.keys(c).forEach(d=>{['hb1','hb2','hb3','hb4','hb5'].forEach(h=>delete c[d][h])});sv(K.checks,c);
+  const set=g(K.set,{});delete set.sample;sv(K.set,set);
+  toast('示例数据已清空');render();
+}
+function clearAll(){
+  if(!confirm('确定要清空全部数据吗？此操作不可恢复！'))return;
+  if(!confirm('最后确认：所有记账、健康、打卡、学习记录都会被删除。建议先导出备份。继续吗？'))return;
+  if(window.wipeCloud)window.wipeCloud();
+  seed();toast('已清空并重置');render();
+}
+
+/* ================= URL 回填（Ace 解析灵光池 → 生成 ?import= 链接 → 点开自动入库） ================= */
+function applyImport(data){
+  const log=[];
+  const date=data.date||today();
+  /* health: upsert 今日记录（合并而非覆盖） */
+  if(data.health){
+    const h=data.health;
+    const hasField=h.note||h.sport||h.min||h.weight||h.sleep||h.calIn||h.calOut;
+    if(hasField){
+      const hs=g(K.health,[]);
+      let rec=hs.find(x=>x.date===date);
+      if(!rec){rec={id:uid(),date};hs.push(rec)}
+      if(h.note)rec.note=rec.note?rec.note+'；'+h.note:h.note;
+      if(h.sport)rec.sport=h.sport;
+      if(h.min)rec.min=h.min;
+      if(h.weight)rec.weight=h.weight;
+      if(h.sleep)rec.sleep=h.sleep;
+      if(h.calIn)rec.calIn=(rec.calIn||0)+h.calIn;
+      if(h.calOut)rec.calOut=(rec.calOut||0)+h.calOut;
+      sv(K.health,hs);
+      /* 联动 hb3 运动 30 分钟 */
+      if(h.sport&&h.min>=30){const c=g(K.checks,{});if(!c[date])c[date]={};if(!c[date]['hb3']){c[date]['hb3']=1;sv(K.checks,c)}}
+      log.push('健康记录');
+    }
+  }
+  /* water: 累加到今日 */
+  /* water: waterSet=设绝对值（当日累计），water=累加（增量） */
+  if(data.waterSet&&data.waterSet>0){
+    const w=g(K.water,{});w[date]=data.waterSet;sv(K.water,w);
+    log.push('饮水 '+data.waterSet+'ml');
+  }else if(data.water&&data.water>0){
+    const w=g(K.water,{});w[date]=(w[date]||0)+data.water;sv(K.water,w);
+    log.push('饮水 +'+data.water+'ml');
+  }
+  /* habits: 勾选指定习惯 */
+  if(Array.isArray(data.habits)&&data.habits.length){
+    const c=g(K.checks,{});if(!c[date])c[date]={};
+    data.habits.forEach(id=>{c[date][id]=1});
+    sv(K.checks,c);
+    log.push(data.habits.length+' 个打卡');
+  }
+  /* tx: 追加账单 */
+  if(Array.isArray(data.tx)&&data.tx.length){
+    const tx=g(K.tx,[]);
+    let n=0;
+    data.tx.forEach(t=>{if(t.amount&&t.type){tx.push({id:uid(),date:t.date||date,type:t.type,amount:+t.amount,cat:t.cat||'其他',note:t.note||'',sample:false});n++}});
+    if(n){sv(K.tx,tx);log.push(n+' 笔账')}
+  }
+  /* kb: 追加知识库 */
+  if(Array.isArray(data.kb)&&data.kb.length){
+    const kb=g(K.kb,[]);
+    let n=0;
+    data.kb.forEach(k=>{if(k.title){kb.push({id:uid(),title:k.title,link:k.link||'',cat:k.cat||'灵感笔记',note:k.note||'',date,links:[],sample:false});n++}});
+    if(n){sv(K.kb,kb);log.push(n+' 条知识库')}
+  }
+  /* ink: 追加灵光池草稿 */
+  if(Array.isArray(data.ink)&&data.ink.length){
+    const arr=g(K.ink,[]);
+    data.ink.forEach(x=>arr.push({id:uid(),ts:Date.now(),type:x.type||'未分类',text:x.text||'',photos:[]}));
+    sv(K.ink,arr);
+    log.push(data.ink.length+' 条草稿');
+  }
+  /* study: 追加学习任务 */
+  if(Array.isArray(data.study)&&data.study.length){
+    const st=g(K.study,[]);
+    let n=0;
+    data.study.forEach(s=>{if(s.task){st.push({id:uid(),task:s.task,date:s.date||date,type:s.type||'口语',done:false,sample:false});n++}});
+    if(n){sv(K.study,st);log.push(n+' 个学习任务')}
+  }
+  return log;
+}
+function manualImport(){
+  const el=document.getElementById('importPaste');
+  const log=document.getElementById('importPasteLog');
+  const raw=(el.value||'').trim();
+  if(!raw){log.textContent='❌ 粘贴点东西';return}
+  /* 容忍粘贴整段 URL 或纯 base64 */
+  let b64=raw;
+  const m=raw.match(/[?&]import=([^&\s#]+)/);
+  if(m)b64=m[1];
+  try{
+    const json=JSON.parse(decodeURIComponent(escape(atob(b64))));
+    if(!json||json.v!==1){log.textContent='❌ 版本不对或数据为空';return}
+    const items=applyImport(json);
+    el.value='';
+    log.textContent='✓ 已回填：'+(items.length?items.join(' · '):'空数据')+' · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+    log.style.color='var(--cy-neon)';
+    /* 显眼横幅（6 秒） */
+    const banner=document.createElement('div');
+    banner.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99998;background:linear-gradient(135deg,#5EE0A0,#56D8D8);color:#0D1210;padding:14px 16px;font:600 14px/1.5 -apple-system,sans-serif;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.2)';
+    banner.innerHTML='✓ Ace 已帮你回填：'+(items.length?items.join(' · '):'空数据')+' <span style="opacity:.7;font-weight:400;margin-left:8px">'+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})+'</span>';
+    document.body.appendChild(banner);
+    setTimeout(()=>{banner.style.transition='opacity .4s';banner.style.opacity='0';setTimeout(()=>banner.remove(),500)},6000);
+    render();
+  }catch(e){
+    log.textContent='❌ 解析失败：'+(e.message||'格式不对');
+    log.style.color='var(--red)';
+  }
+}
+function ingestImport(){
+  try{
+    const u=new URL(location.href);
+    const imp=u.searchParams.get('import');
+    if(!imp)return false;
+    const json=JSON.parse(decodeURIComponent(escape(atob(imp))));
+    if(!json||json.v!==1)return false;
+    const log=applyImport(json);
+    u.searchParams.delete('import');
+    history.replaceState(null,'',u.pathname+u.hash);
+    console.log('[import] success:',log);
+    setTimeout(()=>{
+      showPage('today');
+      render();
+      /* 显眼横幅（6 秒，比 toast 醒目） */
+      const banner=document.createElement('div');
+      banner.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99998;background:linear-gradient(135deg,#5EE0A0,#56D8D8);color:#0D1210;padding:14px 16px;font:600 14px/1.5 -apple-system,sans-serif;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.2)';
+      banner.innerHTML='✓ Ace 已帮你回填：'+(log.length?log.join(' · '):'空数据')+' <span style="opacity:.7;font-weight:400;margin-left:8px">'+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})+'</span>';
+      document.body.appendChild(banner);
+      setTimeout(()=>{banner.style.transition='opacity .4s';banner.style.opacity='0';setTimeout(()=>banner.remove(),500)},6000);
+    },150);
+    return true;
+  }catch(e){console.warn('[import] failed:',e);toast('回填数据解析失败');return false}
+}
+
+/* ================= 启动（登录门由 app.js 接管） ================= */
+/* 数据加载与首次渲染在 app.js afterAuth() 中完成：loadAll → seed → setTxType → render → ingestImport */
+</script>
+</body>
+</html>
