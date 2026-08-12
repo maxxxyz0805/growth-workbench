@@ -398,22 +398,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <button class="ink-tag-photo" onclick="document.getElementById('inkFile').click()">📷 拍照</button>
           <input type="file" id="inkFile" accept="image/*" capture="environment" multiple style="display:none" onchange="addInkPhotos(this)">
         </div>
-        <div class="row mt" style="gap:8px">
-          <button class="btn btn-p" style="flex:1" onclick="saveInk()"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg>加入草稿</button>
-          <button class="btn btn-g" style="flex:1" onclick="copyInkToAce()">📋 复制给 Ace</button>
-        </div>
-        <div class="muted mt" style="font-size:.7rem;line-height:1.6">点「复制给 Ace」→ 到 WorkBuddy 对话粘贴 → Ace 帮你归类到对应板块</div>
-
-        <!-- 回填粘贴框（不依赖点长链接） -->
-        <details class="mt" style="margin-top:10px;background:rgba(94,224,160,.06);border:1px dashed rgba(94,224,160,.35);border-radius:8px;padding:8px 10px">
-          <summary style="cursor:pointer;font-size:.78rem;color:#5EE0A0;font-weight:600">📥 粘贴 Ace 回填数据（无需点链接）</summary>
-          <div class="mt" style="font-size:.7rem;color:var(--muted);line-height:1.6;margin-top:6px">Ace 给你的回填链接末尾有一段长 base64（…<code style="background:rgba(0,0,0,.1);padding:1px 4px;border-radius:3px;font-size:.85em">eyJ2...</code>），复制它粘到下面点导入即可。</div>
-          <div class="row mt" style="gap:6px;margin-top:8px;align-items:flex-start">
-            <textarea id="importPaste" rows="2" placeholder="把 Ace 给你的 base64 字符串粘贴到这里" style="flex:1;font:inherit;padding:6px 8px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);min-height:36px;font-family:ui-monospace,Menlo,monospace;font-size:.72rem;resize:vertical"></textarea>
-            <button class="btn btn-p btn-sm" style="min-height:36px;white-space:nowrap" onclick="manualImport()">📥 导入</button>
-          </div>
-          <div id="importPasteLog" class="mt" style="font-size:.7rem;color:var(--cy-cyan);margin-top:4px"></div>
-        </details>
+        <button class="btn btn-p mt" style="width:100%" onclick="saveInk()"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg>加入草稿</button>
 
         <div id="inkList" class="mt"></div>
       </div>
@@ -1315,8 +1300,7 @@ function classifyInk(id){
   x.classified=true; sv(K.ink,arr); renderInkPool();
   toast(msg||'已归类');
 }
-function renderInkPool(){const list=g(K.ink,[]);const el=document.getElementById('inkList');if(!el)return;el.innerHTML=list.length?list.map(x=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());const photo=x.photos&&x.photos[0]?'<img class="iphoto" src="'+x.photos[0]+'" alt="">':'';return '<div class="ink-item'+(x.classified?' done':'')+'"><div class="imeta"><span class="itag">'+esc(x.type)+'</span>'+(x.classified?'<span class="itag ok">已归类</span>':'')+'<span class="itim">'+time+'</span>'+(x.text?'<div class="itxt">'+esc(x.text)+'</div>':'')+(x.photos&&x.photos.length>1?'<div class="itim">+'+((x.photos.length-1))+' 张图</div>':'')+'</div>'+photo+'<div class="ink-actions">'+(x.classified?'':'<button class="icls" onclick="classifyInk(\''+x.id+'\')">🚀 归类</button>')+'<button class="idel" onclick="delInk(\''+x.id+'\')" title="删除"><svg class="ic" style="width:14px;height:14px"><use href="#i-x"/></svg></button></div></div>'}).join(''):'<div class="muted" style="font-size:.75rem">还没有草稿。写点灵感、吃了啥、跑了多久，一键复制给 Ace 汇总。</div>'}
-async function copyInkToAce(){const list=g(K.ink,[]);if(!list.length)return toast('草稿是空的');const NL=String.fromCharCode(10);const md=list.map((x,i)=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());let s=(i+1)+'. ['+x.type+'] '+time+(x.text?' — '+x.text:'');if(x.photos&&x.photos.length)s+='（含 '+x.photos.length+' 张照片）';return s}).join(NL);const wrap='【Max 的灵光池 · '+list.length+' 条】请帮我归类到工作台各板块（饮食/运动/知识库/灵感/记账等）。'+NL+NL+md+NL+NL+'⚠️ 照片未在文本里（base64 太长），如需同步请告诉我哪些条要附图。';try{await navigator.clipboard.writeText(wrap);toast('已复制 '+list.length+' 条到剪贴板，去对话粘贴给 Ace')}catch(e){const ta=document.createElement('textarea');ta.value=wrap;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制（兼容模式）')}}
+function renderInkPool(){const list=g(K.ink,[]);const el=document.getElementById('inkList');if(!el)return;el.innerHTML=list.length?list.map(x=>{const dt=new Date(x.ts);const time=(dt.getMonth()+1)+'-'+dt.getDate()+' '+pad(dt.getHours())+':'+pad(dt.getMinutes());const photo=x.photos&&x.photos[0]?'<img class="iphoto" src="'+x.photos[0]+'" alt="">':'';return '<div class="ink-item'+(x.classified?' done':'')+'"><div class="imeta"><span class="itag">'+esc(x.type)+'</span>'+(x.classified?'<span class="itag ok">已归类</span>':'')+'<span class="itim">'+time+'</span>'+(x.text?'<div class="itxt">'+esc(x.text)+'</div>':'')+(x.photos&&x.photos.length>1?'<div class="itim">+'+((x.photos.length-1))+' 张图</div>':'')+'</div>'+photo+'<div class="ink-actions">'+(x.classified?'':'<button class="icls" onclick="classifyInk(\''+x.id+'\')">🚀 归类</button>')+'<button class="idel" onclick="delInk(\''+x.id+'\')" title="删除"><svg class="ic" style="width:14px;height:14px"><use href="#i-x"/></svg></button></div></div>'}).join(''):'<div class="muted" style="font-size:.75rem">还没有草稿。写点灵感、吃了啥、跑了多久，写完选标签 →「🚀 归类」自动入库。</div>'}
 
 /* KB 接口预留（Obsidian 风格基础，v1） */
 const parseWikilinks=t=>{const m=String(t||'').match(/\[\[([^\]\n]+)\]\]/g)||[];return m.map(s=>s.slice(2,-2).trim())};
@@ -1446,34 +1430,6 @@ function applyImport(data){
     if(n){sv(K.study,st);log.push(n+' 个学习任务')}
   }
   return log;
-}
-function manualImport(){
-  const el=document.getElementById('importPaste');
-  const log=document.getElementById('importPasteLog');
-  const raw=(el.value||'').trim();
-  if(!raw){log.textContent='❌ 粘贴点东西';return}
-  /* 容忍粘贴整段 URL 或纯 base64 */
-  let b64=raw;
-  const m=raw.match(/[?&]import=([^&\s#]+)/);
-  if(m)b64=m[1];
-  try{
-    const json=JSON.parse(decodeURIComponent(escape(atob(b64))));
-    if(!json||json.v!==1){log.textContent='❌ 版本不对或数据为空';return}
-    const items=applyImport(json);
-    el.value='';
-    log.textContent='✓ 已回填：'+(items.length?items.join(' · '):'空数据')+' · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
-    log.style.color='var(--cy-neon)';
-    /* 显眼横幅（6 秒） */
-    const banner=document.createElement('div');
-    banner.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99998;background:linear-gradient(135deg,#5EE0A0,#56D8D8);color:#0D1210;padding:14px 16px;font:600 14px/1.5 -apple-system,sans-serif;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.2)';
-    banner.innerHTML='✓ Ace 已帮你回填：'+(items.length?items.join(' · '):'空数据')+' <span style="opacity:.7;font-weight:400;margin-left:8px">'+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})+'</span>';
-    document.body.appendChild(banner);
-    setTimeout(()=>{banner.style.transition='opacity .4s';banner.style.opacity='0';setTimeout(()=>banner.remove(),500)},6000);
-    render();
-  }catch(e){
-    log.textContent='❌ 解析失败：'+(e.message||'格式不对');
-    log.style.color='var(--red)';
-  }
 }
 function ingestImport(){
   try{
