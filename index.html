@@ -61,6 +61,11 @@ svg{display:block}
 .between{justify-content:space-between}
 .muted{color:var(--muted);font-size:.82rem}
 .mt{margin-top:12px}.mb{margin-bottom:12px}
+.hb-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.hb-q{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--fg);font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s}
+.hb-q:hover{transform:translateY(-2px);border-color:var(--cy-neon)}
+.hb-q small{font-size:.6rem;color:var(--muted);font-weight:400}
+@media(max-width:560px){.hb-quick{grid-template-columns:repeat(2,1fr)}}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .stat{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;text-align:center}
@@ -313,6 +318,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
     <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"/><path d="M3 13 5.5 4h13L21 13"/><path d="M3 13h6a3 3 0 0 0 6 0h6"/></symbol>
     <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.5-4.5"/></symbol>
+    <symbol id="i-food" viewBox="0 0 24 24"><path d="M4 3v8a3 3 0 0 0 6 0V3M7 3v18M17 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4 2.5-1 2.5-4-1-5-2.5-5M17 12v9"/></symbol>
   </defs>
 </svg>
 
@@ -503,11 +509,13 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <div id="sChart"></div>
         </div>
 
-        <div class="row" style="gap:8px;flex-wrap:wrap">
-          <button class="btn btn-p" style="flex:1;min-width:140px" onclick="openHealthSheet()"><svg class="ic" style="width:16px;height:16px"><use href="#i-plus"/></svg>记录今日数据</button>
-          <button class="btn btn-g" style="flex:1;min-width:140px" onclick="openHealthSheet('sport')"><svg class="ic" style="width:16px;height:16px;color:var(--cy-neon)"><use href="#i-zap"/></svg>只记运动</button>
+        <div class="hb-quick">
+          <button class="hb-q" onclick="openHealthSheet('food')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-amber)"><use href="#i-food"/></svg><span>饮食</span></button>
+          <button class="hb-q" onclick="openHealthSheet('sport')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-neon)"><use href="#i-zap"/></svg><span>运动</span></button>
+          <button class="hb-q" onclick="openHealthSheet('sleep')"><svg class="ic" style="width:20px;height:20px;color:var(--kb-neon)"><use href="#i-moon"/></svg><span>睡眠</span></button>
+          <button class="hb-q" onclick="openHealthSheet('weight')"><svg class="ic" style="width:20px;height:20px;color:var(--sage-d)"><use href="#i-scale"/></svg><span>体重</span><small>周/月</small></button>
         </div>
-        <p class="mt" style="font-size:.72rem;color:var(--cy-dim);line-height:1.7">记录今天的<b style="color:var(--cy-cyan)">体重 / 睡眠 / 饮食 / 运动</b>，至少填一项就生效。手环数据：小米运动健康 App → 活动消耗 + 昨晚睡眠，填进来；吃的卡路里拍照发我帮你估；运动只填类型+时长（≥30 分钟自动勾选「运动 30 分钟」习惯）。</p>
+        <p class="mt" style="font-size:.72rem;color:var(--cy-dim);line-height:1.7">四个入口各记各的，<b style="color:var(--cy-cyan)">同一天会自动合并</b>到一条记录。体重建议每周或每月更新一次即可。</p>
         <div id="healthList" class="mt"></div>
       </div>
     </section>
@@ -596,27 +604,35 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 </div></div>
 
 <div class="mask" id="hMask"><div class="sheet">
-  <div class="row between"><h3>记录健康数据</h3><button onclick="closeMask('hMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <div class="row between"><h3 id="hTitle">记录健康数据</h3><button onclick="closeMask('hMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
   <label class="f">日期</label><input type="date" id="hDate">
-  <label class="f">运动类型（选填）</label>
-  <select id="hSport">
-    <option value="">没运动 / 不记</option>
-    <option value="跑步">跑步</option>
-    <option value="骑行">骑行</option>
-    <option value="游泳">游泳</option>
-    <option value="健身">健身 / 力量训练</option>
-    <option value="瑜伽">瑜伽 / 拉伸</option>
-    <option value="步行">步行 / 散步</option>
-    <option value="篮球">篮球 / 球类</option>
-    <option value="其他">其他运动</option>
-  </select>
-  <label class="f">运动时长（分钟，选填）</label><input type="number" id="hMin" inputmode="numeric" placeholder="比如 30，≥30 自动勾选「运动30分钟」习惯">
-  <label class="f">体重 (kg，选填)</label><input type="number" id="hWeight" inputmode="decimal" step="0.1" placeholder="59.0">
-  <label class="f">摄入卡路里 (kcal，选填)</label><input type="number" id="hIn" inputmode="numeric" placeholder="把吃的拍照发我，我帮你估">
-  <label class="f">消耗卡路里 (kcal，选填·手环数据)</label><input type="number" id="hOut" inputmode="numeric" placeholder="手环 App 里的「活动消耗」">
-  <label class="f">睡眠 (小时，选填)</label><input type="number" id="hSleep" inputmode="decimal" step="0.5" placeholder="7.5">
-  <label class="f">饮食 / 备注（选填）</label>
-  <textarea id="hNote" rows="2" placeholder="比如：早餐 玉米+烧卖+菜包子；中餐 一顿；5 瓶水" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);min-height:44px;resize:vertical"></textarea>
+  <div data-hg="sport">
+    <label class="f">运动类型（选填）</label>
+    <select id="hSport">
+      <option value="">没运动 / 不记</option>
+      <option value="跑步">跑步</option>
+      <option value="骑行">骑行</option>
+      <option value="游泳">游泳</option>
+      <option value="健身">健身 / 力量训练</option>
+      <option value="瑜伽">瑜伽 / 拉伸</option>
+      <option value="步行">步行 / 散步</option>
+      <option value="篮球">篮球 / 球类</option>
+      <option value="其他">其他运动</option>
+    </select>
+    <label class="f">运动时长（分钟，选填）</label><input type="number" id="hMin" inputmode="numeric" placeholder="比如 30，≥30 自动勾选「运动30分钟」习惯">
+  </div>
+  <div data-hg="weight">
+    <label class="f">体重 (kg，选填)</label><input type="number" id="hWeight" inputmode="decimal" step="0.1" placeholder="59.0">
+  </div>
+  <div data-hg="food">
+    <label class="f">摄入卡路里 (kcal，选填)</label><input type="number" id="hIn" inputmode="numeric" placeholder="把吃的拍照发我，我帮你估">
+    <label class="f">饮食 / 备注（选填）</label>
+    <textarea id="hNote" rows="2" placeholder="比如：早餐 玉米+烧卖+菜包子；中餐 一顿；5 瓶水" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);min-height:44px;resize:vertical"></textarea>
+  </div>
+  <div data-hg="sleep">
+    <label class="f">睡眠 (小时，选填)</label><input type="number" id="hSleep" inputmode="decimal" step="0.5" placeholder="7.5">
+    <label class="f">消耗卡路里 (kcal，选填·手环数据)</label><input type="number" id="hOut" inputmode="numeric" placeholder="手环 App 里的「活动消耗」">
+  </div>
   <button class="btn btn-p mt" style="width:100%;background:var(--cy-neon);color:#0D1210;font-weight:700" onclick="saveHealth()">保存</button>
 </div></div>
 
@@ -945,6 +961,13 @@ function openHealthSheet(focus){
   document.getElementById('hDate').value=today();
   ['hWeight','hIn','hOut','hSleep','hMin'].forEach(i=>document.getElementById(i).value='');
   document.getElementById('hSport').value='';
+  document.getElementById('hNote').value='';
+  const TITLES={food:'记录饮食',sport:'记录运动',sleep:'记录睡眠',weight:'记录体重'};
+  const SHOW={food:['food'],sport:['sport'],sleep:['sleep'],weight:['weight']};
+  document.getElementById('hTitle').textContent=TITLES[focus]||'记录健康数据';
+  document.querySelectorAll('#hMask [data-hg]').forEach(g=>{
+    g.style.display=(!focus||(SHOW[focus]||[]).includes(g.getAttribute('data-hg')))?'':'none';
+  });
   document.getElementById('hMask').classList.add('show');
   if(focus==='sport'){
     setTimeout(()=>{
@@ -964,7 +987,14 @@ function saveHealth(){
     min:parseInt(document.getElementById('hMin').value)||0,
     note:(document.getElementById('hNote').value||'').trim()};
   if(!rec.weight&&!rec.calIn&&!rec.calOut&&!rec.sleep&&!rec.sport&&!rec.note)return toast('至少填一项');
-  const hs=g(K.health,[]);hs.push(rec);sv(K.health,hs);closeMask('hMask');
+  const hs=g(K.health,[]);
+  const i=hs.findIndex(x=>x.date===date);
+  if(i>=0){const base=hs[i];hs[i]={...base,
+    weight:rec.weight||base.weight, calIn:rec.calIn||base.calIn, calOut:rec.calOut||base.calOut,
+    sleep:rec.sleep||base.sleep, sport:rec.sport||base.sport, min:rec.min||base.min,
+    note:rec.note||base.note, id:base.id};
+  }else hs.push(rec);
+  sv(K.health,hs);closeMask('hMask');
   // 联动 hb3「运动 30 分钟」
   if(rec.sport && rec.min>=30){
     const c=g(K.checks,{});if(!c[date])c[date]={};
@@ -1006,7 +1036,17 @@ function renderHealth(){
     <div class="cy-stat"><div class="v cy">${lastSleep}</div><div class="l">睡眠 h</div></div>`;
   // 运动类型分布（近 30 天，按分钟数）
   const SPORT_COL={'跑步':'#5EE0A0','骑行':'#56D8D8','游泳':'#8AA8D6','健身':'#F5C86B','瑜伽':'#E8B7D8','步行':'#7A9384','篮球':'#D96C5F','其他':'#B8B0A4'};
-  const SPORT_ICO={'跑步':'▶','骑行':'◐','游泳':'≈','健身':'✦','瑜伽':'◉','步行':'•','篮球':'●','其他':'◆'};
+  const SPORT_SVG={
+    '跑步':'<path d="M13 4.5a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 4.5zM9 20l3.5-5 1.5-3 2.5 1 3-4"/>',
+    '骑行':'<circle cx="6" cy="17" r="3.2"/><circle cx="18" cy="17" r="3.2"/><path d="M6 17l4.5-7h4.5l3 7M10.5 10l2-4h3"/>',
+    '游泳':'<path d="M2 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 14c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>',
+    '健身':'<path d="M3 9.5v5M6 7v10M18 7v10M21 9.5v5M6 12h12"/>',
+    '瑜伽':'<path d="M12 4.5a2 2 0 1 0 .001 4.001A2 2 0 0 0 12 4.5zM5 20c2-4 4-6 7-6s5 2 7 6"/>',
+    '步行':'<path d="M9.5 3.5a1.5 1.5 0 1 0 .001 3.001A1.5 1.5 0 0 0 9.5 3.5zM8 9c-1 1-1 4 0 7s1 5 2.5 5 1.5-3 1-6-1.5-8-3.5-6z"/>',
+    '篮球':'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.5 5.5c4 4 9 4 13 13M18.5 5.5c-4 4-9 4-13 13"/>',
+    '其他':'<path d="M12 3l9 9-9 9-9-9z"/>'
+  };
+  const sportIco=s=>`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${SPORT_COL[s]||'#B8B0A4'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${SPORT_SVG[s]||SPORT_SVG['其他']}</svg>`;
   const spCutoff=dAdd(t,-29);
   const sportRecs=hs.filter(x=>x.sport && x.date>=spCutoff);
   if(sportRecs.length){
@@ -1020,7 +1060,7 @@ function renderHealth(){
     document.getElementById('sportChart').innerHTML=`<svg width="100" height="100" viewBox="0 0 100 100">${svg}</svg>`;
     document.getElementById('sportLegend').innerHTML=entries.map(([s,m])=>{
       const pct=Math.round(m/totalM*100);
-      return `<div class="row" style="gap:6px"><span style="color:${SPORT_COL[s]||'#B8B0A4'};font-size:.85rem;width:14px;text-align:center">${SPORT_ICO[s]||'•'}</span><span style="flex:1">${esc(s)}</span><b style="color:#E0EAE3;font-variant-numeric:tabular-nums">${m}<span style="color:#7A9384;font-weight:400;font-size:.68rem"> 分 · ${pct}%</span></b></div>`;
+      return `<div class="row" style="gap:6px"><span style="width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center">${sportIco(s)}</span><span style="flex:1">${esc(s)}</span><b style="color:#E0EAE3;font-variant-numeric:tabular-nums">${m}<span style="color:#7A9384;font-weight:400;font-size:.68rem"> 分 · ${pct}%</span></b></div>`;
     }).join('');
     document.getElementById('sportSummary').textContent=`共 ${entries.length} 种 · ${sportRecs.length} 次`;
   }else{
