@@ -1102,7 +1102,7 @@ function renderHealth(){
     <div style="display:flex;align-items:center;gap:8px">
       <span class="muted" style="color:var(--cy-dim);font-size:.75rem;min-width:74px">${x.date}</span>
       <div style="flex:1;font-size:.8rem;color:#B9CBBF;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-        ${x.sport?`<span class="tag" style="background:${(SPORT_COL[x.sport]||'#B8B0A4')}22;color:${SPORT_COL[x.sport]||'#B8B0A4'};font-weight:600">${SPORT_ICO[x.sport]||'•'} ${esc(x.sport)}${x.min?' '+x.min+'分':''}</span>`:''}
+        ${x.sport?`<span class="tag" style="background:${(SPORT_COL[x.sport]||'#B8B0A4')}22;color:${SPORT_COL[x.sport]||'#B8B0A4'};font-weight:600">${SPORT_SVG[x.sport]||'•'} ${esc(x.sport)}${x.min?' '+x.min+'分':''}</span>`:''}
         <span>${[x.weight&&x.weight+'kg',x.calIn&&'入'+x.calIn,x.calOut&&'耗'+x.calOut,x.sleep&&'睡'+x.sleep+'h'].filter(Boolean).join(' · ')}</span>
       </div>
       <button style="color:var(--cy-dim);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delHealth('${x.id}')"><svg class="ic" style="width:14px;height:14px"><use href="#i-trash"/></svg></button>
