@@ -142,11 +142,19 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 #page-today .hero-ring svg circle:nth-child(1){stroke:rgba(255,245,237,.26)}
 #page-today #heroRing{stroke:#FFF5ED}
 #page-today .hr-num{color:#FFF5ED}
-#page-today .water-card{background:#FFFFFF;border:1px solid #F5DCC8}
+#page-today .water-card{background:#FFFFFF;border:1px solid #F5DCC8;padding:16px 18px}
 .rest-banner{margin:14px 0;padding:13px 16px;border-radius:14px;background:linear-gradient(135deg,#FBE3A0,#F7C98E);border:1px solid #E8B36A;color:#7A4A12;font-size:.9rem;font-weight:600;box-shadow:0 3px 14px rgba(201,72,48,.12)}
 #page-today .water-card b{color:#C94830}
 #page-today #waterText{color:#C4906F}
 #page-today #waterTip{color:#C4906F}
+.water-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.water-text{font-size:.82rem;color:#C4906F;letter-spacing:.5px}
+.water-bar{height:14px;background:#F5E8DD;border-radius:7px;overflow:hidden;margin-top:12px;border:1px solid #F5DCC8}
+.water-bar i{display:block;height:100%;border-radius:7px;transition:width .35s ease}
+.water-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.water-actions .btn{flex:1 1 auto;min-height:42px;padding:8px 10px;font-size:.85rem}
+.water-tip{font-size:.72rem;color:#C4906F;margin-top:12px;line-height:1.6}
+@media(max-width:480px){.water-actions .btn{flex:1 1 100%;min-height:46px;font-size:.92rem}}
 #page-today .stat{background:#FFFFFF;border:1px solid #F5DCC8}
 #page-today .stat .v{color:#C94830}
 #page-today .psy{background:linear-gradient(135deg,#FBE3D2,#F5DCC8);border:1px solid #E8B98E}
@@ -296,10 +304,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .hd-chk.on{background:var(--sage);border-color:var(--sage);color:#fff}
 .check-btn{width:48px;height:48px;border-radius:14px;border:2px solid var(--cy-line);display:flex;align-items:center;justify-content:center;color:var(--cy-dim);transition:.2s;flex-shrink:0}
 .check-btn.on{background:var(--cy-neon);border-color:var(--cy-neon);color:#0D1210;box-shadow:0 0 12px rgba(94,224,160,.4)}
-.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;max-width:200px;margin:0 auto}
-.heat .d{aspect-ratio:1;border-radius:3px;background:#0D1210;border:1px solid var(--cy-line);display:flex;align-items:center;justify-content:center;font-size:.52rem;color:var(--cy-dim)}
-.heat .h{gap:2px;font-size:.55rem;color:var(--cy-dim);text-align:center}
-.heat-head{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--cy-dim);text-align:center;max-width:200px;margin-left:auto;margin-right:auto}
+.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:0 auto}
+.heat .d{aspect-ratio:1;border-radius:5px;background:#0D1210;border:1px solid var(--cy-line);display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--cy-dim)}
+.heat .h{gap:4px;font-size:.65rem;color:var(--cy-dim);text-align:center}
+.heat-head{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;font-size:.65rem;color:var(--cy-dim);text-align:center}
 /* ===== 英语页 ===== */
 .countdown{background:linear-gradient(135deg,#E8B6BA,#C97C8F);border-radius:var(--r);padding:20px;color:#fff;text-align:center;box-shadow:0 4px 18px rgba(201,124,143,.25);position:relative;overflow:hidden}
 .countdown::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 100% 0%,rgba(255,255,255,.2),transparent 60%);pointer-events:none}
@@ -320,16 +328,14 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .hb-name{flex:1;font-size:.92rem}
 .hb-name .st{font-size:.72rem;color:#C99A3C;margin-top:3px;display:flex;align-items:center;gap:4px}
 .heat-light .d{background:#F0EDE6;border:1px solid var(--line);color:#B5AFA5}
-.heat-light{gap:2px;max-width:200px;margin:0 auto}
-.heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--muted);text-align:center;max-width:200px;margin:0 auto 3px}
-.today-todo-heat{display:flex;gap:24px;align-items:flex-start;margin-top:14px}
-.today-todo-col{flex:1;min-width:0}
-.today-heat-col{width:230px;flex-shrink:0;padding:16px 18px;background:linear-gradient(180deg,#FCF9F3,#F4EEE5);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:stretch;position:sticky;top:0;box-shadow:0 2px 10px rgba(160,140,108,.08)}
-.heat-col-title{font-size:.78rem;letter-spacing:2px;color:var(--red);font-weight:700}
-.heat-stats{margin-top:14px;padding-top:12px;border-top:1px dashed #E0D8CB;font-size:.78rem;color:#7A7062;line-height:1.9;text-align:center}
+.heat-light{gap:4px}
+.heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;font-size:.65rem;color:var(--muted);text-align:center}
+.heat-section{margin-top:18px;padding-top:16px;border-top:1px dashed #E0D8CB}
+.heat-col-title{font-size:.82rem;letter-spacing:2px;color:var(--red);font-weight:700}
+.heat-track{font-size:.72rem;color:var(--muted);letter-spacing:1px}
+.heat-stats{margin-top:14px;padding-top:12px;border-top:1px dashed #E0D8CB;font-size:.82rem;color:#7A7062;line-height:1.9;text-align:center}
 .heat-stats b{color:var(--red);font-size:1.08rem;font-weight:700}
 .heat-stats .flame{color:#C99A3C}
-@media(max-width:680px){.today-todo-heat{flex-direction:column;gap:14px}.today-heat-col{width:100%;position:static}}
 
 /* ===== 弹层 ===== */
 .mask{position:fixed;inset:0;background:rgba(40,38,35,.4);z-index:50;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
@@ -423,17 +429,18 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         <div class="c" id="psyTip"></div>
       </div>
 
-      <div class="card water-card mb">
-        <div class="row between">
-          <div><b style="font-size:.95rem">💧 今日喝水</b> <span class="muted" id="waterText">0 / 1600 ml</span></div>
-          <div class="row" style="gap:6px;flex-wrap:wrap">
-            <button class="btn btn-p btn-sm" onclick="addWater(500)">+1 杯（500ml）</button>
-            <button class="btn btn-g btn-sm" onclick="addWater(100)">+100 精调</button>
-            <button class="btn btn-g btn-sm" onclick="addWater(-100)" id="waterMinusBtn" style="display:none">−100</button>
-          </div>
+      <div class="card water-card">
+        <div class="water-head">
+          <b style="font-size:1.05rem">💧 今日喝水</b>
+          <span class="water-text" id="waterText">0 / 1600 ml</span>
         </div>
-        <div class="hero-bar mt"><i id="waterBar" style="width:0%;background:#E8765A"></i></div>
-        <div class="muted mt" style="font-size:.72rem" id="waterTip">每喝一杯点一下（≈500ml）· 不够或多了就用 100ml 精调 · 满 1600ml 自动完成</div>
+        <div class="water-bar"><i id="waterBar" style="width:0%;background:#E8765A"></i></div>
+        <div class="water-actions">
+          <button class="btn btn-p" onclick="addWater(500)">+1 杯（500ml）</button>
+          <button class="btn btn-g" onclick="addWater(100)">+100 精调</button>
+          <button class="btn btn-g" onclick="addWater(-100)" id="waterMinusBtn" style="display:none">−100</button>
+        </div>
+        <div class="water-tip" id="waterTip">每喝一杯点一下（≈500ml）· 不够或多了就用 100ml 精调 · 满 1600ml 自动完成</div>
       </div>
 
       <div class="grid4 mb" id="todayStats"></div>
@@ -441,21 +448,18 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
       <div class="card">
         <div class="row between">
           <h3 style="margin:0"><svg class="ic" style="color:var(--red)"><use href="#i-target"/></svg>今日待办</h3>
+          <button class="btn btn-g btn-sm" onclick="openHabitSheet()"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg>加习惯</button>
         </div>
-        <div class="today-todo-heat">
-          <div class="today-todo-col">
-            <div id="todoList"></div>
-            <div id="habitGroups"></div>
+        <div id="todoList"></div>
+        <div id="habitGroups"></div>
+        <div class="heat-section">
+          <div class="row between" style="margin-bottom:10px">
+            <span class="heat-col-title">本月热力</span>
+            <span class="heat-track" id="heatTrack">连续 0 天 · 完成率 0%</span>
           </div>
-          <div class="today-heat-col">
-            <div class="row between" style="margin-bottom:12px">
-              <span class="heat-col-title">本月热力</span>
-              <button class="btn btn-g btn-sm" onclick="openHabitSheet()" style="padding:4px 10px;min-height:30px"><svg class="ic" style="width:13px;height:13px"><use href="#i-plus"/></svg>加习惯</button>
-            </div>
-            <div class="heat-head-l"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
-            <div class="heat heat-light" id="heatmap"></div>
-            <div class="heat-stats" id="heatStats"></div>
-          </div>
+          <div class="heat-head-l"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="heat heat-light" id="heatmap"></div>
+          <div class="heat-stats" id="heatStats"></div>
         </div>
       </div>
 
@@ -1428,7 +1432,9 @@ function renderHabit(){
     if(n>0){totalDone++;curStreak++;maxStreak=Math.max(maxStreak,curStreak);}else curStreak=0;}
   const pct=totalDone?Math.round(totalDone/dim*100):0;
   const hsEl=document.getElementById('heatStats');
-  if(hsEl)hsEl.innerHTML=`<div><b>${totalDone}</b> / ${dim} 天</div><div style="margin-top:3px">完成率 <b>${pct}%</b></div><div class="flame" style="margin-top:3px">最长连 <b>${maxStreak}</b> 天 🔥</div>`;
+  const htEl=document.getElementById('heatTrack');
+  if(htEl)htEl.textContent=`${totalDone} / ${dim} 天完成 · 完成率 ${pct}%`;
+  if(hsEl)hsEl.innerHTML=`<div class="flame">最长连 <b>${maxStreak}</b> 天 🔥</div>`;
 }
 
 /* ================= 英语 ================= */
