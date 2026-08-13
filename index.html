@@ -322,11 +322,13 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .heat-light .d{background:#F0EDE6;border:1px solid var(--line);color:#B5AFA5}
 .heat-light{gap:2px;max-width:200px;margin:0 auto}
 .heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--muted);text-align:center;max-width:200px;margin:0 auto 3px}
-.today-todo-heat{display:flex;gap:18px;align-items:flex-start}
+.today-todo-heat{display:flex;gap:24px;align-items:flex-start;margin-top:14px}
 .today-todo-col{flex:1;min-width:0}
-.today-heat-col{width:200px;flex-shrink:0;padding:10px 12px;background:linear-gradient(180deg,#FAF6EF,#F4EEE5);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;align-items:stretch;position:sticky;top:0}
-.heat-stats{margin-top:10px;padding-top:10px;border-top:1px dashed #E0D8CB;font-size:.72rem;color:#7A7062;line-height:1.7;text-align:center}
-.heat-stats b{color:#C94830;font-size:.95rem}
+.today-heat-col{width:230px;flex-shrink:0;padding:16px 18px;background:linear-gradient(180deg,#FCF9F3,#F4EEE5);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:stretch;position:sticky;top:0;box-shadow:0 2px 10px rgba(160,140,108,.08)}
+.heat-col-title{font-size:.78rem;letter-spacing:2px;color:var(--red);font-weight:700}
+.heat-stats{margin-top:14px;padding-top:12px;border-top:1px dashed #E0D8CB;font-size:.78rem;color:#7A7062;line-height:1.9;text-align:center}
+.heat-stats b{color:var(--red);font-size:1.08rem;font-weight:700}
+.heat-stats .flame{color:#C99A3C}
 @media(max-width:680px){.today-todo-heat{flex-direction:column;gap:14px}.today-heat-col{width:100%;position:static}}
 
 /* ===== 弹层 ===== */
@@ -439,7 +441,6 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
       <div class="card">
         <div class="row between">
           <h3 style="margin:0"><svg class="ic" style="color:var(--red)"><use href="#i-target"/></svg>今日待办</h3>
-          <button class="btn btn-g btn-sm" onclick="openHabitSheet()"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg>加习惯</button>
         </div>
         <div class="today-todo-heat">
           <div class="today-todo-col">
@@ -447,7 +448,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <div id="habitGroups"></div>
           </div>
           <div class="today-heat-col">
-            <div class="muted mb" style="letter-spacing:1px;font-size:.7rem">本月热力</div>
+            <div class="row between" style="margin-bottom:12px">
+              <span class="heat-col-title">本月热力</span>
+              <button class="btn btn-g btn-sm" onclick="openHabitSheet()" style="padding:4px 10px;min-height:30px"><svg class="ic" style="width:13px;height:13px"><use href="#i-plus"/></svg>加习惯</button>
+            </div>
             <div class="heat-head-l"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
             <div class="heat heat-light" id="heatmap"></div>
             <div class="heat-stats" id="heatStats"></div>
@@ -1424,7 +1428,7 @@ function renderHabit(){
     if(n>0){totalDone++;curStreak++;maxStreak=Math.max(maxStreak,curStreak);}else curStreak=0;}
   const pct=totalDone?Math.round(totalDone/dim*100):0;
   const hsEl=document.getElementById('heatStats');
-  if(hsEl)hsEl.innerHTML=`<div><b>${totalDone}</b> / ${dim} 天</div><div style="margin-top:2px">完成率 <b>${pct}%</b></div><div style="margin-top:2px;color:#C99A3C">最长连 <b>${maxStreak}</b> 天 🔥</div>`;
+  if(hsEl)hsEl.innerHTML=`<div><b>${totalDone}</b> / ${dim} 天</div><div style="margin-top:3px">完成率 <b>${pct}%</b></div><div class="flame" style="margin-top:3px">最长连 <b>${maxStreak}</b> 天 🔥</div>`;
 }
 
 /* ================= 英语 ================= */
