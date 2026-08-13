@@ -479,7 +479,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         </div>
       </div>
 
-      <!-- 月视图（原有内容，仅「月」维度显示） -->
+      <!-- 月视图：仅保留月预算条卡片（月历+消费类别+明细由 mvCard 提供） -->
       <div id="monthCards">
         <div class="card">
           <div class="row between">
@@ -497,24 +497,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <span class="muted">支出 <b class="exp" id="monExp"></b> · 收入 <b class="inc" id="monInc"></b></span>
           </div>
         </div>
-        <div class="card">
-          <h3><svg class="ic" style="color:var(--blue-d)"><use href="#i-target"/></svg>钱花在哪儿了</h3>
-          <div class="donut-wrap">
-            <div id="donut"></div>
-            <div class="legend" id="legend"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="row between">
-            <h3 style="margin:0"><svg class="ic" style="color:var(--blue-d)"><use href="#i-cal"/></svg>明细</h3>
-            <button class="btn btn-g btn-sm" onclick="exportCSV()"><svg class="ic" style="width:14px;height:14px"><use href="#i-down"/></svg>导出 CSV</button>
-          </div>
-          <div id="txList" class="mt"></div>
-        </div>
       </div>
 
-      <!-- 消费明细分析（日/季/年/累计维度显示） -->
-      <div id="mvCard" class="card" style="display:none">
+      <!-- 消费明细分析（日/月/季/年/累计维度共用，由 applyMoneyDim 控显示） -->
+      <div id="mvCard" class="card">
         <div class="row between mb">
           <button class="btn btn-g btn-sm" id="mvPrev" onclick="mvShift(-1)">‹</button>
           <b id="mvLabel"></b>
@@ -991,34 +977,15 @@ function renderMoney(){
   document.getElementById('monInc').textContent=money(inc);
   const bar=document.getElementById('budgetBar');bar.style.width=pct+'%';bar.classList.toggle('warn',pct>=90);
   document.getElementById('budgetPct').textContent='已用 '+pct.toFixed(0)+'%'+(pct>=100?' · 超预算啦':pct>=90?' · 接近预算':'');
-  // 甜甜圈
-  const byCat={};tx.filter(x=>x.type==='expense').forEach(x=>byCat[x.cat]=(byCat[x.cat]||0)+x.amount);
-  const entries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
-  const C=2*Math.PI*40;let off=0,svg='';
-  if(exp>0){entries.forEach(([c,v])=>{const len=v/exp*C;
-    svg+=`<circle cx="55" cy="55" r="40" fill="none" stroke="${CCOL[c]||'#B8B0A4'}" stroke-width="18" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 55 55)"/>`;off+=len});
-    svg+=`<text x="55" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#3F3D3A">${money(exp)}</text><text x="55" y="68" text-anchor="middle" font-size="9" fill="#9B958C">本月支出</text>`;
-  }else svg=`<circle cx="55" cy="55" r="40" fill="none" stroke="#EDE9E1" stroke-width="18"/><text x="55" y="58" text-anchor="middle" font-size="10" fill="#9B958C">暂无支出</text>`;
-  document.getElementById('donut').innerHTML=`<svg width="110" height="110" viewBox="0 0 110 110">${svg}</svg>`;
-  document.getElementById('legend').innerHTML=entries.map(([c,v])=>`<div class="li"><span class="dot" style="background:${CCOL[c]||'#B8B0A4'}"></span>${esc(c)}<b>${money(v)}</b></div>`).join('')||'<div class="empty">记一笔就开始统计</div>';
-  // 明细
-  const sorted=[...tx].sort((a,b)=>a.date<b.date?1:-1);
-  let html='',lastD='';
-  sorted.forEach(x=>{if(x.date!==lastD){html+=`<div class="muted" style="padding:10px 4px 2px">${x.date}</div>`;lastD=x.date}
-    html+=`<div class="list-item"><span class="tag" style="background:${(CCOL[x.cat]||'#B8B0A4')}22;color:${CCOL[x.cat]||'#8A827A'}">${esc(x.cat)}</span>
-      <div style="flex:1"><div style="font-size:.88rem">${esc(x.note)||esc(x.cat)}</div></div>
-      <b class="${x.type==='expense'?'exp':'inc'}">${x.type==='expense'?'-':'+'}${money(x.amount)}</b>
-      <button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delTx('${x.id}')"><svg class="ic" style="width:15px;height:15px"><use href="#i-trash"/></svg></button></div>`});
-  document.getElementById('txList').innerHTML=html||'<div class="empty">这个月还没有记录</div>';
   applyMoneyDim();
-  if(moneyDim!=='month') renderMoneyAnalytics();
+  renderMoneyAnalytics();
 }
 /* === 记账·消费明细分析（日/月/季/年/累计） === */
 let moneyDim='month', curYr=new Date().getFullYear(), mvSelDay=null, mvSelQuarter=null, mvSelYear=null;
 function setMoneyDim(d){moneyDim=d;document.querySelectorAll('#moneyDimSeg button').forEach(b=>b.classList.toggle('on',b.dataset.dim===d));applyMoneyDim();renderMoneyAnalytics();}
-function applyMoneyDim(){const m=moneyDim==='month';document.getElementById('monthCards').style.display=m?'':'none';document.getElementById('mvCard').style.display=m?'none':'';}
+function applyMoneyDim(){document.getElementById('monthCards').style.display=(moneyDim==='month')?'':'none';document.getElementById('mvCard').style.display='';}
 function mvShift(n){if(moneyDim==='day'){const[y,m2]=curMon.split('-').map(Number);const d=new Date(y,m2-1+n,1);curMon=d.getFullYear()+'-'+pad(d.getMonth()+1);}else if(moneyDim==='quarter'||moneyDim==='year'){curYr+=n;}else return;renderMoney();}
-function selDay(ds){mvSelDay=ds;renderMoneyAnalytics();}
+function jumpToDay(ds){mvSelDay=ds;curMon=ds.slice(0,7);moneyDim='day';document.querySelectorAll('#moneyDimSeg button').forEach(b=>b.classList.toggle('on',b.dataset.dim==='day'));applyMoneyDim();renderMoney();}
 function selQuarter(q){mvSelQuarter=q;renderMoneyAnalytics();}
 function selYear(y){mvSelYear=y;renderMoneyAnalytics();}
 function sumTiles(list){const e=list.filter(x=>x.type==='expense').reduce((a,b)=>a+b.amount,0);const i=list.filter(x=>x.type==='income').reduce((a,b)=>a+b.amount,0);return `<div class="s"><div class="l">支出</div><div class="v exp">${money(e)}</div></div><div class="s"><div class="l">收入</div><div class="v inc">+${money(i)}</div></div><div class="s"><div class="l">净额</div><div class="v ${i-e>=0?'inc':'exp'}">${i-e>=0?'+':'-'}${money(Math.abs(i-e))}</div></div>`;}
@@ -1044,7 +1011,6 @@ function compDonut(list){
 function txRows(list,limit){const sorted=[...list].sort((a,b)=>a.date<b.date?1:-1).slice(0,limit||100);if(!sorted.length)return '<div class="empty">这个周期还没有记录</div>';let html='',lastD='';sorted.forEach(x=>{if(x.date!==lastD){html+=`<div class="muted" style="padding:10px 4px 2px">${x.date}</div>`;lastD=x.date;}html+=`<div class="list-item"><span class="tag" style="background:${(CCOL[x.cat]||'#B8B0A4')}22;color:${CCOL[x.cat]||'#8A827A'}">${esc(x.cat)}</span><div style="flex:1;min-width:0"><div style="font-size:.88rem">${esc(x.note)||esc(x.cat)}</div></div><b class="${x.type==='expense'?'exp':'inc'}">${x.type==='expense'?'-':'+'}${money(x.amount)}</b><button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delTx('${x.id}')"><svg class="ic" style="width:15px;height:15px"><use href="#i-trash"/></svg></button></div>`;});return html;}
 function renderTrend(svg,keys,vals){const W=320,H=120,pd=14;const max=Math.max(1,...vals);const n=keys.length;const sx=n>1?(W-pd*2)/(n-1):0;let pts='';vals.forEach((v,i)=>{const x=pd+sx*i;const y=H-pd-(v/max)*(H-pd*2);pts+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';});const lastX=pd+sx*(n-1);const area='M'+pd+' '+(H-pd)+' '+pts.replace(/^M/,'L')+'L'+lastX.toFixed(1)+' '+(H-pd)+' Z';let lbl='';const sn=Math.min(4,n);for(let i=0;i<sn;i++){const idx=Math.round(i*(n-1)/(sn-1||1));const x=pd+sx*idx;lbl+=`<text x="${x.toFixed(1)}" y="${H-2}" font-size="8" fill="#9B958C" text-anchor="middle">${keys[idx].slice(2)}</text>`;}svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML=`<path d="${area}" fill="rgba(143,166,184,.14)"/><path d="${pts}" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"/>${vals.map((v,i)=>`<circle cx="${(pd+sx*i).toFixed(1)}" cy="${(H-pd-(v/max)*(H-pd*2)).toFixed(1)}" r="2.4" style="fill:var(--blue)"/>`).join('')}${lbl}`;}
 function renderMoneyAnalytics(){
-  if(moneyDim==='month')return;
   const all=g(K.tx,[]);
   const mvLabel=document.getElementById('mvLabel'),mvPrev=document.getElementById('mvPrev'),mvNext=document.getElementById('mvNext'),
         mvGrid=document.getElementById('mvGrid'),mvCal=document.getElementById('mvCal'),mvTrend=document.getElementById('mvTrend'),
@@ -1053,29 +1019,39 @@ function renderMoneyAnalytics(){
   mvTrend.style.display='none';mvCal.style.display='none';mvCal.innerHTML='';mvGrid.innerHTML='';
   let list=[];
   if(moneyDim==='day'){
+    if(!mvSelDay)mvSelDay=today();
+    list=all.filter(x=>x.date===mvSelDay);
+    mvLabel.textContent='已选 · '+mvSelDay;
+    mvPrev.style.display='none';mvNext.style.display='none';
+  }else if(moneyDim==='month'){
     const [y,m]=curMon.split('-').map(Number);const days=new Date(y,m,0).getDate();const dayMap={};
     all.forEach(x=>{if(x.date.slice(0,7)===curMon){const dd=+x.date.slice(8,10);dayMap[dd]=(dayMap[dd]||0)+(x.type==='income'?x.amount:-x.amount);}});
     const wd=['日','一','二','三','四','五','六'];let ch=wd.map(w=>`<div class="wd">${w}</div>`).join('');
     for(let i=0;i<new Date(y,m-1,1).getDay();i++)ch+=`<div class="c dim"></div>`;
-    if(mvSelDay===null||mvSelDay.slice(0,7)!==curMon){const ks=Object.keys(dayMap).map(Number);mvSelDay=ks.length?curMon+'-'+pad(Math.max(...ks)):curMon+'-'+pad(Math.min(days,+today().slice(8,10)));}
-    for(let d=1;d<=days;d++){const net=dayMap[d],ds=curMon+'-'+pad(d);let cls='c',amt='';if(net!==undefined){cls+=net<0?' has-e':' has-i';amt=`<div class="ca ${net<0?'e':'i'}">${net<0?'-':'+'}${Math.abs(net).toFixed(0)}</div>`;}if(ds===mvSelDay)cls+=' sel';else if(net===undefined)cls+=' dim';ch+=`<div class="${cls}" onclick="selDay('${ds}')"><div class="d">${d}</div>${amt}</div>`;}
-    mvCal.style.display='grid';mvCal.innerHTML=ch;list=all.filter(x=>x.date===mvSelDay);mvLabel.textContent=y+' 年 '+m+' 月 · 已选 '+mvSelDay.slice(5);
+    for(let d=1;d<=days;d++){const net=dayMap[d],ds=curMon+'-'+pad(d);let cls='c',amt='';if(net!==undefined){cls+=net<0?' has-e':' has-i';amt=`<div class="ca ${net<0?'e':'i'}">${net<0?'-':'+'}${Math.abs(net).toFixed(0)}</div>`;}else cls+=' dim';ch+=`<div class="${cls}" onclick="jumpToDay('${ds}')"><div class="d">${d}</div>${amt}</div>`;}
+    mvCal.style.display='grid';mvCal.innerHTML=ch;
+    list=all.filter(x=>x.date.slice(0,7)===curMon);
+    mvLabel.textContent=y+' 年 '+m+' 月';
+    mvPrev.style.display='';mvNext.style.display='';
   }else if(moneyDim==='quarter'){
     if(mvSelQuarter===null)mvSelQuarter=Math.floor(new Date().getMonth()/3);
     const qTot=[0,1,2,3].map(q=>{let e=0,i=0;for(let mo=0;mo<3;mo++){const mm=curYr+'-'+pad(q*3+mo+1);all.forEach(x=>{if(x.date.startsWith(mm)){x.type==='expense'?e+=x.amount:i+=x.amount;}});}return{e,i};});
     let g='<div class="qgrid">';['第一季度','第二季度','第三季度','第四季度'].forEach((qn,q)=>{g+=`<div class="q ${q===mvSelQuarter?'sel':''}" onclick="selQuarter(${q})"><div class="ql">${qn}</div><div class="qv exp">-${money(qTot[q].e)}</div><div class="qi">收入 +${money(qTot[q].i)}</div></div>`;});g+='</div>';mvGrid.innerHTML=g;
     const q=mvSelQuarter,months=[0,1,2].map(mo=>curYr+'-'+pad(q*3+mo+1));list=all.filter(x=>months.some(mm=>x.date.startsWith(mm)));mvLabel.textContent=curYr+' 年 · '+(q+1)+' 季度';
+    mvPrev.style.display='';mvNext.style.display='';
   }else if(moneyDim==='year'){
     if(mvSelYear===null)mvSelYear=curYr;const yrs=[];for(let yy=curYr;yy>=curYr-4;yy--)yrs.push(yy);let g='<div class="ygrid">';
     yrs.forEach(yy=>{const e=all.filter(x=>x.date.startsWith(String(yy))&&x.type==='expense').reduce((a,b)=>a+b.amount,0);g+=`<div class="y ${yy===mvSelYear?'sel':''}" onclick="selYear(${yy})"><div class="yl">${yy}</div><div class="yv exp">-${money(e)}</div></div>`;});g+='</div>';mvGrid.innerHTML=g;
     list=all.filter(x=>x.date.startsWith(String(mvSelYear)));mvLabel.textContent=mvSelYear+' 年';
+    mvPrev.style.display='';mvNext.style.display='';
   }else{
     list=all.slice();mvLabel.textContent='累计 · 共 '+all.length+' 笔';
     const byMon={};all.forEach(x=>{const mm=x.date.slice(0,7);byMon[mm]=(byMon[mm]||0)+(x.type==='expense'?x.amount:0);});
     const keys=Object.keys(byMon).sort();if(keys.length>1){renderTrend(mvTrend,keys,keys.map(k=>byMon[k]));mvTrend.style.display='block';}
+    mvPrev.style.display='none';mvNext.style.display='none';
   }
   mvSum.innerHTML=sumTiles(list);
-  mvCompRange.textContent=moneyDim==='day'?'当日':moneyDim==='quarter'?(mvSelQuarter+1)+'季度':moneyDim==='year'?mvSelYear+'年':'全部';
+  mvCompRange.textContent=moneyDim==='day'?'当日':moneyDim==='month'?'当月':moneyDim==='quarter'?(mvSelQuarter+1)+'季度':moneyDim==='year'?mvSelYear+'年':'全部';
   const dn=compDonut(list);
   mvDonut.innerHTML=dn.donut;mvLegend.innerHTML=dn.legend;
   mvList.innerHTML=txRows(list,80);mvCnt.textContent='('+list.length+' 笔)';
