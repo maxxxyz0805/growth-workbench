@@ -65,6 +65,10 @@ svg{display:block}
 .hb-q{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--fg);font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s}
 .hb-q:hover{transform:translateY(-2px);border-color:var(--sage)}
 .hb-q small{font-size:.6rem;color:var(--muted);font-weight:400}
+.cy-card .hb-q{background:linear-gradient(180deg,rgba(94,224,160,.06),rgba(94,224,160,.02));border:1px solid rgba(94,224,160,.25);color:var(--cy-neon);box-shadow:inset 0 0 12px rgba(94,224,160,.04)}
+.cy-card .hb-q:hover{border-color:var(--cy-neon);background:linear-gradient(180deg,rgba(94,224,160,.14),rgba(94,224,160,.04));box-shadow:0 0 14px rgba(94,224,160,.18),inset 0 0 16px rgba(94,224,160,.06);transform:translateY(-1px)}
+.cy-card .hb-q small{color:var(--cy-dim)}
+.cy-card .hb-q svg.ic{filter:drop-shadow(0 0 4px currentColor)}
 @media(max-width:560px){.hb-quick{grid-template-columns:repeat(2,1fr)}}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
@@ -140,8 +144,9 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 #page-today .stat .v{color:#C94830}
 #page-today .psy{background:linear-gradient(135deg,#FBE3D2,#F5DCC8);border:1px solid #E8B98E}
 #page-today .psy .t{color:#C94830}
-#page-today .psy .c{color:#5C3320}
+#page-today .psy .c{color:#5C3320;font-size:.92rem;line-height:1.85}
 #page-today .psy .c b{color:#C94830}
+#page-today .psy::before{content:"\"\"";display:block;font-family:Georgia,serif;font-size:2.8rem;line-height:.6;color:rgba(184,72,48,.18);margin-bottom:6px;height:14px}
 #page-today .backup-bar{background:linear-gradient(135deg,#FBE3D2,#F5DCC8);border-color:#E8B98E;color:#8B4520}
 #page-today .backup-bar .bb-text b{color:#5C3320}
 #page-today .btn-g{background:#FBE3D2;color:#5C3320}
@@ -192,15 +197,15 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .mv-sum .s{background:var(--bg);border-radius:12px;padding:10px 6px;text-align:center}
 .mv-sum .s .l{font-size:.72rem;color:var(--muted)}
 .mv-sum .s .v{font-size:1.02rem;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
-.mv-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px}
-.mv-cal .wd{text-align:center;font-size:.66rem;color:var(--muted);padding-bottom:2px}
-.mv-cal .c{aspect-ratio:1/.7;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;padding:1px;background:transparent}
+.mv-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:14px}
+.mv-cal .wd{text-align:center;font-size:.6rem;color:var(--muted);padding-bottom:1px}
+.mv-cal .c{aspect-ratio:1/.55;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;padding:0;background:transparent}
 .mv-cal .c.dim{opacity:.4;cursor:default}
 .mv-cal .c.sel{outline:2px solid var(--blue);outline-offset:-2px}
 .mv-cal .c.has-e{background:#FBEAE8}
 .mv-cal .c.has-i{background:#EAF3EA}
-.mv-cal .c .d{font-size:.72rem;font-weight:600;line-height:1}
-.mv-cal .c .ca{font-size:.52rem;line-height:1.05;font-variant-numeric:tabular-nums;margin-top:1px}
+.mv-cal .c .d{font-size:.62rem;font-weight:600;line-height:1}
+.mv-cal .c .ca{font-size:.46rem;line-height:1.05;font-variant-numeric:tabular-nums;margin-top:0;opacity:.85}
 .mv-cal .c .ca.e{color:var(--red)}
 .mv-cal .c .ca.i{color:var(--green)}
 .mv-trend{width:100%;height:120px;margin:6px 0 16px}
@@ -277,10 +282,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .hd-chk.on{background:var(--sage);border-color:var(--sage);color:#fff}
 .check-btn{width:48px;height:48px;border-radius:14px;border:2px solid var(--cy-line);display:flex;align-items:center;justify-content:center;color:var(--cy-dim);transition:.2s;flex-shrink:0}
 .check-btn.on{background:var(--cy-neon);border-color:var(--cy-neon);color:#0D1210;box-shadow:0 0 12px rgba(94,224,160,.4)}
-.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.heat .d{aspect-ratio:1;border-radius:5px;background:#0D1210;border:1px solid var(--cy-line);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--cy-dim)}
-.heat .h{gap:5px;font-size:.65rem;color:var(--cy-dim);text-align:center}
-.heat-head{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px;font-size:.62rem;color:var(--cy-dim);text-align:center}
+.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;max-width:200px;margin:0 auto}
+.heat .d{aspect-ratio:1;border-radius:3px;background:#0D1210;border:1px solid var(--cy-line);display:flex;align-items:center;justify-content:center;font-size:.52rem;color:var(--cy-dim)}
+.heat .h{gap:2px;font-size:.55rem;color:var(--cy-dim);text-align:center}
+.heat-head{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--cy-dim);text-align:center;max-width:200px;margin-left:auto;margin-right:auto}
 
 /* ===== 英语页 ===== */
 .countdown{background:linear-gradient(135deg,#E8B6BA,#C97C8F);border-radius:var(--r);padding:20px;color:#fff;text-align:center;box-shadow:0 4px 18px rgba(201,124,143,.25);position:relative;overflow:hidden}
@@ -302,8 +307,8 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .hb-name{flex:1;font-size:.92rem}
 .hb-name .st{font-size:.72rem;color:#C99A3C;margin-top:3px;display:flex;align-items:center;gap:4px}
 .heat-light .d{background:#F0EDE6;border:1px solid var(--line);color:#B5AFA5}
-.heat-light{gap:5px}
-.heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px;font-size:.62rem;color:var(--muted);text-align:center}
+.heat-light{gap:2px}
+.heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--muted);text-align:center;max-width:200px;margin-left:auto;margin-right:auto}
 
 /* ===== 弹层 ===== */
 .mask{position:fixed;inset:0;background:rgba(40,38,35,.4);z-index:50;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
@@ -363,7 +368,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
   <nav class="side">
     <div class="brand">Max<span>·成长台</span></div>
     <button class="nav-item on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日看板</button>
-    <button class="nav-item" data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账账本</button>
+    <button class="nav-item" data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账本</button>
     <button class="nav-item" data-p="health"><svg class="ic"><use href="#i-heart"/></svg>健康追踪</button>
     <button class="nav-item" data-p="eng"><svg class="ic"><use href="#i-book"/></svg>学习中心</button>
     <button class="nav-item" data-p="kb"><svg class="ic"><use href="#i-inbox"/></svg>知识库</button>
@@ -392,6 +397,11 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 
       <div class="rest-banner" id="restBanner" style="display:none">📚 今天休息日，时间更自由 —— 多点时间学习吧！💪</div>
 
+      <div class="psy mb">
+        <div class="t">每日心理学 · DAILY PSYCHOLOGY</div>
+        <div class="c" id="psyTip"></div>
+      </div>
+
       <div class="card water-card mb">
         <div class="row between">
           <div><b style="font-size:.95rem">💧 今日喝水</b> <span class="muted" id="waterText">0 / 1600 ml</span></div>
@@ -419,11 +429,6 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <div class="heat-head-l"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
           <div class="heat heat-light" id="heatmap"></div>
         </div>
-      </div>
-
-      <div class="psy mb">
-        <div class="t">每日心理学 · DAILY PSYCHOLOGY</div>
-        <div class="c" id="psyTip"></div>
       </div>
 
       <div class="ink-pool mb">
@@ -463,7 +468,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
     <section class="page" id="page-money">
       <div class="card">
         <div class="row between">
-          <h3 style="margin:0"><svg class="ic" style="color:var(--blue-d)"><use href="#i-wallet"/></svg>记账账本</h3>
+          <h3 style="margin:0"><svg class="ic" style="color:var(--blue-d)"><use href="#i-wallet"/></svg>记账本</h3>
           <button class="btn btn-p btn-sm" onclick="openTxSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>记一笔</button>
         </div>
       </div>
@@ -567,10 +572,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         </div>
 
         <div class="hb-quick">
-          <button class="hb-q" onclick="openHealthSheet('food')"><svg class="ic" style="width:20px;height:20px;color:var(--sand)"><use href="#i-food"/></svg><span>饮食</span></button>
-          <button class="hb-q" onclick="openHealthSheet('sport')"><svg class="ic" style="width:20px;height:20px;color:var(--sage-d)"><use href="#i-zap"/></svg><span>运动</span></button>
-          <button class="hb-q" onclick="openHealthSheet('sleep')"><svg class="ic" style="width:20px;height:20px;color:var(--blue-d)"><use href="#i-moon"/></svg><span>睡眠</span></button>
-          <button class="hb-q" onclick="openHealthSheet('weight')"><svg class="ic" style="width:20px;height:20px;color:var(--rose)"><use href="#i-scale"/></svg><span>体重</span><small>周/月</small></button>
+          <button class="hb-q" onclick="openHealthSheet('food')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-neon)"><use href="#i-food"/></svg><span>饮食</span></button>
+          <button class="hb-q" onclick="openHealthSheet('sport')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-amber)"><use href="#i-zap"/></svg><span>运动</span></button>
+          <button class="hb-q" onclick="openHealthSheet('sleep')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-cyan)"><use href="#i-moon"/></svg><span>睡眠</span></button>
+          <button class="hb-q" onclick="openHealthSheet('weight')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-neon)"><use href="#i-scale"/></svg><span>体重</span><small>周/月</small></button>
         </div>
         <p class="mt" style="font-size:.72rem;color:var(--cy-dim);line-height:1.7">四个入口各记各的，<b style="color:var(--cy-cyan)">同一天会自动合并</b>到一条记录。体重建议每周或每月更新一次即可。</p>
         <div id="healthList" class="mt"></div>
@@ -677,6 +682,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
       <option value="其他">其他运动</option>
     </select>
     <label class="f">运动时长（分钟，选填）</label><input type="number" id="hMin" inputmode="numeric" placeholder="比如 30，≥30 自动勾选「运动30分钟」习惯">
+    <label class="f">消耗卡路里 (kcal，选填)</label><input type="number" id="hCal" inputmode="numeric" placeholder="运动本身燃烧的热量，比如跑步 30 分钟约 280 kcal">
   </div>
   <div data-hg="weight">
     <label class="f">体重 (kg，选填)</label><input type="number" id="hWeight" inputmode="decimal" step="0.1" placeholder="59.0">
@@ -846,7 +852,11 @@ const PSY=[
  ['习惯堆叠','把新习惯挂在旧习惯后面：「刷完牙之后，我就背 5 个单词」。旧习惯是稳定的触发器，新习惯更容易存活。'],
  ['多巴胺与奖励预测','让人坚持的不是奖励本身，而是「期待奖励」。打卡的勾选、热力图的变色，就是在给大脑制造即时的期待反馈——所以记录本身就有效。'],
  ['成长型思维','把「我口语不行」换成「我口语暂时不行」。Dweck 的研究发现：相信能力可成长的人，面对挫折坚持更久。语言学习尤其吃这一套。'],
- ['环境设计','意志力是稀缺资源，环境才是隐形的手。想多喝水就把水杯放在视线内；想少刷手机就把它放另一个房间。改造环境比改造自己容易得多。']
+ ['环境设计','意志力是稀缺资源，环境才是隐形的手。想多喝水就把水杯放在视线内；想少刷手机就把它放另一个房间。改造环境比改造自己容易得多。'],
+ ['心流通道','心理学家 Csikszentmihalyi 的发现：人最投入、最有成就感的状态，发生在「挑战略高于当前能力」的时候。学习时如果觉得太轻松就升难度，太痛苦就降一档，保持那种「再使一把劲就能做到」的张力。'],
+ ['情绪颗粒度','会精确命名自己情绪的人，更容易调节它。把「我心情不好」说成「我现在有点失望，因为我对自己期望更高」，大脑会自动开始找出口。命名即疗愈。'],
+ ['80 分法则','追求 100 分会让人拖延，80 分就能交付反而让人持续产出。运动先出门、写作先打开文档、记账先记一笔——完美是完成的敌人。'],
+ ['默认效应','人脑倾向走阻力最小的路径。把这台工作台放在桌面一键打开、把水杯放在桌角、把跑鞋放在门口 —— 让好事「不得不」发生，比靠意志力靠谱得多。']
 ];
 function renderToday(){
   document.getElementById('restBanner').style.display=isRestDay(today())?'':'none';
@@ -981,7 +991,7 @@ function renderMoney(){
   renderMoneyAnalytics();
 }
 /* === 记账·消费明细分析（日/月/季/年/累计） === */
-let moneyDim='month', curYr=new Date().getFullYear(), mvSelDay=null, mvSelQuarter=null, mvSelYear=null;
+let moneyDim='day', curYr=new Date().getFullYear(), mvSelDay=null, mvSelQuarter=null, mvSelYear=null;
 function setMoneyDim(d){moneyDim=d;document.querySelectorAll('#moneyDimSeg button').forEach(b=>b.classList.toggle('on',b.dataset.dim===d));applyMoneyDim();renderMoneyAnalytics();}
 function applyMoneyDim(){document.getElementById('monthCards').style.display=(moneyDim==='month')?'':'none';document.getElementById('mvCard').style.display='';}
 function mvShift(n){if(moneyDim==='day'){const[y,m2]=curMon.split('-').map(Number);const d=new Date(y,m2-1+n,1);curMon=d.getFullYear()+'-'+pad(d.getMonth()+1);}else if(moneyDim==='quarter'||moneyDim==='year'){curYr+=n;}else return;renderMoney();}
@@ -1033,17 +1043,29 @@ function renderMoneyAnalytics(){
     list=all.filter(x=>x.date.slice(0,7)===curMon);
     mvLabel.textContent=y+' 年 '+m+' 月';
     mvPrev.style.display='';mvNext.style.display='';
+    // 趋势：本月每日支出（无支出日显示 0 形成连续折线）
+    const dayExp={};all.forEach(x=>{if(x.date.slice(0,7)===curMon && x.type==='expense'){const dd=+x.date.slice(8,10);dayExp[dd]=(dayExp[dd]||0)+x.amount;}});
+    const expKeys=[],expVals=[];for(let d=1;d<=days;d++){expKeys.push(curMon+'-'+pad(d));expVals.push(dayExp[d]||0);}
+    if(expVals.some(v=>v>0)){renderTrend(mvTrend,expKeys,expVals);mvTrend.style.display='block';}
   }else if(moneyDim==='quarter'){
     if(mvSelQuarter===null)mvSelQuarter=Math.floor(new Date().getMonth()/3);
     const qTot=[0,1,2,3].map(q=>{let e=0,i=0;for(let mo=0;mo<3;mo++){const mm=curYr+'-'+pad(q*3+mo+1);all.forEach(x=>{if(x.date.startsWith(mm)){x.type==='expense'?e+=x.amount:i+=x.amount;}});}return{e,i};});
     let g='<div class="qgrid">';['第一季度','第二季度','第三季度','第四季度'].forEach((qn,q)=>{g+=`<div class="q ${q===mvSelQuarter?'sel':''}" onclick="selQuarter(${q})"><div class="ql">${qn}</div><div class="qv exp">-${money(qTot[q].e)}</div><div class="qi">收入 +${money(qTot[q].i)}</div></div>`;});g+='</div>';mvGrid.innerHTML=g;
     const q=mvSelQuarter,months=[0,1,2].map(mo=>curYr+'-'+pad(q*3+mo+1));list=all.filter(x=>months.some(mm=>x.date.startsWith(mm)));mvLabel.textContent=curYr+' 年 · '+(q+1)+' 季度';
     mvPrev.style.display='';mvNext.style.display='';
+    // 趋势：本季度每月支出
+    const qMonExp=[0,1,2].map((_,i)=>all.filter(x=>x.date.startsWith(curYr+'-'+pad(q*3+i+1))&&x.type==='expense').reduce((a,b)=>a+b.amount,0));
+    const qKeys=[0,1,2].map(i=>curYr+'-'+pad(q*3+i+1));
+    if(qMonExp.some(v=>v>0)){renderTrend(mvTrend,qKeys,qMonExp);mvTrend.style.display='block';}
   }else if(moneyDim==='year'){
     if(mvSelYear===null)mvSelYear=curYr;const yrs=[];for(let yy=curYr;yy>=curYr-4;yy--)yrs.push(yy);let g='<div class="ygrid">';
     yrs.forEach(yy=>{const e=all.filter(x=>x.date.startsWith(String(yy))&&x.type==='expense').reduce((a,b)=>a+b.amount,0);g+=`<div class="y ${yy===mvSelYear?'sel':''}" onclick="selYear(${yy})"><div class="yl">${yy}</div><div class="yv exp">-${money(e)}</div></div>`;});g+='</div>';mvGrid.innerHTML=g;
     list=all.filter(x=>x.date.startsWith(String(mvSelYear)));mvLabel.textContent=mvSelYear+' 年';
     mvPrev.style.display='';mvNext.style.display='';
+    // 趋势：本年度每月支出
+    const yMonExp=Array.from({length:12},(_,mm)=>all.filter(x=>x.date.startsWith(mvSelYear+'-'+pad(mm+1))&&x.type==='expense').reduce((a,b)=>a+b.amount,0));
+    const yKeys=Array.from({length:12},(_,mm)=>mvSelYear+'-'+pad(mm+1));
+    if(yMonExp.some(v=>v>0)){renderTrend(mvTrend,yKeys,yMonExp);mvTrend.style.display='block';}
   }else{
     list=all.slice();mvLabel.textContent='累计 · 共 '+all.length+' 笔';
     const byMon={};all.forEach(x=>{const mm=x.date.slice(0,7);byMon[mm]=(byMon[mm]||0)+(x.type==='expense'?x.amount:0);});
@@ -1076,7 +1098,7 @@ const RECIPES=[
 ];
 function openHealthSheet(focus){
   document.getElementById('hDate').value=today();
-  ['hWeight','hIn','hOut','hSleep','hMin'].forEach(i=>document.getElementById(i).value='');
+  ['hWeight','hIn','hOut','hSleep','hMin','hCal'].forEach(i=>document.getElementById(i).value='');
   document.getElementById('hSport').value='';
   document.getElementById('hNote').value='';
   const TITLES={food:'记录饮食',sport:'记录运动',sleep:'记录睡眠',weight:'记录体重'};
@@ -1099,15 +1121,17 @@ function saveHealth(){
     weight:parseFloat(document.getElementById('hWeight').value)||0,
     calIn:parseInt(document.getElementById('hIn').value)||0,
     calOut:parseInt(document.getElementById('hOut').value)||0,
+    calBurn:parseInt(document.getElementById('hCal').value)||0,
     sleep:parseFloat(document.getElementById('hSleep').value)||0,
     sport:document.getElementById('hSport').value||'',
     min:parseInt(document.getElementById('hMin').value)||0,
     note:(document.getElementById('hNote').value||'').trim()};
-  if(!rec.weight&&!rec.calIn&&!rec.calOut&&!rec.sleep&&!rec.sport&&!rec.note)return toast('至少填一项');
+  if(!rec.weight&&!rec.calIn&&!rec.calOut&&!rec.calBurn&&!rec.sleep&&!rec.sport&&!rec.note)return toast('至少填一项');
   const hs=g(K.health,[]);
   const i=hs.findIndex(x=>x.date===date);
   if(i>=0){const base=hs[i];hs[i]={...base,
     weight:rec.weight||base.weight, calIn:rec.calIn||base.calIn, calOut:rec.calOut||base.calOut,
+    calBurn:rec.calBurn||base.calBurn,
     sleep:rec.sleep||base.sleep, sport:rec.sport||base.sport, min:rec.min||base.min,
     note:rec.note||base.note, id:base.id};
   }else hs.push(rec);
@@ -1220,7 +1244,7 @@ function renderHealth(){
       <span class="muted" style="color:var(--cy-dim);font-size:.75rem;min-width:74px">${x.date}</span>
       <div style="flex:1;font-size:.8rem;color:#B9CBBF;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
         ${x.sport?`<span class="tag" style="background:${(SPORT_COL[x.sport]||'#B8B0A4')}22;color:${SPORT_COL[x.sport]||'#B8B0A4'};font-weight:600">${SPORT_SVG[x.sport]||'•'} ${esc(x.sport)}${x.min?' '+x.min+'分':''}</span>`:''}
-        <span>${[x.weight&&x.weight+'kg',x.calIn&&'入'+x.calIn,x.calOut&&'耗'+x.calOut,x.sleep&&'睡'+x.sleep+'h'].filter(Boolean).join(' · ')}</span>
+        <span>${[x.weight&&x.weight+'kg',x.calIn&&'入'+x.calIn,x.calOut&&'动耗'+x.calOut,x.calBurn&&'燃'+x.calBurn,x.sleep&&'睡'+x.sleep+'h'].filter(Boolean).join(' · ')}</span>
       </div>
       <button style="color:var(--cy-dim);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delHealth('${x.id}')"><svg class="ic" style="width:14px;height:14px"><use href="#i-trash"/></svg></button>
     </div>
