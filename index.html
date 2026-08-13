@@ -62,13 +62,20 @@ svg{display:block}
 .muted{color:var(--muted);font-size:.82rem}
 .mt{margin-top:12px}.mb{margin-bottom:12px}
 .hb-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.hb-q{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--fg);font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s}
-.hb-q:hover{transform:translateY(-2px);border-color:var(--sage)}
-.hb-q small{font-size:.6rem;color:var(--muted);font-weight:400}
-.cy-card .hb-q{background:linear-gradient(180deg,rgba(94,224,160,.06),rgba(94,224,160,.02));border:1px solid rgba(94,224,160,.25);color:var(--cy-neon);box-shadow:inset 0 0 12px rgba(94,224,160,.04)}
-.cy-card .hb-q:hover{border-color:var(--cy-neon);background:linear-gradient(180deg,rgba(94,224,160,.14),rgba(94,224,160,.04));box-shadow:0 0 14px rgba(94,224,160,.18),inset 0 0 16px rgba(94,224,160,.06);transform:translateY(-1px)}
-.cy-card .hb-q small{color:var(--cy-dim)}
-.cy-card .hb-q svg.ic{filter:drop-shadow(0 0 4px currentColor)}
+.hb-q{font-size:.82rem;font-weight:600;cursor:pointer;transition:.18s;border-radius:14px;position:relative;overflow:hidden}
+.hb-q::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,currentColor,transparent 70%);opacity:.18;pointer-events:none}
+.hb-q:hover{transform:translateY(-2px)}
+.hb-q:hover::before{opacity:.32}
+.hb-q small{font-size:.6rem;font-weight:400;display:block;margin-top:1px;letter-spacing:.5px}
+.hb-q[data-c="0"]{background:linear-gradient(160deg,rgba(94,224,160,.14),rgba(94,224,160,.04));border:1px solid rgba(94,224,160,.42);color:var(--cy-neon);box-shadow:inset 0 0 14px rgba(94,224,160,.08)}
+.hb-q[data-c="0"]:hover{box-shadow:0 0 16px rgba(94,224,160,.28),inset 0 0 18px rgba(94,224,160,.12);border-color:var(--cy-neon)}
+.hb-q[data-c="1"]{background:linear-gradient(160deg,rgba(245,200,107,.14),rgba(245,200,107,.04));border:1px solid rgba(245,200,107,.42);color:var(--cy-amber);box-shadow:inset 0 0 14px rgba(245,200,107,.08)}
+.hb-q[data-c="1"]:hover{box-shadow:0 0 16px rgba(245,200,107,.28),inset 0 0 18px rgba(245,200,107,.12);border-color:var(--cy-amber)}
+.hb-q[data-c="2"]{background:linear-gradient(160deg,rgba(86,216,216,.14),rgba(86,216,216,.04));border:1px solid rgba(86,216,216,.42);color:var(--cy-cyan);box-shadow:inset 0 0 14px rgba(86,216,216,.08)}
+.hb-q[data-c="2"]:hover{box-shadow:0 0 16px rgba(86,216,216,.28),inset 0 0 18px rgba(86,216,216,.12);border-color:var(--cy-cyan)}
+.hb-q[data-c="3"]{background:linear-gradient(160deg,rgba(199,125,255,.14),rgba(199,125,255,.04));border:1px solid rgba(199,125,255,.42);color:#C77DFF;box-shadow:inset 0 0 14px rgba(199,125,255,.08)}
+.hb-q[data-c="3"]:hover{box-shadow:0 0 16px rgba(199,125,255,.28),inset 0 0 18px rgba(199,125,255,.12);border-color:#C77DFF}
+.hb-q svg.ic{filter:drop-shadow(0 0 5px currentColor)}
 @media(max-width:560px){.hb-quick{grid-template-columns:repeat(2,1fr)}}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
@@ -208,7 +215,6 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .mv-cal .c .ca{font-size:.46rem;line-height:1.05;font-variant-numeric:tabular-nums;margin-top:0;opacity:.85}
 .mv-cal .c .ca.e{color:var(--red)}
 .mv-cal .c .ca.i{color:var(--green)}
-.mv-trend{width:100%;height:120px;margin:6px 0 16px}
 .comp-title{display:flex;align-items:baseline;justify-content:space-between;margin:6px 0 10px}
 .comp-title .t{font-size:.95rem;font-weight:600}
 .comp-title .d{font-size:.72rem;color:var(--muted)}
@@ -238,6 +244,14 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .cyber h3{color:var(--cy-neon);font-size:.95rem;letter-spacing:1.5px;display:flex;align-items:center;gap:8px;margin-bottom:14px;text-transform:uppercase}
 .cyber h3::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--cy-line),transparent)}
 .cy-card{background:var(--cy-card);border:1px solid var(--cy-line);border-radius:14px;padding:14px;margin-bottom:12px}
+.hlth-tip{background:linear-gradient(135deg,rgba(94,224,160,.10),rgba(86,216,216,.04));border:1px solid rgba(94,224,160,.35);border-left:3px solid var(--cy-neon);border-radius:14px;padding:14px 16px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:inset 0 0 20px rgba(94,224,160,.04)}
+.hlth-tip::before{content:"";position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle,rgba(94,224,160,.12),transparent 70%);pointer-events:none}
+.hlth-tip-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;position:relative}
+.hlth-tip-tag{font-size:.7rem;letter-spacing:2px;color:var(--cy-neon);font-weight:700}
+.hlth-tip-day{font-size:.62rem;color:var(--cy-dim);font-family:ui-monospace,Menlo,monospace;letter-spacing:1px}
+.hlth-tip-t{color:var(--cy-neon);font-size:1.05rem;font-weight:700;margin-bottom:6px;position:relative;text-shadow:0 0 8px rgba(94,224,160,.25)}
+.hlth-tip-c{color:#C5D4C8;font-size:.85rem;line-height:1.75;position:relative}
+.hlth-tip-c b{color:var(--cy-neon)}
 .cy-stat{background:var(--cy-card);border:1px solid var(--cy-line);border-radius:14px;padding:12px;text-align:center}
 .cy-stat .v{font-size:1.2rem;font-weight:700;color:var(--cy-neon);font-variant-numeric:tabular-nums}
 .cy-stat .v.cy{color:var(--cy-cyan)}
@@ -286,7 +300,6 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .heat .d{aspect-ratio:1;border-radius:3px;background:#0D1210;border:1px solid var(--cy-line);display:flex;align-items:center;justify-content:center;font-size:.52rem;color:var(--cy-dim)}
 .heat .h{gap:2px;font-size:.55rem;color:var(--cy-dim);text-align:center}
 .heat-head{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--cy-dim);text-align:center;max-width:200px;margin-left:auto;margin-right:auto}
-
 /* ===== 英语页 ===== */
 .countdown{background:linear-gradient(135deg,#E8B6BA,#C97C8F);border-radius:var(--r);padding:20px;color:#fff;text-align:center;box-shadow:0 4px 18px rgba(201,124,143,.25);position:relative;overflow:hidden}
 .countdown::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 100% 0%,rgba(255,255,255,.2),transparent 60%);pointer-events:none}
@@ -307,8 +320,14 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .hb-name{flex:1;font-size:.92rem}
 .hb-name .st{font-size:.72rem;color:#C99A3C;margin-top:3px;display:flex;align-items:center;gap:4px}
 .heat-light .d{background:#F0EDE6;border:1px solid var(--line);color:#B5AFA5}
-.heat-light{gap:2px}
-.heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--muted);text-align:center;max-width:200px;margin-left:auto;margin-right:auto}
+.heat-light{gap:2px;max-width:200px;margin:0 auto}
+.heat-head-l{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;font-size:.55rem;color:var(--muted);text-align:center;max-width:200px;margin:0 auto 3px}
+.today-todo-heat{display:flex;gap:18px;align-items:flex-start}
+.today-todo-col{flex:1;min-width:0}
+.today-heat-col{width:200px;flex-shrink:0;padding:10px 12px;background:linear-gradient(180deg,#FAF6EF,#F4EEE5);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;align-items:stretch;position:sticky;top:0}
+.heat-stats{margin-top:10px;padding-top:10px;border-top:1px dashed #E0D8CB;font-size:.72rem;color:#7A7062;line-height:1.7;text-align:center}
+.heat-stats b{color:#C94830;font-size:.95rem}
+@media(max-width:680px){.today-todo-heat{flex-direction:column;gap:14px}.today-heat-col{width:100%;position:static}}
 
 /* ===== 弹层 ===== */
 .mask{position:fixed;inset:0;background:rgba(40,38,35,.4);z-index:50;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
@@ -422,12 +441,17 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <h3 style="margin:0"><svg class="ic" style="color:var(--red)"><use href="#i-target"/></svg>今日待办</h3>
           <button class="btn btn-g btn-sm" onclick="openHabitSheet()"><svg class="ic" style="width:14px;height:14px"><use href="#i-plus"/></svg>加习惯</button>
         </div>
-        <div id="todoList"></div>
-        <div id="habitGroups"></div>
-        <div class="mt">
-          <div class="muted mb" style="letter-spacing:1px">本月打卡热力 · 颜色越深完成越多</div>
-          <div class="heat-head-l"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
-          <div class="heat heat-light" id="heatmap"></div>
+        <div class="today-todo-heat">
+          <div class="today-todo-col">
+            <div id="todoList"></div>
+            <div id="habitGroups"></div>
+          </div>
+          <div class="today-heat-col">
+            <div class="muted mb" style="letter-spacing:1px;font-size:.7rem">本月热力</div>
+            <div class="heat-head-l"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+            <div class="heat heat-light" id="heatmap"></div>
+            <div class="heat-stats" id="heatStats"></div>
+          </div>
         </div>
       </div>
 
@@ -514,7 +538,6 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         <div id="mvGrid"></div>
         <div class="mv-sum" id="mvSum"></div>
         <div id="mvCal" class="mv-cal"></div>
-        <svg id="mvTrend" class="mv-trend" viewBox="0 0 320 120" preserveAspectRatio="none" style="display:none"></svg>
         <div class="comp-title"><span class="t">消费类别</span><span class="d" id="mvCompRange"></span></div>
         <div class="donut-wrap">
           <div id="mvDonut"></div>
@@ -532,6 +555,9 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
     <section class="page" id="page-health">
       <div class="cyber">
         <h3><svg class="ic"><use href="#i-zap"/></svg>HEALTH CORE · 健康追踪</h3>
+
+        <div class="hlth-tip" id="hlthTip"></div>
+
         <div class="grid4 mb" id="healthStats" style="gap:10px"></div>
 
         <div class="cy-card">
@@ -571,13 +597,18 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <div id="sChart"></div>
         </div>
 
-        <div class="hb-quick">
-          <button class="hb-q" onclick="openHealthSheet('food')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-neon)"><use href="#i-food"/></svg><span>饮食</span></button>
-          <button class="hb-q" onclick="openHealthSheet('sport')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-amber)"><use href="#i-zap"/></svg><span>运动</span></button>
-          <button class="hb-q" onclick="openHealthSheet('sleep')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-cyan)"><use href="#i-moon"/></svg><span>睡眠</span></button>
-          <button class="hb-q" onclick="openHealthSheet('weight')"><svg class="ic" style="width:20px;height:20px;color:var(--cy-neon)"><use href="#i-scale"/></svg><span>体重</span><small>周/月</small></button>
+        <div class="cy-card">
+          <div class="row between" style="margin-bottom:10px">
+            <span style="font-size:.85rem;color:var(--cy-cyan);letter-spacing:1px">⚡ 快速记录</span>
+            <span style="font-size:.7rem;color:var(--cy-dim)">四个入口 · 同日自动合并</span>
+          </div>
+          <div class="hb-quick">
+            <button class="hb-q" data-c="0" onclick="openHealthSheet('food')" style="padding:14px 4px;display:flex;flex-direction:column;align-items:center;gap:4px"><svg class="ic" style="width:22px;height:22px"><use href="#i-food"/></svg><span>饮食</span><small>FOOD</small></button>
+            <button class="hb-q" data-c="1" onclick="openHealthSheet('sport')" style="padding:14px 4px;display:flex;flex-direction:column;align-items:center;gap:4px"><svg class="ic" style="width:22px;height:22px"><use href="#i-zap"/></svg><span>运动</span><small>SPORT</small></button>
+            <button class="hb-q" data-c="2" onclick="openHealthSheet('sleep')" style="padding:14px 4px;display:flex;flex-direction:column;align-items:center;gap:4px"><svg class="ic" style="width:22px;height:22px"><use href="#i-moon"/></svg><span>睡眠</span><small>SLEEP</small></button>
+            <button class="hb-q" data-c="3" onclick="openHealthSheet('weight')" style="padding:14px 4px;display:flex;flex-direction:column;align-items:center;gap:4px"><svg class="ic" style="width:22px;height:22px"><use href="#i-scale"/></svg><span>体重</span><small>WEEKLY</small></button>
+          </div>
         </div>
-        <p class="mt" style="font-size:.72rem;color:var(--cy-dim);line-height:1.7">四个入口各记各的，<b style="color:var(--cy-cyan)">同一天会自动合并</b>到一条记录。体重建议每周或每月更新一次即可。</p>
         <div id="healthList" class="mt"></div>
       </div>
     </section>
@@ -858,6 +889,39 @@ const PSY=[
  ['80 分法则','追求 100 分会让人拖延，80 分就能交付反而让人持续产出。运动先出门、写作先打开文档、记账先记一笔——完美是完成的敌人。'],
  ['默认效应','人脑倾向走阻力最小的路径。把这台工作台放在桌面一键打开、把水杯放在桌角、把跑鞋放在门口 —— 让好事「不得不」发生，比靠意志力靠谱得多。']
 ];
+const HLTH=[
+ ['饮水节奏','每天 1.5-2L 水不是一口气喝完。起床 200ml、饭前 30 分钟 200ml、运动后 200ml、睡前 100ml。均匀摄入比猛灌更解渴、肾脏负担也小。'],
+ ['早餐吃蛋白质','早晨摄入 20-30g 蛋白质（2 颗蛋 / 1 杯希腊酸奶 / 一把坚果），能稳定到午饭前的血糖，减少上午 10 点后对甜食的渴望，整体精力提升 30%。'],
+ ['久坐 30-5 法则','坐满 30 分钟就站起来 5 分钟（接水、深蹲几下、拉伸）。一条研究 23000 人追踪 12 年：久坐 + 不动的人全因死亡率比经常打断组高 40%。'],
+ ['碳水选慢的','同样一碗饭，把白米饭换成糙米、意面换成全麦、馒头换成燕麦。GI 降一档，饱腹感持续久一截，午后犯困的概率肉眼可见下降。'],
+ ['睡前的 90 分钟','决定整夜睡眠质量的不是睡多长，而是睡前 90 分钟做了什么。洗澡、看纸质书、拉伸 —— 这三件事最能稳定生物钟。手机蓝光会推迟褪黑素释放约 50 分钟。'],
+ ['力量训练是抗衰核心','30 岁后肌肉量每十年掉 3-8%。每周 2-3 次力量训练（深蹲、硬拉、卧推、引体）比纯有氧更能稳住基础代谢，比同龄人显年轻。'],
+ ['蛋白质日均 1.6g/kg','增肌期 1.6-2.2g/kg，体重维持期 1.2-1.6g/kg。60kg 的人每天约 100g 蛋白质 ≈ 5 颗蛋 + 300g 鸡胸 + 500ml 牛奶，3 餐分摊比 1 餐猛吃利用率高 25%。'],
+ ['咖啡因 8 小时原则','下午 14 点后喝咖啡，睡前仍会有 50% 咖啡因残留。把最后一杯咖啡放在 12 点前，是改善入睡最快的一招。'],
+ ['每周 150 分钟中强度','WHO 推荐成人每周 150-300 分钟中等强度有氧（快走、骑车、游泳）或 75 分钟高强度。每天 30 分钟分 2 次也有效，关键是「每周都做」而不是「偶尔猛练」。'],
+ ['睡眠 7-9 小时不是越多越好','睡 9 小时以上和 6 小时以下，对认知表现、心血管风险的影响几乎相当。找到自己的 7-9 小时区间比一味补觉更健康。'],
+ ['吃脂肪不胖你','身体需要 omega-3 / omega-6 才能合成激素、吸收脂溶性维生素。每天 1 把坚果 + 1 份深海鱼（三文鱼/鲭鱼）= 大脑和心血管的最强补给。'],
+ ['深蹲是性价比之王','自重深蹲 100 个 ≈ 4 组跑步 5 分钟的能量消耗。同时激活下肢 200+ 块肌肉、骨骼受到良性压力（防骨质疏松）。每天 50 个，1 个月腿部力量肉眼可见。'],
+ ['控糖比控油更关键','导致现代人肥胖的核心不是脂肪而是精制糖。把含糖饮料换成黑咖啡/茶/气泡水，6 周平均能减重 2-3kg，腰围缩 1-2cm。'],
+ ['起床喝温水','一夜睡眠后身体处于轻度脱水状态。起床先喝 200-300ml 温水（不是冰水也不是蜂蜜水），10 分钟内被小肠吸收，立刻恢复血液循环和新陈代谢。'],
+ ['运动 20 分钟就有效','不必每次跑 1 小时才能算运动。心率达到「有点喘但还能说话」持续 20 分钟，生长激素、皮质醇调节、情绪提升已全部启动。'],
+ ['饭后散步 10 分钟','饭后坐着血糖高峰更猛，站着/慢走 10 分钟能削掉 20% 的餐后血糖峰值。日积月累对体重、腰围、餐后犯困都有显著改善。'],
+ ['7 小时睡眠 + 30 分钟运动 > 8 小时睡眠','研究比较两类人：睡 7 小时 + 每天运动 30 分钟 vs. 睡 8 小时但不运动 —— 前者认知、情绪、代谢指标全面胜出。「睡多 + 久坐」是最低效的健康组合。'],
+ ['拉伸不是越痛越好','拉伸的强度应该到「轻微酸胀但不觉疼痛」即可。痛到流泪会触发保护性收缩，反而更紧。每次 30 秒 × 2 组，针对一块肌肉就够。'],
+ ['冷热交替淋浴','洗澡最后 30 秒切冷水，可以激活棕色脂肪、促进末梢血液循环。一开始受不了就 5 秒，习惯后慢慢延到 30 秒，整个秋冬不容易手脚冰凉。'],
+ ['每周吃 2 次深海鱼','三文鱼/鲭鱼/沙丁鱼富含 EPA+DHA，是大脑细胞膜的关键组成。长期吃的人比不吃的人老年认知退化风险低 23%。'],
+ ['晒早晨的 10 分钟阳光','起床后 1 小时内晒 10 分钟自然光（不进玻璃），能稳定当日皮质醇节律、改善夜眠、提升日间专注力。比任何补剂都便宜都有效。'],
+ ['间歇性断食 16:8','每天集中在 8 小时内吃完 2-3 餐，其余 16 小时只喝水/黑咖啡。研究显示 16:8 模式能改善胰岛素敏感性、降低炎症，且不需要刻意计算热量。'],
+ ['冥想 5 分钟 = 咖啡 1 杯','专注呼吸 5 分钟（约 6-8 个深呼吸循环），能让大脑默认模式网络活跃度下降，等效于一杯咖啡的专注力提升，但没有咖啡因的副作用。'],
+ ['站姿比坐姿多燃 0.15 kcal/分钟','差距不大，但累积 6 小时 = 多消耗 54 kcal ≈ 一年 1.5kg 脂肪。给工作台配个升降桌或加个站立垫就行。'],
+ ['吃原型食物，少吃加工','每餐至少 70% 的盘子装原型食物（蔬菜、肉、蛋、米面），剩下的 30% 留给加工食品。营养密度差异 5-10 倍，长期吃原型的人 BMI 平均低 2-3。']
+];
+function renderHlthTip(){
+  const d=new Date();const di=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);
+  const t=HLTH[di%HLTH.length];
+  const el=document.getElementById('hlthTip');
+  if(el)el.innerHTML=`<div class="hlth-tip-hd"><span class="hlth-tip-tag">每日健康 TIPS</span><span class="hlth-tip-day">DAY ${di}</span></div><div class="hlth-tip-t">${t[0]}</div><div class="hlth-tip-c">${t[1]}</div>`;
+}
 function renderToday(){
   document.getElementById('restBanner').style.display=isRestDay(today())?'':'none';
   const d=new Date(),h=d.getHours();
@@ -1019,14 +1083,13 @@ function compDonut(list){
   return {donut:donutSvg,legend:legendHtml};
 }
 function txRows(list,limit){const sorted=[...list].sort((a,b)=>a.date<b.date?1:-1).slice(0,limit||100);if(!sorted.length)return '<div class="empty">这个周期还没有记录</div>';let html='',lastD='';sorted.forEach(x=>{if(x.date!==lastD){html+=`<div class="muted" style="padding:10px 4px 2px">${x.date}</div>`;lastD=x.date;}html+=`<div class="list-item"><span class="tag" style="background:${(CCOL[x.cat]||'#B8B0A4')}22;color:${CCOL[x.cat]||'#8A827A'}">${esc(x.cat)}</span><div style="flex:1;min-width:0"><div style="font-size:.88rem">${esc(x.note)||esc(x.cat)}</div></div><b class="${x.type==='expense'?'exp':'inc'}">${x.type==='expense'?'-':'+'}${money(x.amount)}</b><button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delTx('${x.id}')"><svg class="ic" style="width:15px;height:15px"><use href="#i-trash"/></svg></button></div>`;});return html;}
-function renderTrend(svg,keys,vals){const W=320,H=120,pd=14;const max=Math.max(1,...vals);const n=keys.length;const sx=n>1?(W-pd*2)/(n-1):0;let pts='';vals.forEach((v,i)=>{const x=pd+sx*i;const y=H-pd-(v/max)*(H-pd*2);pts+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';});const lastX=pd+sx*(n-1);const area='M'+pd+' '+(H-pd)+' '+pts.replace(/^M/,'L')+'L'+lastX.toFixed(1)+' '+(H-pd)+' Z';let lbl='';const sn=Math.min(4,n);for(let i=0;i<sn;i++){const idx=Math.round(i*(n-1)/(sn-1||1));const x=pd+sx*idx;lbl+=`<text x="${x.toFixed(1)}" y="${H-2}" font-size="8" fill="#9B958C" text-anchor="middle">${keys[idx].slice(2)}</text>`;}svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML=`<path d="${area}" fill="rgba(143,166,184,.14)"/><path d="${pts}" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"/>${vals.map((v,i)=>`<circle cx="${(pd+sx*i).toFixed(1)}" cy="${(H-pd-(v/max)*(H-pd*2)).toFixed(1)}" r="2.4" style="fill:var(--blue)"/>`).join('')}${lbl}`;}
 function renderMoneyAnalytics(){
   const all=g(K.tx,[]);
   const mvLabel=document.getElementById('mvLabel'),mvPrev=document.getElementById('mvPrev'),mvNext=document.getElementById('mvNext'),
-        mvGrid=document.getElementById('mvGrid'),mvCal=document.getElementById('mvCal'),mvTrend=document.getElementById('mvTrend'),
+        mvGrid=document.getElementById('mvGrid'),mvCal=document.getElementById('mvCal'),
         mvSum=document.getElementById('mvSum'),mvCompRange=document.getElementById('mvCompRange'),mvDonut=document.getElementById('mvDonut'),mvLegend=document.getElementById('mvLegend'),
         mvList=document.getElementById('mvList'),mvCnt=document.getElementById('mvCnt');
-  mvTrend.style.display='none';mvCal.style.display='none';mvCal.innerHTML='';mvGrid.innerHTML='';
+  mvCal.style.display='none';mvCal.innerHTML='';mvGrid.innerHTML='';
   let list=[];
   if(moneyDim==='day'){
     if(!mvSelDay)mvSelDay=today();
@@ -1046,7 +1109,6 @@ function renderMoneyAnalytics(){
     // 趋势：本月每日支出（无支出日显示 0 形成连续折线）
     const dayExp={};all.forEach(x=>{if(x.date.slice(0,7)===curMon && x.type==='expense'){const dd=+x.date.slice(8,10);dayExp[dd]=(dayExp[dd]||0)+x.amount;}});
     const expKeys=[],expVals=[];for(let d=1;d<=days;d++){expKeys.push(curMon+'-'+pad(d));expVals.push(dayExp[d]||0);}
-    if(expVals.some(v=>v>0)){renderTrend(mvTrend,expKeys,expVals);mvTrend.style.display='block';}
   }else if(moneyDim==='quarter'){
     if(mvSelQuarter===null)mvSelQuarter=Math.floor(new Date().getMonth()/3);
     const qTot=[0,1,2,3].map(q=>{let e=0,i=0;for(let mo=0;mo<3;mo++){const mm=curYr+'-'+pad(q*3+mo+1);all.forEach(x=>{if(x.date.startsWith(mm)){x.type==='expense'?e+=x.amount:i+=x.amount;}});}return{e,i};});
@@ -1056,7 +1118,6 @@ function renderMoneyAnalytics(){
     // 趋势：本季度每月支出
     const qMonExp=[0,1,2].map((_,i)=>all.filter(x=>x.date.startsWith(curYr+'-'+pad(q*3+i+1))&&x.type==='expense').reduce((a,b)=>a+b.amount,0));
     const qKeys=[0,1,2].map(i=>curYr+'-'+pad(q*3+i+1));
-    if(qMonExp.some(v=>v>0)){renderTrend(mvTrend,qKeys,qMonExp);mvTrend.style.display='block';}
   }else if(moneyDim==='year'){
     if(mvSelYear===null)mvSelYear=curYr;const yrs=[];for(let yy=curYr;yy>=curYr-4;yy--)yrs.push(yy);let g='<div class="ygrid">';
     yrs.forEach(yy=>{const e=all.filter(x=>x.date.startsWith(String(yy))&&x.type==='expense').reduce((a,b)=>a+b.amount,0);g+=`<div class="y ${yy===mvSelYear?'sel':''}" onclick="selYear(${yy})"><div class="yl">${yy}</div><div class="yv exp">-${money(e)}</div></div>`;});g+='</div>';mvGrid.innerHTML=g;
@@ -1065,11 +1126,9 @@ function renderMoneyAnalytics(){
     // 趋势：本年度每月支出
     const yMonExp=Array.from({length:12},(_,mm)=>all.filter(x=>x.date.startsWith(mvSelYear+'-'+pad(mm+1))&&x.type==='expense').reduce((a,b)=>a+b.amount,0));
     const yKeys=Array.from({length:12},(_,mm)=>mvSelYear+'-'+pad(mm+1));
-    if(yMonExp.some(v=>v>0)){renderTrend(mvTrend,yKeys,yMonExp);mvTrend.style.display='block';}
   }else{
     list=all.slice();mvLabel.textContent='累计 · 共 '+all.length+' 笔';
     const byMon={};all.forEach(x=>{const mm=x.date.slice(0,7);byMon[mm]=(byMon[mm]||0)+(x.type==='expense'?x.amount:0);});
-    const keys=Object.keys(byMon).sort();if(keys.length>1){renderTrend(mvTrend,keys,keys.map(k=>byMon[k]));mvTrend.style.display='block';}
     mvPrev.style.display='none';mvNext.style.display='none';
   }
   mvSum.innerHTML=sumTiles(list);
@@ -1154,6 +1213,7 @@ function editProfile(){const set=g(K.set,{});
 }
 function nextRecipe(){recipeIdx++;renderHealth()}
 function renderHealth(){
+  renderHlthTip();
   const hs=g(K.health,[]),set=g(K.set,{});
   const withW=hs.filter(x=>x.weight).sort((a,b)=>a.date<b.date?-1:1);
   const w=withW.length?withW[withW.length-1].weight:0;
@@ -1357,6 +1417,14 @@ function renderHabit(){
     const isT=ds===t;
     cells+=`<span class="d" style="${n?`background:rgba(200,72,48,${op});border-color:transparent;color:#fff`:''}${isT?';outline:2px solid #C94830;outline-offset:1px':''}">${dd}</span>`}
   document.getElementById('heatmap').innerHTML=cells;
+  // 热力图统计：完成度 + 连续天数
+  const cBox=g(K.tc,{});let totalDone=0,maxStreak=0,curStreak=0,prevWas=0;
+  for(let dd=1;dd<=dim;dd++){const ds=`${y}-${pad(m)}-${pad(dd)}`;
+    const n=Object.keys(cBox[ds]||{}).filter(k=>habits.some(h=>h.id===k)).length;
+    if(n>0){totalDone++;curStreak++;maxStreak=Math.max(maxStreak,curStreak);}else curStreak=0;}
+  const pct=totalDone?Math.round(totalDone/dim*100):0;
+  const hsEl=document.getElementById('heatStats');
+  if(hsEl)hsEl.innerHTML=`<div><b>${totalDone}</b> / ${dim} 天</div><div style="margin-top:2px">完成率 <b>${pct}%</b></div><div style="margin-top:2px;color:#C99A3C">最长连 <b>${maxStreak}</b> 天 🔥</div>`;
 }
 
 /* ================= 英语 ================= */
