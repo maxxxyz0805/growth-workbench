@@ -192,15 +192,15 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .mv-sum .s{background:var(--bg);border-radius:12px;padding:10px 6px;text-align:center}
 .mv-sum .s .l{font-size:.72rem;color:var(--muted)}
 .mv-sum .s .v{font-size:1.02rem;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
-.mv-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:16px}
+.mv-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px}
 .mv-cal .wd{text-align:center;font-size:.66rem;color:var(--muted);padding-bottom:2px}
-.mv-cal .c{aspect-ratio:1/1.15;border-radius:9px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;padding:2px}
+.mv-cal .c{aspect-ratio:1/.7;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;padding:1px;background:transparent}
 .mv-cal .c.dim{opacity:.4;cursor:default}
 .mv-cal .c.sel{outline:2px solid var(--blue);outline-offset:-2px}
 .mv-cal .c.has-e{background:#FBEAE8}
 .mv-cal .c.has-i{background:#EAF3EA}
-.mv-cal .c .d{font-size:.8rem;font-weight:600;line-height:1}
-.mv-cal .c .ca{font-size:.6rem;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:1px}
+.mv-cal .c .d{font-size:.72rem;font-weight:600;line-height:1}
+.mv-cal .c .ca{font-size:.52rem;line-height:1.05;font-variant-numeric:tabular-nums;margin-top:1px}
 .mv-cal .c .ca.e{color:var(--red)}
 .mv-cal .c .ca.i{color:var(--green)}
 .mv-trend{width:100%;height:120px;margin:6px 0 16px}
@@ -524,8 +524,11 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         <div class="mv-sum" id="mvSum"></div>
         <div id="mvCal" class="mv-cal"></div>
         <svg id="mvTrend" class="mv-trend" viewBox="0 0 320 120" preserveAspectRatio="none" style="display:none"></svg>
-        <div class="comp-title"><span class="t">类别构成</span><span class="d" id="mvCompRange"></span></div>
-        <div id="mvComp"></div>
+        <div class="comp-title"><span class="t">消费类别</span><span class="d" id="mvCompRange"></span></div>
+        <div class="donut-wrap">
+          <div id="mvDonut"></div>
+          <div class="legend" id="mvLegend"></div>
+        </div>
         <div class="row between mt">
           <h3 style="margin:0;font-size:.95rem"><svg class="ic" style="color:var(--blue-d)"><use href="#i-cal"/></svg>明细 <span class="muted" id="mvCnt"></span></h3>
           <button class="btn btn-g btn-sm" onclick="exportCSV()"><svg class="ic" style="width:14px;height:14px"><use href="#i-down"/></svg>导出 CSV</button>
@@ -959,9 +962,9 @@ function renderWater(){
 function dismissBackup(){sv(K.backup,today());document.getElementById('backupHint').innerHTML=''}
 
 /* ================= 记账 ================= */
-const CATS_E=['食','衣','住','行','旅行游玩','自我提升','医疗健康','人情社交','其他'];
+const CATS_E=['衣','食','住','行','医疗健康','娱乐','旅行游玩','自我提升','人情社交','其他'];
 const CATS_I=['工资','副业','理财','红包','其他收入'];
-const CCOL={'食':'#C4A29E','衣':'#A8B8C9','住':'#9CAF9B','行':'#8FA6B8','旅行游玩':'#D6B48F','自我提升':'#B49CC4','医疗健康':'#D98F8F','人情社交':'#C9BC8F','其他':'#B8B0A4'};
+const CCOL={'衣':'#A8B8C9','食':'#C4A29E','住':'#9CAF9B','行':'#8FA6B8','医疗健康':'#D98F8F','娱乐':'#E89B6F','旅行游玩':'#D6B48F','自我提升':'#B49CC4','人情社交':'#C9BC8F','其他':'#B8B0A4'};
 let txType='expense',curMon=today().slice(0,7);
 function shiftMonth(n){const[y,m]=curMon.split('-').map(Number);const d=new Date(y,m-1+n,1);curMon=d.getFullYear()+'-'+pad(d.getMonth()+1);renderMoney()}
 function openTxSheet(){document.getElementById('txDate').value=today();setTxType('expense');document.getElementById('txAmt').value='';document.getElementById('txNote').value='';document.getElementById('txMask').classList.add('show')}
@@ -1019,7 +1022,25 @@ function selDay(ds){mvSelDay=ds;renderMoneyAnalytics();}
 function selQuarter(q){mvSelQuarter=q;renderMoneyAnalytics();}
 function selYear(y){mvSelYear=y;renderMoneyAnalytics();}
 function sumTiles(list){const e=list.filter(x=>x.type==='expense').reduce((a,b)=>a+b.amount,0);const i=list.filter(x=>x.type==='income').reduce((a,b)=>a+b.amount,0);return `<div class="s"><div class="l">支出</div><div class="v exp">${money(e)}</div></div><div class="s"><div class="l">收入</div><div class="v inc">+${money(i)}</div></div><div class="s"><div class="l">净额</div><div class="v ${i-e>=0?'inc':'exp'}">${i-e>=0?'+':'-'}${money(Math.abs(i-e))}</div></div>`;}
-function compBars(list){const by={};list.filter(x=>x.type==='expense').forEach(x=>by[x.cat]=(by[x.cat]||0)+x.amount);const arr=Object.entries(by).sort((a,b)=>b[1]-a[1]);if(!arr.length)return '<div class="empty">这个周期还没有支出</div>';const max=arr[0][1];return arr.map(([c,v])=>`<div class="comp-row"><div class="cn">${esc(c)}</div><div class="cbar"><i style="width:${Math.max(6,v/max*100)}%;background:${CCOL[c]||'#B8B0A4'}"></i></div><div class="cv">-${money(v)}</div></div>`).join('');}
+function compDonut(list){
+  const exp=list.filter(x=>x.type==='expense').reduce((a,b)=>a+b.amount,0);
+  const by={};list.filter(x=>x.type==='expense').forEach(x=>by[x.cat]=(by[x.cat]||0)+x.amount);
+  const known=CATS_E.filter(c=>by[c]).map(c=>[c,by[c]]);
+  const others=Object.keys(by).filter(c=>!CATS_E.includes(c)).map(c=>[c,by[c]]);
+  const entries=known.concat(others);
+  let donutSvg,legendHtml;
+  if(exp>0){
+    const C=2*Math.PI*40;let off=0,svg='';
+    entries.forEach(([c,v])=>{const len=v/exp*C;svg+=`<circle cx="55" cy="55" r="40" fill="none" stroke="${CCOL[c]||'#B8B0A4'}" stroke-width="18" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 55 55)"/>`;off+=len});
+    svg+=`<text x="55" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#3F3D3A">${money(exp)}</text><text x="55" y="68" text-anchor="middle" font-size="9" fill="#9B958C">周期支出</text>`;
+    donutSvg=`<svg width="110" height="110" viewBox="0 0 110 110">${svg}</svg>`;
+    legendHtml=entries.map(([c,v])=>`<div class="li"><span class="dot" style="background:${CCOL[c]||'#B8B0A4'}"></span>${esc(c)}<b>${money(v)}</b></div>`).join('');
+  }else{
+    donutSvg=`<svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="40" fill="none" stroke="#EDE9E1" stroke-width="18"/><text x="55" y="58" text-anchor="middle" font-size="10" fill="#9B958C">暂无支出</text></svg>`;
+    legendHtml='<div class="empty">记一笔就开始统计</div>';
+  }
+  return {donut:donutSvg,legend:legendHtml};
+}
 function txRows(list,limit){const sorted=[...list].sort((a,b)=>a.date<b.date?1:-1).slice(0,limit||100);if(!sorted.length)return '<div class="empty">这个周期还没有记录</div>';let html='',lastD='';sorted.forEach(x=>{if(x.date!==lastD){html+=`<div class="muted" style="padding:10px 4px 2px">${x.date}</div>`;lastD=x.date;}html+=`<div class="list-item"><span class="tag" style="background:${(CCOL[x.cat]||'#B8B0A4')}22;color:${CCOL[x.cat]||'#8A827A'}">${esc(x.cat)}</span><div style="flex:1;min-width:0"><div style="font-size:.88rem">${esc(x.note)||esc(x.cat)}</div></div><b class="${x.type==='expense'?'exp':'inc'}">${x.type==='expense'?'-':'+'}${money(x.amount)}</b><button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这条记录？'))delTx('${x.id}')"><svg class="ic" style="width:15px;height:15px"><use href="#i-trash"/></svg></button></div>`;});return html;}
 function renderTrend(svg,keys,vals){const W=320,H=120,pd=14;const max=Math.max(1,...vals);const n=keys.length;const sx=n>1?(W-pd*2)/(n-1):0;let pts='';vals.forEach((v,i)=>{const x=pd+sx*i;const y=H-pd-(v/max)*(H-pd*2);pts+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';});const lastX=pd+sx*(n-1);const area='M'+pd+' '+(H-pd)+' '+pts.replace(/^M/,'L')+'L'+lastX.toFixed(1)+' '+(H-pd)+' Z';let lbl='';const sn=Math.min(4,n);for(let i=0;i<sn;i++){const idx=Math.round(i*(n-1)/(sn-1||1));const x=pd+sx*idx;lbl+=`<text x="${x.toFixed(1)}" y="${H-2}" font-size="8" fill="#9B958C" text-anchor="middle">${keys[idx].slice(2)}</text>`;}svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML=`<path d="${area}" fill="rgba(143,166,184,.14)"/><path d="${pts}" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"/>${vals.map((v,i)=>`<circle cx="${(pd+sx*i).toFixed(1)}" cy="${(H-pd-(v/max)*(H-pd*2)).toFixed(1)}" r="2.4" style="fill:var(--blue)"/>`).join('')}${lbl}`;}
 function renderMoneyAnalytics(){
@@ -1027,7 +1048,7 @@ function renderMoneyAnalytics(){
   const all=g(K.tx,[]);
   const mvLabel=document.getElementById('mvLabel'),mvPrev=document.getElementById('mvPrev'),mvNext=document.getElementById('mvNext'),
         mvGrid=document.getElementById('mvGrid'),mvCal=document.getElementById('mvCal'),mvTrend=document.getElementById('mvTrend'),
-        mvSum=document.getElementById('mvSum'),mvComp=document.getElementById('mvComp'),mvCompRange=document.getElementById('mvCompRange'),
+        mvSum=document.getElementById('mvSum'),mvCompRange=document.getElementById('mvCompRange'),mvDonut=document.getElementById('mvDonut'),mvLegend=document.getElementById('mvLegend'),
         mvList=document.getElementById('mvList'),mvCnt=document.getElementById('mvCnt');
   mvTrend.style.display='none';mvCal.style.display='none';mvCal.innerHTML='';mvGrid.innerHTML='';
   let list=[];
@@ -1055,7 +1076,9 @@ function renderMoneyAnalytics(){
   }
   mvSum.innerHTML=sumTiles(list);
   mvCompRange.textContent=moneyDim==='day'?'当日':moneyDim==='quarter'?(mvSelQuarter+1)+'季度':moneyDim==='year'?mvSelYear+'年':'全部';
-  mvComp.innerHTML=compBars(list);mvList.innerHTML=txRows(list,80);mvCnt.textContent='('+list.length+' 笔)';
+  const dn=compDonut(list);
+  mvDonut.innerHTML=dn.donut;mvLegend.innerHTML=dn.legend;
+  mvList.innerHTML=txRows(list,80);mvCnt.textContent='('+list.length+' 笔)';
 }
 
 function exportCSV(){
