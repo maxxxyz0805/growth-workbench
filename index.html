@@ -1559,6 +1559,13 @@ function reverseInk(id){
       if(tx.length<g(K.tx,[]).length)sv(K.tx,tx);                        // 删除归到的记账条目
     }
   });
+  // 反向撤销完后，扫一遍健康记录——凡是全空的就整条删掉
+  const hs=g(K.health,[]);
+  const cleaned=hs.filter(r=>{
+    const has=(r.calIn||0)>0||r.sport||(r.min||0)>0||(r.sleep||0)>0||(r.note&&String(r.note).trim());
+    return has;
+  });
+  if(cleaned.length!==hs.length)sv(K.health,cleaned);
 }
 // ===== 灵光池 · 一键归类 =====
 function todayHealth(){const arr=g(K.health,[]);let rec=arr.find(x=>x.date===today());if(!rec){rec={id:uid(),date:today()};arr.push(rec)}return {arr,rec}}
