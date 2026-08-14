@@ -1521,7 +1521,45 @@ let _inkTag='';
 function setInkTag(btn){_inkTag=btn.dataset.t;document.querySelectorAll('.ink-tag').forEach(b=>b.classList.toggle('on',b===btn))}
 function addInkPhotos(input){const files=Array.from(input.files||[]).slice(0,3-_inkPhotos.length);if(!files.length)return;let done=0;files.forEach(f=>{const r=new FileReader();r.onload=()=>{_inkPhotos.push(r.result);done++;if(done===files.length)toast('已加 '+files.length+' 张图')};r.readAsDataURL(f)});input.value=''}
 function saveInk(){const t=document.getElementById('inkText').value.trim();if(!t&&!_inkPhotos.length)return toast('写点什么或拍张照');const arr=g(K.ink,[]);arr.unshift({id:uid(),ts:Date.now(),type:_inkTag||'未分类',text:t,photos:_inkPhotos.slice()});sv(K.ink,arr);document.getElementById('inkText').value='';_inkPhotos=[];_inkTag='';document.querySelectorAll('.ink-tag').forEach(b=>b.classList.remove('on'));toast('已加入草稿');renderInkPool()}
-function delInk(id){sv(K.ink,g(K.ink,[]).filter(x=>x.id!==id));renderInkPool();toast('已删除')}
+function delInk(id){
+  reverseInk(id);                 // 先撤销该草稿在其它板块产生的所有副作用
+  sv(K.ink,g(K.ink,[]).filter(x=>x.id!==id));
+  render();                       // 刷新全部板块（健康/知识库/记账/灵光池）
+  toast('已删除草稿，并同步撤销其在其它板块的归类数据');
+}
+/* 删除灵光池草稿时，按草稿记录的 effects 反向撤销其在健康/知识库/记账等板块的归类 */
+function reverseInk(id){
+  const x=g(K.ink,[]).find(i=>i.id===id);
+  const eff=(x&&x.effects)||[];
+  if(!eff.length)return;
+  const escR=s=>String(s||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  eff.forEach(e=>{
+    if(e.board==='healthFood'){
+      const hs=g(K.health,[]), rec=hs.find(h=>h.date===e.date);
+      if(rec){
+        rec.calIn=Math.max(0,(rec.calIn||0)-(e.kcal||0));   // 扣回摄入热量
+        if(e.note){                                          // 尽力扣回当时写入的备注片段
+          let n=rec.note||'';
+          n=n.replace(new RegExp('(^|；)'+escR(e.note),'g'),'').replace(/^；+|；；+/g,'；').replace(/^；|；$/g,'').trim();
+          rec.note=n||undefined;
+        }
+        sv(K.health,hs);
+      }
+    }else if(e.board==='healthSport'){
+      const hs=g(K.health,[]), rec=hs.find(h=>h.date===e.date);
+      if(rec){rec.sport=e.prevSport;rec.min=e.prevMin;sv(K.health,hs);}  // 还原运动字段
+    }else if(e.board==='healthSleep'){
+      const hs=g(K.health,[]), rec=hs.find(h=>h.date===e.date);
+      if(rec){rec.sleep=e.prevSleep;sv(K.health,hs);}                    // 还原睡眠字段
+    }else if(e.board==='kb'){
+      const kb=g(K.kb,[]).filter(k=>k.id!==e.id);
+      if(kb.length<g(K.kb,[]).length)sv(K.kb,kb);                        // 删除归到的知识库条目
+    }else if(e.board==='tx'){
+      const tx=g(K.tx,[]).filter(k=>k.id!==e.id);
+      if(tx.length<g(K.tx,[]).length)sv(K.tx,tx);                        // 删除归到的记账条目
+    }
+  });
+}
 // ===== 灵光池 · 一键归类 =====
 function todayHealth(){const arr=g(K.health,[]);let rec=arr.find(x=>x.date===today());if(!rec){rec={id:uid(),date:today()};arr.push(rec)}return {arr,rec}}
 function extractNum(s){const m=String(s||'').match(/(\d+(?:\.\d+)?)/);return m?parseFloat(m[1]):null}
@@ -1532,27 +1570,42 @@ function classifyInk(id){
   const arr=g(K.ink,[]), x=arr.find(i=>i.id===id);
   if(!x)return;
   const t=(x.text||'').trim();
+  x.effects=x.effects||[];          // 记录本次归类产生的副作用，供删除时反向撤销
   let msg='';
   if(x.type==='食物'){
     const kcal=extractKcal(t);
     const {arr:ha,rec}=todayHealth();
     rec.calIn=(rec.calIn||0)+kcal;
     rec.note=(rec.note?rec.note+'；':'')+t;
-    sv(K.health,ha); msg='已归到健康·摄入 '+kcal+' kcal';
+    sv(K.health,ha);
+    x.effects.push({board:'healthFood',date:rec.date,kcal,note:t});
+    msg='已归到健康·摄入 '+kcal+' kcal';
   }else if(x.type==='运动'){
     const min=extractNum(t), sport=extractSport(t);
     const {arr:ha,rec}=todayHealth();
+    const prevSport=rec.sport, prevMin=rec.min;
     if(sport)rec.sport=sport; if(min)rec.min=min;
-    sv(K.health,ha); msg='已归到健康·运动 '+(sport||'')+(min?(' '+min+'分钟'):'');
+    sv(K.health,ha);
+    x.effects.push({board:'healthSport',date:rec.date,prevSport,prevMin});
+    msg='已归到健康·运动 '+(sport||'')+(min?(' '+min+'分钟'):'');
   }else if(x.type==='睡眠'){
     const h=extractNum(t);
     const {arr:ha,rec}=todayHealth();
-    if(h)rec.sleep=h; sv(K.health,ha); msg='已归到健康·睡眠 '+h+' 小时';
+    const prevSleep=rec.sleep;
+    if(h)rec.sleep=h; sv(K.health,ha);
+    x.effects.push({board:'healthSleep',date:rec.date,prevSleep});
+    msg='已归到健康·睡眠 '+h+' 小时';
   }else if(x.type==='灵感'){
-    const kb=g(K.kb,[]); kb.unshift({id:uid(),title:(t.slice(0,40)||'灵感速记'),link:'',cat:'灵感笔记',note:t,date:today(),links:[]}); sv(K.kb,kb); msg='已归到知识库';
+    const kb=g(K.kb,[]); const nid=uid();
+    kb.unshift({id:nid,title:(t.slice(0,40)||'灵感速记'),link:'',cat:'灵感笔记',note:t,date:today(),links:[]}); sv(K.kb,kb);
+    x.effects.push({board:'kb',id:nid});
+    msg='已归到知识库';
   }else if(x.type==='记账'){
     const amt=extractNum(t);
-    const tx=g(K.tx,[]); tx.unshift({id:uid(),type:'expense',amount:amt,cat:guessCat(t),note:t,date:today()}); sv(K.tx,tx); msg='已归到记账 '+amt+' 元';
+    const tx=g(K.tx,[]); const nid=uid();
+    tx.unshift({id:nid,type:'expense',amount:amt,cat:guessCat(t),note:t,date:today()}); sv(K.tx,tx);
+    x.effects.push({board:'tx',id:nid});
+    msg='已归到记账 '+amt+' 元';
   }else{
     return toast('「'+x.type+'」暂不支持自动归类，已保留草稿');
   }
