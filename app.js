@@ -21,7 +21,8 @@ window.K = {
   tx:'wb_growth_tx', health:'wb_growth_health', habits:'wb_growth_habits',
   checks:'wb_growth_checkins', study:'wb_growth_study', mats:'wb_growth_mats',
   kb:'wb_growth_kb', water:'wb_growth_water', ink:'wb_growth_ink', set:'wb_growth_settings',
-  backup:'wb_growth_backup_dismissed', kbImport:'wb_growth_kb_lastimport'
+  backup:'wb_growth_backup_dismissed', kbImport:'wb_growth_kb_lastimport',
+  siRead:'wb_growth_si_read', siPod:'wb_growth_si_podcast', siRev:'wb_growth_si_review', siSeeded:'wb_growth_si_seeded'
 };
 
 /* ---------- 2. 内存数据缓存（页面运行时唯一数据源） ---------- */
