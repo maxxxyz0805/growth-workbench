@@ -115,16 +115,17 @@ function removeQueued(store){
   });
 }
 function debouncedFlush(k){
+  _flushPending = true;
   clearTimeout(_flushTimers[k]);
   _flushTimers[k] = setTimeout(function(){ flushStore(k); }, 350);
 }
 function flushStore(k){
-  if(!session || !online()){ enqueue(k, DB[k]); return; }
+  if(!session || !online()){ enqueue(k, DB[k]); _flushPending = false; return; }
   rest('POST', '/rest/v1/' + TABLE + '?on_conflict=user_id,store',
     [{user_id: session.uid, store:k, value: DB[k]}],
     {'Prefer':'resolution=merge-duplicates'})
-    .then(function(){ removeQueued(k); })
-    .catch(function(){ enqueue(k, DB[k]); });
+    .then(function(){ _flushPending = false; removeQueued(k); })
+    .catch(function(){ _flushPending = false; enqueue(k, DB[k]); });
 }
 function drainQueue(){
   return idbAll('queue').then(function(rows){
@@ -145,11 +146,69 @@ function drainQueue(){
 }
 
 /* ---------- 7. 云端读取（登录后拉全量） ---------- */
+function isEmptyVal(v){ return v === null || v === undefined || v === '' || (Array.isArray(v) && v.length === 0) || (typeof v === 'object' && !Array.isArray(v) && v !== null && Object.keys(v).length === 0); }
+function mergeStore(cloud, local){
+  // 两端都是数组：按 id（无 id 则按内容）做并集，绝不丢弃任一侧独有数据
+  if(Array.isArray(cloud) && Array.isArray(local)){
+    var seen = {}, out = [];
+    var keyOf = function(it){ return (it && typeof it === 'object' && it.id != null) ? ('id:'+it.id) : ('j:'+JSON.stringify(it)); };
+    cloud.concat(local).forEach(function(it){ var k = keyOf(it); if(!seen[k]){ seen[k] = 1; out.push(it); } });
+    return out;
+  }
+  if(isEmptyVal(cloud)) return local;   // 云端空 → 保留本地（防丢）
+  if(isEmptyVal(local)) return cloud;   // 本地空 → 用云端
+  // 对象：合并双方键；冲突键以云端为准（保证多设备同步，最后写入方胜出），本地独有键保留
+  if(cloud && typeof cloud === 'object' && !Array.isArray(cloud) && local && typeof local === 'object' && !Array.isArray(local)){
+    var m = {};
+    for(var k in local){ if(Object.prototype.hasOwnProperty.call(local, k)) m[k] = local[k]; }
+    for(var k2 in cloud){ if(Object.prototype.hasOwnProperty.call(cloud, k2)) m[k2] = cloud[k2]; }
+    return m;
+  }
+  return cloud;                          // 标量：云端优先
+}
 function loadAll(){
+  // 安全网：先备份当前本地快照，极端情况下可在 localStorage['wb_snapshot_prev'] 找回
+  try { localStorage.setItem('wb_snapshot_prev', JSON.stringify(DB)); } catch(e){}
   return rest('GET', '/rest/v1/' + TABLE + '?select=store,value').then(function(rows){
-    (rows || []).forEach(function(r){ DB[r.store] = r.value; });
+    var needPush = [];
+    (rows || []).forEach(function(r){
+      var cloud = r.value, local = DB[r.store];
+      if(cloud === undefined || cloud === null){
+        // 云端缺该键但本地有数据：保留本地并补推上云
+        if(local !== undefined && local !== null){ DB[r.store] = local; needPush.push(r.store); }
+        return;
+      }
+      var merged = mergeStore(cloud, local);
+      DB[r.store] = merged;
+      // 合并后比云端多（说明本地有云端没有的数据）→ 补推上云，恢复多设备一致（自愈）
+      if(!isEmptyVal(local) && (isEmptyVal(cloud) || (Array.isArray(merged) && Array.isArray(cloud) && merged.length > cloud.length))){
+        needPush.push(r.store);
+      }
+    });
     persistSnapshot();
+    needPush.forEach(function(k){ try { flushStore(k); } catch(e){} });
   });
+}
+
+/* ---------- 7.5 自动拉取（多设备实时同步） ---------- */
+var _flushPending = false;
+function isEditing(){
+  var a = document.activeElement;
+  if(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)) return true;
+  if(document.querySelector('.mask.show')) return true;  // 弹窗打开中，不打断
+  return false;
+}
+var _lastPull = 0;
+function pullAndRender(){
+  if(!session || !online() || isEditing() || _flushPending) return;  // 本地刚改动未上云时不拉，避免覆盖
+  if(document.hidden) return;  // 后台隐藏标签不轮询，省请求；切回时 visibilitychange 会触发
+  var now = Date.now();
+  if(now - _lastPull < 4000) return;  // 4s 节流，防抖动
+  _lastPull = now;
+  setSync('syncing');
+  loadAll()
+    .then(function(){ if(typeof render === 'function'){ try{ render(); }catch(e){} } setSync('synced'); })
+    .catch(function(){ setSync('offline'); });
 }
 
 /* ---------- 8. Supabase REST 封装（零依赖，纯 fetch） ---------- */
@@ -345,6 +404,9 @@ function boot(){
   registerSW();
   window.addEventListener('online', onOnline);
   window.addEventListener('offline', onOffline);
+  window.addEventListener('focus', pullAndRender);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) pullAndRender(); });
+  setInterval(pullAndRender, 30000);  // 30s 后台轮询：不切窗口也自动同步（隐藏标签自动跳过）
 
   loadSnapshot().then(function(){
     if(!CONFIGURED){ setSync('idle'); showLogin(); return Promise.resolve(); }
