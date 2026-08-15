@@ -42,6 +42,25 @@ svg{display:block}
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;color:var(--muted);font-size:.95rem;min-height:44px;transition:.15s;text-align:left;width:100%}
 .nav-item:hover{background:#EDE9E1}
 .nav-item.on{background:var(--ink);color:#fff}
+/* 自我提升 · 专属黛绿配色 */
+.nav-item[data-p="selfimp"]{color:var(--si)}
+.nav-item[data-p="selfimp"] .ic{color:var(--si)}
+.nav-item[data-p="selfimp"].on{background:var(--si);color:#fff}
+.nav-item[data-p="selfimp"].on .ic{color:#fff}
+.tabbar button[data-p="selfimp"]{color:var(--si)}
+.tabbar button[data-p="selfimp"].on{color:var(--si);font-weight:600}
+/* 复盘 · 按周期分组的时间线 */
+.rev-group{margin-bottom:18px}
+.rev-group-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.rev-group-tag{background:var(--si);color:#fff;font-size:.78rem;padding:3px 10px;border-radius:99px;font-weight:600}
+.rev-group-count{font-size:.75rem;color:var(--muted)}
+.tl{margin:0;padding:0}
+.tl-item{position:relative;padding:0 0 16px 24px}
+.tl-item:before{content:'';position:absolute;left:6px;top:6px;bottom:-6px;width:2px;background:var(--si-line)}
+.tl-item:last-child:before{display:none}
+.tl-item:after{content:'';position:absolute;left:1px;top:4px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--si);box-sizing:border-box}
+.tl-date{font-size:.78rem;color:var(--si-d);font-weight:600;margin-bottom:4px}
+.tl-body{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .main{flex:1;max-width:860px;margin:0 auto;padding:28px 20px 100px;width:100%}
 .page{display:none;animation:fade .25s ease}
 .page.on{display:block}
@@ -1602,7 +1621,28 @@ function renderPod(){const arr=[...g(K.siPod,[])].sort((a,b)=>a.date<b.date?1:-1
 function openRevSheet(){['rvGain','rvImprove','rvNext'].forEach(i=>document.getElementById(i).value='');document.getElementById('rvCycle').selectedIndex=0;document.getElementById('revMask').classList.add('show')}
 function saveRev(){const g1=document.getElementById('rvGain').value.trim();if(!g1&&!document.getElementById('rvImprove').value.trim()&&!document.getElementById('rvNext').value.trim())return toast('写点什么吧');const arr=g(K.siRev,[]);arr.unshift({id:uid(),cycle:document.getElementById('rvCycle').value,gain:g1,improve:document.getElementById('rvImprove').value.trim(),next:document.getElementById('rvNext').value.trim(),date:today()});sv(K.siRev,arr);closeMask('revMask');toast('已复盘');renderSelfImp()}
 function delRev(id){sv(K.siRev,g(K.siRev,[]).filter(x=>x.id!==id));renderSelfImp();toast('已删除')}
-function renderRev(){const arr=[...g(K.siRev,[])].sort((a,b)=>a.date<b.date?1:-1);document.getElementById('revList').innerHTML=arr.map(x=>`<div class="rec-item"><div class="hd"><span class="ti">${esc(x.cycle||'复盘')}</span><span class="chip">${esc(x.date)}</span></div>${x.gain?`<div class="mt"><b>收获</b><div class="muted" style="margin-top:2px">${esc(x.gain)}</div></div>`:''}${x.improve?`<div class="mt"><b>待改进</b><div class="muted" style="margin-top:2px">${esc(x.improve)}</div></div>`:''}${x.next?`<div class="mt"><b>下一步</b><div class="muted" style="margin-top:2px">${esc(x.next)}</div></div>`:''}<div class="row between mt"><button class="btn btn-sm btn-danger" onclick="if(confirm('删除这条？'))delRev('${x.id}')">删除</button></div></div>`).join('')||'<div class="empty">还没有复盘，点右上角写一条</div>'}
+function renderRev(){
+  const arr=[...g(K.siRev,[])].sort((a,b)=>a.date<b.date?1:-1);
+  const box=document.getElementById('revList');
+  if(!arr.length){box.innerHTML='<div class="empty">还没有复盘，点右上角写一条</div>';return;}
+  const order=['周复盘','月复盘','季复盘'];
+  const groups={};
+  arr.forEach(function(r){const c=r.cycle||'复盘';(groups[c]=groups[c]||[]).push(r);});
+  const keys=order.filter(function(k){return groups[k];}).concat(Object.keys(groups).filter(function(k){return order.indexOf(k)===-1;}));
+  box.innerHTML=keys.map(function(k){
+    const items=groups[k];
+    const tl=items.map(function(x){
+      return '<div class="tl-item"><div class="tl-body">'
+        +'<div class="tl-date">'+esc(x.date)+'</div>'
+        + (x.gain?'<div class="mt"><b>收获</b><div class="muted" style="margin-top:2px">'+esc(x.gain)+'</div></div>':'')
+        + (x.improve?'<div class="mt"><b>待改进</b><div class="muted" style="margin-top:2px">'+esc(x.improve)+'</div></div>':'')
+        + (x.next?'<div class="mt"><b>下一步</b><div class="muted" style="margin-top:2px">'+esc(x.next)+'</div></div>':'')
+        + '<div class="row between mt"><button class="btn btn-sm btn-danger" onclick="if(confirm(\'删除这条？\'))delRev(\''+x.id+'\')">删除</button></div>'
+        + '</div></div>';
+    }).join('');
+    return '<div class="rev-group"><div class="rev-group-hd"><span class="rev-group-tag">'+esc(k)+'</span><span class="rev-group-count">'+items.length+' 条</span></div><div class="tl">'+tl+'</div></div>';
+  }).join('');
+}
 
 /* ================= 英语 ================= */
 function setExamDate(){const set=g(K.set,{});const v=prompt('雅思考试日期 (YYYY-MM-DD)',set.examDate||'2026-12-05');
