@@ -146,9 +146,23 @@ function drainQueue(){
 
 /* ---------- 7. 云端读取（登录后拉全量） ---------- */
 function loadAll(){
+  // 安全网：先备份当前本地快照，极端情况下可在 localStorage['wb_snapshot_prev'] 找回
+  try { localStorage.setItem('wb_snapshot_prev', JSON.stringify(DB)); } catch(e){}
   return rest('GET', '/rest/v1/' + TABLE + '?select=store,value').then(function(rows){
-    (rows || []).forEach(function(r){ DB[r.store] = r.value; });
+    var cloudEmptyStores = [];
+    var isEmpty = function(v){ return v === null || v === undefined || v === '' || (Array.isArray(v) && v.length === 0) || (typeof v === 'object' && !Array.isArray(v) && v !== null && Object.keys(v).length === 0); };
+    (rows || []).forEach(function(r){
+      var cloud = r.value, local = DB[r.store];
+      if(isEmpty(cloud) && !isEmpty(local)){
+        // 云端为空但本地有数据：绝不覆盖本地（防丢），稍后补推上云
+        cloudEmptyStores.push(r.store);
+        return;
+      }
+      DB[r.store] = cloud;
+    });
     persistSnapshot();
+    // 把云端缺失但本地有的数据补推上云，恢复多设备一致（自愈）
+    cloudEmptyStores.forEach(function(k){ try { flushStore(k); } catch(e){} });
   });
 }
 
