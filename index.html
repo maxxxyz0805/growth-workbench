@@ -24,6 +24,7 @@
   --cy-bg:#111714; --cy-card:#182019; --cy-line:#26332A; --cy-neon:#5EE0A0; --cy-cyan:#56D8D8; --cy-dim:#7A9384; --cy-amber:#F5C86B;
   --kb-bg:#14192A; --kb-card:#1B2236; --kb-line:#2A3349; --kb-neon:#B0A6E8; --kb-cyan:#8AA8D6; --kb-dim:#8E97B5; --kb-amber:#E8B7D8;
   --r:16px; --shadow:0 2px 12px rgba(63,61,58,.06);
+  --si:#3E6B58; --si-d:#2F5343; --si-soft:rgba(62,107,88,.12); --si-line:rgba(62,107,88,.30);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:16px}
@@ -357,6 +358,23 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
   .tabbar .ic{width:22px;height:22px}
   .hero h1{font-size:1.15rem}
 }
+.subtabs{display:flex;gap:6px;background:#EDE9E1;border-radius:14px;padding:5px;margin-bottom:16px;overflow-x:auto}
+.subtabs .subtab{flex:1;min-width:72px;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:10px 6px;border-radius:10px;font-size:.82rem;color:var(--muted);min-height:44px;font-weight:500;transition:.15s;white-space:nowrap}
+.subtabs .subtab .ic{width:15px;height:15px}
+.subtabs .subtab.on{background:#fff;color:var(--si-d);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.si-pane{display:none;animation:fade .2s ease}
+.si-pane.on{display:block}
+.si-banner{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--si),var(--si-d));color:#fff;border-radius:var(--r);padding:13px 16px;margin-bottom:16px;font-size:.84rem;line-height:1.4;box-shadow:0 4px 16px rgba(62,107,88,.22)}
+.si-banner.warn{background:linear-gradient(135deg,#D96C5F,#B84A3E);box-shadow:0 4px 16px rgba(184,74,62,.22)}
+.si-banner .ic{width:18px;height:18px;flex-shrink:0}
+.rec-item{background:#FBFAF7;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.rec-item .hd{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.rec-item .ti{font-weight:600;font-size:.92rem;color:var(--ink)}
+.rec-item .mt{font-size:.78rem;color:var(--muted);margin-top:7px;line-height:1.6}
+.rec-item .mt b{color:var(--si-d)}
+.rec-item .qt{font-size:.82rem;color:var(--si-d);background:var(--si-soft);border-left:3px solid var(--si);padding:8px 10px;border-radius:8px;margin-top:8px;line-height:1.6;white-space:pre-wrap}
+.rec-item .tag{background:var(--si-soft);color:var(--si-d)}
+.stars{color:#E0A93B;letter-spacing:1px;font-size:.85rem}
 </style>
 </head>
 <body>
@@ -386,6 +404,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
     <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"/><path d="M3 13 5.5 4h13L21 13"/><path d="M3 13h6a3 3 0 0 0 6 0h6"/></symbol>
     <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.5-4.5"/></symbol>
+    <symbol id="i-seed" viewBox="0 0 24 24"><path d="M12 21v-8"/><path d="M12 13c0-4.5 2.5-8 8-8 0 4.5-3.2 8-8 8z"/><path d="M12 13c0-3.5-2-6-6.5-6C5.5 10.5 8 13 12 13z"/></symbol>
     <symbol id="i-food" viewBox="0 0 24 24"><path d="M4 3v8a3 3 0 0 0 6 0V3M7 3v18M17 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4 2.5-1 2.5-4-1-5-2.5-5M17 12v9"/></symbol>
   </defs>
 </svg>
@@ -397,7 +416,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
     <button class="nav-item on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日看板</button>
     <button class="nav-item" data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账本</button>
     <button class="nav-item" data-p="health"><svg class="ic"><use href="#i-heart"/></svg>健康追踪</button>
-    <button class="nav-item" data-p="eng"><svg class="ic"><use href="#i-book"/></svg>学习中心</button>
+    <button class="nav-item" data-p="selfimp"><svg class="ic"><use href="#i-seed"/></svg>自我提升</button>
     <button class="nav-item" data-p="kb"><svg class="ic"><use href="#i-inbox"/></svg>知识库</button>
   </nav>
 
@@ -647,30 +666,75 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
       </div>
     </section>
 
-    <!-- ================= 英语 ================= -->
-    <section class="page" id="page-eng">
-      <div class="countdown mb">
-        <div class="muted" style="color:rgba(255,255,255,.85);font-size:.78rem;letter-spacing:1px" id="cdLabel">IELTS COUNTDOWN</div>
-        <div class="days" id="cdDays">--</div>
-        <div style="font-size:.8rem;opacity:.85" id="cdDate">设置考试日期</div>
-        <div class="countdown-sub mt" id="cdSub"></div>
-        <button class="btn btn-sm mt" style="background:rgba(255,255,255,.22);color:#fff" onclick="setExamDate()">设置/修改日期</button>
+    <!-- ================= 自我提升（学习中心升级） ================= -->
+    <section class="page" id="page-selfimp">
+      <div id="siBanner" class="si-banner"></div>
+
+      <div class="subtabs">
+        <button class="subtab on" data-si="lang" onclick="showSiTab('lang')"><svg class="ic"><use href="#i-seed"/></svg>语言学习</button>
+        <button class="subtab" data-si="read" onclick="showSiTab('read')"><svg class="ic"><use href="#i-book"/></svg>阅读</button>
+        <button class="subtab" data-si="pod" onclick="showSiTab('pod')"><svg class="ic"><use href="#i-inbox"/></svg>播客</button>
+        <button class="subtab" data-si="rev" onclick="showSiTab('rev')"><svg class="ic"><use href="#i-edit"/></svg>复盘</button>
       </div>
 
-      <div class="card">
-        <div class="row between">
-          <h3 style="margin:0"><svg class="ic" style="color:var(--rose)"><use href="#i-target"/></svg>学习任务</h3>
-          <button class="btn btn-p btn-sm" onclick="openStudySheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加任务</button>
+      <!-- 语言学习（沿用原英语学习页：雅思倒计时 + 学习任务 + 口语素材，数据保留） -->
+      <div class="si-pane on" data-si="lang">
+        <div class="countdown mb">
+          <div class="muted" style="color:rgba(255,255,255,.85);font-size:.78rem;letter-spacing:1px" id="cdLabel">IELTS COUNTDOWN</div>
+          <div class="days" id="cdDays">--</div>
+          <div style="font-size:.8rem;opacity:.85" id="cdDate">设置考试日期</div>
+          <div class="countdown-sub mt" id="cdSub"></div>
+          <button class="btn btn-sm mt" style="background:rgba(255,255,255,.22);color:#fff" onclick="setExamDate()">设置/修改日期</button>
         </div>
-        <div id="studyList" class="mt"></div>
+
+        <div class="card">
+          <div class="row between">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--rose)"><use href="#i-target"/></svg>学习任务</h3>
+            <button class="btn btn-p btn-sm" onclick="openStudySheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加任务</button>
+          </div>
+          <div id="studyList" class="mt"></div>
+        </div>
+
+        <div class="card">
+          <div class="row between">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--rose)"><use href="#i-book"/></svg>口语素材库</h3>
+            <button class="btn btn-g btn-sm" onclick="openMatSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>收一句</button>
+          </div>
+          <div id="matList" class="mt"></div>
+        </div>
       </div>
 
-      <div class="card">
-        <div class="row between">
-          <h3 style="margin:0"><svg class="ic" style="color:var(--rose)"><use href="#i-book"/></svg>口语素材库</h3>
-          <button class="btn btn-g btn-sm" onclick="openMatSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>收一句</button>
+      <!-- 阅读 -->
+      <div class="si-pane" data-si="read">
+        <div class="card">
+          <div class="row between">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-book"/></svg>阅读</h3>
+            <button class="btn btn-p btn-sm" onclick="openReadSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加一条</button>
+          </div>
+          <div id="readList" class="mt"></div>
         </div>
-        <div id="matList" class="mt"></div>
+      </div>
+
+      <!-- 播客 -->
+      <div class="si-pane" data-si="pod">
+        <div class="card">
+          <div class="row between">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-inbox"/></svg>播客</h3>
+            <button class="btn btn-p btn-sm" onclick="openPodSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加一条</button>
+          </div>
+          <div id="podList" class="mt"></div>
+        </div>
+      </div>
+
+      <!-- 复盘 -->
+      <div class="si-pane" data-si="rev">
+        <div class="card">
+          <div class="row between">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-edit"/></svg>复盘</h3>
+            <button class="btn btn-p btn-sm" onclick="openRevSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>写一条</button>
+          </div>
+          <div id="revList" class="mt"></div>
+        </div>
       </div>
     </section>
 
@@ -682,7 +746,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
   <button class="on" data-p="today"><svg class="ic"><use href="#i-home"/></svg>今日看板</button>
   <button data-p="money"><svg class="ic"><use href="#i-wallet"/></svg>记账</button>
   <button data-p="health"><svg class="ic"><use href="#i-heart"/></svg>健康</button>
-  <button data-p="eng"><svg class="ic"><use href="#i-book"/></svg>学习中心</button>
+  <button data-p="selfimp"><svg class="ic"><use href="#i-seed"/></svg>自我提升</button>
   <button data-p="kb"><svg class="ic"><use href="#i-inbox"/></svg>知识库</button>
 </nav>
 
@@ -773,6 +837,58 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
   <label class="f">来源（选填）</label>
   <input type="text" id="mtSrc" placeholder="客户邮件 / 播客 / YouTube">
   <button class="btn btn-p mt" style="width:100%" onclick="saveMat()">收进库里</button>
+</div></div>
+
+<!-- 自我提升 · 阅读 -->
+<div class="mask" id="readMask"><div class="sheet">
+  <div class="row between"><h3>加一条阅读</h3><button onclick="closeMask('readMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">书名 / 标题</label>
+  <input type="text" id="rdTitle" placeholder="比如：《原子习惯》">
+  <label class="f">类型</label>
+  <select id="rdType"><option>书籍</option><option>文章</option><option>行业报告</option></select>
+  <label class="f">状态</label>
+  <select id="rdStatus"><option>想读</option><option>在读</option><option>读完</option></select>
+  <label class="f">分类</label>
+  <select id="rdCat"><option>专业</option><option>行业</option><option>商业</option><option>通识</option></select>
+  <label class="f">评分（1–5，选填）</label>
+  <input type="number" id="rdRating" min="0" max="5" placeholder="0">
+  <label class="f">金句 / 笔记（选填）</label>
+  <textarea id="rdQuote" rows="3" placeholder="读到想记住的一句话…"></textarea>
+  <button class="btn btn-p mt" style="width:100%" onclick="saveRead()">保存</button>
+</div></div>
+
+<!-- 自我提升 · 播客 -->
+<div class="mask" id="podMask"><div class="sheet">
+  <div class="row between"><h3>加一条播客</h3><button onclick="closeMask('podMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">节目名</label>
+  <input type="text" id="pdShow" placeholder="比如：知行小酒馆">
+  <label class="f">单集标题</label>
+  <input type="text" id="pdEp" placeholder="E150 …">
+  <label class="f">语言</label>
+  <select id="pdLang"><option>中文</option><option>英文</option></select>
+  <label class="f">时长（分钟，选填）</label>
+  <input type="number" id="pdMin" min="0" placeholder="60">
+  <label class="f">分类</label>
+  <select id="pdCat"><option>行业</option><option>英语</option><option>商业</option><option>访谈</option><option>通识</option></select>
+  <label class="f">状态</label>
+  <select id="pdStatus"><option>想听</option><option>在听</option><option>听完</option></select>
+  <label class="f">金句 / 笔记（选填）</label>
+  <textarea id="pdQuote" rows="3" placeholder="听到想记住的一句…"></textarea>
+  <button class="btn btn-p mt" style="width:100%" onclick="savePod()">保存</button>
+</div></div>
+
+<!-- 自我提升 · 复盘 -->
+<div class="mask" id="revMask"><div class="sheet">
+  <div class="row between"><h3>写复盘</h3><button onclick="closeMask('revMask')"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <label class="f">周期</label>
+  <select id="rvCycle"><option>周复盘</option><option>月复盘</option><option>季复盘</option></select>
+  <label class="f">收获 / 新认知</label>
+  <textarea id="rvGain" rows="2" placeholder="这周期里搞懂了什么…"></textarea>
+  <label class="f">待改进</label>
+  <textarea id="rvImprove" rows="2" placeholder="哪里还可以更好…"></textarea>
+  <label class="f">下一步行动</label>
+  <textarea id="rvNext" rows="2" placeholder="接下来具体做一件什么事…"></textarea>
+  <button class="btn btn-p mt" style="width:100%" onclick="saveRev()">保存</button>
 </div></div>
 
 <div class="mask" id="kbMask"><div class="sheet">
@@ -876,7 +992,7 @@ function showPage(p){
   document.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x.dataset.p===p));
   window.scrollTo(0,0);render();
 }
-function render(){renderToday();renderMoney();renderHealth();renderHabit();renderEng();renderKB();renderInkPool()}
+function render(){seedSelfImpOnce();renderToday();renderMoney();renderHealth();renderHabit();renderEng();renderSelfImp();renderKB();renderInkPool()}
 function closeMask(id){document.getElementById(id).classList.remove('show')}
 document.querySelectorAll('.mask').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 
@@ -1436,6 +1552,57 @@ function renderHabit(){
   if(htEl)htEl.textContent=`${totalDone} / ${dim} 天完成 · 完成率 ${pct}%`;
   if(hsEl)hsEl.innerHTML=`<div class="flame">最长连 <b>${maxStreak}</b> 天 🔥</div>`;
 }
+
+/* ================= 自我提升（学习中心升级） ================= */
+let _siTab='lang';
+function showSiTab(t){
+  _siTab=t;
+  document.querySelectorAll('#page-selfimp .si-pane').forEach(p=>p.classList.toggle('on',p.dataset.si===t));
+  document.querySelectorAll('#page-selfimp .subtab').forEach(b=>b.classList.toggle('on',b.dataset.si===t));
+}
+function isThisWeek(d){if(!d)return false;const now=new Date(today()+'T00:00:00');const dw=(now.getDay()+6)%7;const mon=new Date(now);mon.setDate(now.getDate()-dw);mon.setHours(0,0,0,0);const dt=new Date(d+'T00:00:00');return dt>=mon&&dt<=now}
+function renderSelfImp(){
+  if(typeof renderEng==='function') renderEng();
+  renderRead();renderPod();renderRev();
+  const revs=g(K.siRev,[]);
+  const tw=revs.filter(r=>isThisWeek(r.date));
+  const b=document.getElementById('siBanner');
+  if(tw.length===0){const last=revs.slice().sort((a,b)=>a.date<b.date?1:-1)[0];
+    b.className='si-banner warn';
+    b.innerHTML='<svg class="ic"><use href="#i-flame"/></svg> 本周还没复盘'+(last?' · 上次 '+last.date:'')+'，点「复盘」补一条';
+  }else{b.className='si-banner';b.innerHTML='<svg class="ic"><use href="#i-check"/></svg> 自我提升进行中 · 本周已复盘 '+tw.length+' 次';}
+}
+function seedSelfImpOnce(){
+  if(g(K.siSeeded,false))return;
+  const t=today();
+  sv(K.siRead,[
+    {id:uid(),title:'《原子习惯》',type:'书籍',status:'在读',cat:'商业',rating:0,quote:'你不需要把目标设得更大，而是要把体系设得更小。',date:t,sample:true},
+    {id:uid(),title:'《纳瓦尔宝典》',type:'书籍',status:'想读',cat:'通识',rating:0,quote:'',date:dAdd(t,-3),sample:true}
+  ]);
+  sv(K.siPod,[
+    {id:uid(),show:'知行小酒馆',ep:'E150 存钱心态',lang:'中文',min:65,cat:'商业',status:'在听',quote:'先支付给自己（pay yourself first）。',date:t,sample:true},
+    {id:uid(),show:'Huberman Lab',ep:'关于专注的脑科学',lang:'英文',min:120,cat:'通识',status:'想听',quote:'',date:dAdd(t,-2),sample:true}
+  ]);
+  sv(K.siRev,[
+    {id:uid(),cycle:'周复盘',gain:'本周坚持了 5 天运动打卡，状态不错。',improve:'深度阅读时间偏少，容易被碎片信息占满。',next:'下周每天固定 30 分钟读《原子习惯》。',date:dAdd(t,-10),sample:true}
+  ]);
+  sv(K.siSeeded,true);
+}
+/* 阅读 */
+function openReadSheet(){['rdTitle','rdQuote'].forEach(i=>document.getElementById(i).value='');['rdType','rdStatus','rdCat'].forEach(i=>document.getElementById(i).selectedIndex=0);document.getElementById('rdRating').value='';document.getElementById('readMask').classList.add('show')}
+function saveRead(){const t=document.getElementById('rdTitle').value.trim();if(!t)return toast('写个书名');const arr=g(K.siRead,[]);arr.unshift({id:uid(),title:t,type:document.getElementById('rdType').value,status:document.getElementById('rdStatus').value,cat:document.getElementById('rdCat').value,rating:Math.max(0,Math.min(5,parseInt(document.getElementById('rdRating').value)||0)),quote:document.getElementById('rdQuote').value.trim(),date:today()});sv(K.siRead,arr);closeMask('readMask');toast('已添加');renderSelfImp()}
+function delRead(id){sv(K.siRead,g(K.siRead,[]).filter(x=>x.id!==id));renderSelfImp();toast('已删除')}
+function renderRead(){const arr=[...g(K.siRead,[])].sort((a,b)=>a.date<b.date?1:-1);document.getElementById('readList').innerHTML=arr.map(x=>`<div class="rec-item"><div class="hd"><span class="ti">${esc(x.title)}</span>${x.status?`<span class="tag" style="background:var(--si-soft);color:var(--si-d)">${esc(x.status)}</span>`:''}${x.type?`<span class="tag">${esc(x.type)}</span>`:''}${x.cat?`<span class="chip">${esc(x.cat)}</span>`:''}${x.rating?`<span class="stars">${'★'.repeat(x.rating)}</span>`:''}</div><div class="mt muted">${x.date}</div>${x.quote?`<div class="qt">${esc(x.quote)}</div>`:''}<div class="row between mt"><button class="btn btn-sm btn-danger" onclick="if(confirm('删除这条？'))delRead('${x.id}')">删除</button></div></div>`).join('')||'<div class="empty">还没有阅读记录，点右上角加一条</div>'}
+/* 播客 */
+function openPodSheet(){['pdShow','pdEp','pdQuote'].forEach(i=>document.getElementById(i).value='');['pdLang','pdCat','pdStatus'].forEach(i=>document.getElementById(i).selectedIndex=0);document.getElementById('pdMin').value='';document.getElementById('podMask').classList.add('show')}
+function savePod(){const s=document.getElementById('pdShow').value.trim();if(!s)return toast('写个节目名');const arr=g(K.siPod,[]);arr.unshift({id:uid(),show:s,ep:document.getElementById('pdEp').value.trim(),lang:document.getElementById('pdLang').value,min:parseInt(document.getElementById('pdMin').value)||0,cat:document.getElementById('pdCat').value,status:document.getElementById('pdStatus').value,quote:document.getElementById('pdQuote').value.trim(),date:today()});sv(K.siPod,arr);closeMask('podMask');toast('已添加');renderSelfImp()}
+function delPod(id){sv(K.siPod,g(K.siPod,[]).filter(x=>x.id!==id));renderSelfImp();toast('已删除')}
+function renderPod(){const arr=[...g(K.siPod,[])].sort((a,b)=>a.date<b.date?1:-1);document.getElementById('podList').innerHTML=arr.map(x=>`<div class="rec-item"><div class="hd"><span class="ti">${esc(x.show)}</span>${x.ep?`<span class="chip">${esc(x.ep)}</span>`:''}${x.lang?`<span class="tag">${esc(x.lang)}</span>`:''}${x.status?`<span class="tag" style="background:var(--si-soft);color:var(--si-d)">${esc(x.status)}</span>`:''}${x.cat?`<span class="chip">${esc(x.cat)}</span>`:''}${x.min?`<span class="chip">${x.min} 分钟</span>`:''}</div>${x.quote?`<div class="qt">${esc(x.quote)}</div>`:''}<div class="mt muted">${x.date}</div><div class="row between mt"><button class="btn btn-sm btn-danger" onclick="if(confirm('删除这条？'))delPod('${x.id}')">删除</button></div></div>`).join('')||'<div class="empty">还没有播客记录，点右上角加一条</div>'}
+/* 复盘 */
+function openRevSheet(){['rvGain','rvImprove','rvNext'].forEach(i=>document.getElementById(i).value='');document.getElementById('rvCycle').selectedIndex=0;document.getElementById('revMask').classList.add('show')}
+function saveRev(){const g1=document.getElementById('rvGain').value.trim();if(!g1&&!document.getElementById('rvImprove').value.trim()&&!document.getElementById('rvNext').value.trim())return toast('写点什么吧');const arr=g(K.siRev,[]);arr.unshift({id:uid(),cycle:document.getElementById('rvCycle').value,gain:g1,improve:document.getElementById('rvImprove').value.trim(),next:document.getElementById('rvNext').value.trim(),date:today()});sv(K.siRev,arr);closeMask('revMask');toast('已复盘');renderSelfImp()}
+function delRev(id){sv(K.siRev,g(K.siRev,[]).filter(x=>x.id!==id));renderSelfImp();toast('已删除')}
+function renderRev(){const arr=[...g(K.siRev,[])].sort((a,b)=>a.date<b.date?1:-1);document.getElementById('revList').innerHTML=arr.map(x=>`<div class="rec-item"><div class="hd"><span class="ti">${esc(x.cycle||'复盘')}</span><span class="chip">${esc(x.date)}</span></div>${x.gain?`<div class="mt"><b>收获</b><div class="muted" style="margin-top:2px">${esc(x.gain)}</div></div>`:''}${x.improve?`<div class="mt"><b>待改进</b><div class="muted" style="margin-top:2px">${esc(x.improve)}</div></div>`:''}${x.next?`<div class="mt"><b>下一步</b><div class="muted" style="margin-top:2px">${esc(x.next)}</div></div>`:''}<div class="row between mt"><button class="btn btn-sm btn-danger" onclick="if(confirm('删除这条？'))delRev('${x.id}')">删除</button></div></div>`).join('')||'<div class="empty">还没有复盘，点右上角写一条</div>'}
 
 /* ================= 英语 ================= */
 function setExamDate(){const set=g(K.set,{});const v=prompt('雅思考试日期 (YYYY-MM-DD)',set.examDate||'2026-12-05');
