@@ -145,24 +145,40 @@ function drainQueue(){
 }
 
 /* ---------- 7. 云端读取（登录后拉全量） ---------- */
+function isEmptyVal(v){ return v === null || v === undefined || v === '' || (Array.isArray(v) && v.length === 0) || (typeof v === 'object' && !Array.isArray(v) && v !== null && Object.keys(v).length === 0); }
+function mergeStore(cloud, local){
+  // 两端都是数组：按 id（无 id 则按内容）做并集，绝不丢弃任一侧独有数据
+  if(Array.isArray(cloud) && Array.isArray(local)){
+    var seen = {}, out = [];
+    var keyOf = function(it){ return (it && typeof it === 'object' && it.id != null) ? ('id:'+it.id) : ('j:'+JSON.stringify(it)); };
+    cloud.concat(local).forEach(function(it){ var k = keyOf(it); if(!seen[k]){ seen[k] = 1; out.push(it); } });
+    return out;
+  }
+  if(isEmptyVal(cloud)) return local;   // 云端空 → 保留本地
+  if(isEmptyVal(local)) return cloud;   // 本地空 → 用云端
+  return local;                          // 两侧都有内容 → 优先本地（最安全，防丢）
+}
 function loadAll(){
   // 安全网：先备份当前本地快照，极端情况下可在 localStorage['wb_snapshot_prev'] 找回
   try { localStorage.setItem('wb_snapshot_prev', JSON.stringify(DB)); } catch(e){}
   return rest('GET', '/rest/v1/' + TABLE + '?select=store,value').then(function(rows){
-    var cloudEmptyStores = [];
-    var isEmpty = function(v){ return v === null || v === undefined || v === '' || (Array.isArray(v) && v.length === 0) || (typeof v === 'object' && !Array.isArray(v) && v !== null && Object.keys(v).length === 0); };
+    var needPush = [];
     (rows || []).forEach(function(r){
       var cloud = r.value, local = DB[r.store];
-      if(isEmpty(cloud) && !isEmpty(local)){
-        // 云端为空但本地有数据：绝不覆盖本地（防丢），稍后补推上云
-        cloudEmptyStores.push(r.store);
+      if(cloud === undefined || cloud === null){
+        // 云端缺该键但本地有数据：保留本地并补推上云
+        if(local !== undefined && local !== null){ DB[r.store] = local; needPush.push(r.store); }
         return;
       }
-      DB[r.store] = cloud;
+      var merged = mergeStore(cloud, local);
+      DB[r.store] = merged;
+      // 合并后比云端多（说明本地有云端没有的数据）→ 补推上云，恢复多设备一致（自愈）
+      if(!isEmptyVal(local) && (isEmptyVal(cloud) || (Array.isArray(merged) && Array.isArray(cloud) && merged.length > cloud.length))){
+        needPush.push(r.store);
+      }
     });
     persistSnapshot();
-    // 把云端缺失但本地有的数据补推上云，恢复多设备一致（自愈）
-    cloudEmptyStores.forEach(function(k){ try { flushStore(k); } catch(e){} });
+    needPush.forEach(function(k){ try { flushStore(k); } catch(e){} });
   });
 }
 
