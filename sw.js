@@ -3,7 +3,7 @@
  *  说明：数据本身存在云端（Supabase），离线时由 IndexedDB 缓存兜底显示。
  *        本 SW 只负责让「应用页面」在断网时也能打开（应用壳缓存）。
  * =================================================================== */
-var CACHE = 'growth-pwa-v3';
+var CACHE = 'growth-pwa-v4';
 var SHELL = [
   './', './index.html', './config.js', './app.js', './manifest.json',
   './icon-180.png', './icon-192.png', './icon-512.png',
