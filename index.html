@@ -56,12 +56,12 @@ svg{display:block}
 .nav-item.on[data-p="kb"]{background:var(--kb-s);color:#fff}
 .nav-item.on[data-p="selfimp"]{background:var(--si-s);color:#fff}
 .tabbar button.on{font-weight:700}
-/* 底部 Tab 选中态：保留板块色 + 加粗（压制 media 里的 --ink 覆盖） */
-.tabbar button.on[data-p="today"]{color:var(--today);font-weight:700}
-.tabbar button.on[data-p="money"]{color:var(--money);font-weight:700}
-.tabbar button.on[data-p="health"]{color:var(--health);font-weight:700}
-.tabbar button.on[data-p="kb"]{color:var(--kb);font-weight:700}
-.tabbar button.on[data-p="selfimp"]{color:var(--si);font-weight:700}
+/* 底部 Tab 选中态：柔和色块 + 白字（与侧边栏同步，压制 media 里的 --ink 覆盖） */
+.tabbar button.on[data-p="today"]{background:var(--today-s);color:#fff;font-weight:700;border-radius:12px}
+.tabbar button.on[data-p="money"]{background:var(--money-s);color:#fff;font-weight:700;border-radius:12px}
+.tabbar button.on[data-p="health"]{background:var(--health-s);color:#fff;font-weight:700;border-radius:12px}
+.tabbar button.on[data-p="kb"]{background:var(--kb-s);color:#fff;font-weight:700;border-radius:12px}
+.tabbar button.on[data-p="selfimp"]{background:var(--si-s);color:#fff;font-weight:700;border-radius:12px}
 /* 复盘 · 按周期分组的时间线 */
 .rev-group{margin-bottom:18px}
 .rev-group-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
