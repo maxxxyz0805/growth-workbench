@@ -25,6 +25,7 @@
   --kb-bg:#14192A; --kb-card:#1B2236; --kb-line:#2A3349; --kb-neon:#B0A6E8; --kb-cyan:#8AA8D6; --kb-dim:#8E97B5; --kb-amber:#E8B7D8;
   --r:16px; --shadow:0 2px 12px rgba(63,61,58,.06);
   --si:#3E6B58; --si-d:#2F5343; --si-soft:rgba(62,107,88,.12); --si-line:rgba(62,107,88,.30);
+  --today:#CE6A48; --money:#637E90; --health:#2FA371; --kb:#7C70CC;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:16px}
@@ -42,13 +43,24 @@ svg{display:block}
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;color:var(--muted);font-size:.95rem;min-height:44px;transition:.15s;text-align:left;width:100%}
 .nav-item:hover{background:#EDE9E1}
 .nav-item.on{background:var(--ink);color:#fff}
-/* 自我提升 · 专属黛绿配色 */
-.nav-item[data-p="selfimp"]{color:var(--si)}
-.nav-item[data-p="selfimp"] .ic{color:var(--si)}
-.nav-item[data-p="selfimp"].on{background:var(--si);color:#fff}
-.nav-item[data-p="selfimp"].on .ic{color:#fff}
-.tabbar button[data-p="selfimp"]{color:var(--si)}
-.tabbar button[data-p="selfimp"].on{color:var(--si);font-weight:600}
+/* 各板块专属配色：导航与底部 Tab 标题随板块主题色 */
+.nav-item[data-p="today"],.tabbar button[data-p="today"]{color:var(--today)}
+.nav-item[data-p="money"],.tabbar button[data-p="money"]{color:var(--money)}
+.nav-item[data-p="health"],.tabbar button[data-p="health"]{color:var(--health)}
+.nav-item[data-p="kb"],.tabbar button[data-p="kb"]{color:var(--kb)}
+.nav-item[data-p="selfimp"],.tabbar button[data-p="selfimp"]{color:var(--si)}
+.nav-item.on[data-p="today"]{background:var(--today)}
+.nav-item.on[data-p="money"]{background:var(--money)}
+.nav-item.on[data-p="health"]{background:var(--health)}
+.nav-item.on[data-p="kb"]{background:var(--kb)}
+.nav-item.on[data-p="selfimp"]{background:var(--si)}
+.tabbar button.on{font-weight:700}
+/* 底部 Tab 选中态：保留板块色 + 加粗（压制 media 里的 --ink 覆盖） */
+.tabbar button.on[data-p="today"]{color:var(--today);font-weight:700}
+.tabbar button.on[data-p="money"]{color:var(--money);font-weight:700}
+.tabbar button.on[data-p="health"]{color:var(--health);font-weight:700}
+.tabbar button.on[data-p="kb"]{color:var(--kb);font-weight:700}
+.tabbar button.on[data-p="selfimp"]{color:var(--si);font-weight:700}
 /* 复盘 · 按周期分组的时间线 */
 .rev-group{margin-bottom:18px}
 .rev-group-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
