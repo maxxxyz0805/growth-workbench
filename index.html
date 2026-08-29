@@ -1243,7 +1243,11 @@ function showPage(p){
   document.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x.dataset.p===p));
   window.scrollTo(0,0);render();
 }
-function render(){seedSelfImpOnce();renderToday();renderMoney();renderHealth();renderHabit();renderEng();renderSelfImp();renderKB();renderInkPool()}
+/* 各板块独立渲染：任一板块出错只影响它自己，不会连带整页白屏或卡住启动流程 */
+function render(){
+  var steps=[['seedSelfImpOnce',seedSelfImpOnce],['今日看板',renderToday],['记账',renderMoney],['健康',renderHealth],['习惯',renderHabit],['英语',renderEng],['自我提升',renderSelfImp],['知识库',renderKB],['灵感池',renderInkPool]];
+  steps.forEach(function(x){try{x[1]()}catch(e){console.error('[render] '+x[0]+' 渲染失败',e);if(window.toast)toast('⚠️ 「'+x[0]+'」渲染出错，其余板块不受影响')}});
+}
 function closeMask(id){document.getElementById(id).classList.remove('show')}
 document.querySelectorAll('.mask').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 
