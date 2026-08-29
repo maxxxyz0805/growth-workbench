@@ -2008,7 +2008,9 @@ function renderKorean(){
   if(b){if(rec){b.className='ko-banner ok';b.innerHTML=`<svg class="ic"><use href="#i-check"/></svg> 今日已打卡 ${rec.m} 分钟 · 已连续 <b>${sk}</b> 天 🔥`}
     else{b.className='ko-banner warn';b.innerHTML='<svg class="ic"><use href="#i-flame"/></svg> 今天还没打卡 —— 选时长 → 写小结 → 保存，30 分钟也算数'}}
   el('koStats').innerHTML=`<div class="ko-stat"><b>${sk}</b><span>连续天数</span></div><div class="ko-stat"><b>${koWeekCnt()}/6</b><span>本周打卡</span></div><div class="ko-stat"><b>${arr.length}</b><span>累计打卡</span></div><div class="ko-stat"><b>${dn}</b><span>完成任务</span></div>`;
-  if(document.activeElement!==el('koDailyNote'))el('koDailyNote').value=rec?rec.n:'';
+  // 仅在输入框为空时回填今日已存小结（首次加载回显）；有内容则一律保留，避免轮询清掉未保存输入
+  const dnEl=el('koDailyNote');
+  if(dnEl&&document.activeElement!==dnEl&&!dnEl.value&&rec)dnEl.value=rec.n;
   const nt=el('koStudyNote');
   if(nt&&document.activeElement!==nt)nt.value=g(K.siKoNote,'');
   if(nt&&!_koNoteBound){_koNoteBound=true;nt.addEventListener('input',()=>sv(K.siKoNote,nt.value))}
