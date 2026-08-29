@@ -482,6 +482,41 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .rec-item .qt{font-size:.82rem;color:var(--si-d);background:var(--si-soft);border-left:3px solid var(--si);padding:8px 10px;border-radius:8px;margin-top:8px;line-height:1.6;white-space:pre-wrap}
 .rec-item .tag{background:var(--si-soft);color:var(--si-d)}
 .stars{color:#E0A93B;letter-spacing:1px;font-size:.85rem}
+/* ---------- 韩语 · 奖励机制 ---------- */
+.ko-rw-hero{background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;border-radius:var(--r);padding:15px 17px;margin-bottom:14px;box-shadow:0 5px 18px rgba(201,138,14,.26)}
+.ko-rw-top{display:flex;align-items:center;gap:13px}
+.ko-rw-lv{width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid rgba(255,255,255,.4)}
+.ko-rw-lv b{font-size:1.35rem;line-height:1;font-weight:800}
+.ko-rw-lv span{font-size:.58rem;opacity:.9;margin-top:2px}
+.ko-rw-mid{flex:1;min-width:0}
+.ko-rw-name{font-size:.95rem;font-weight:800;line-height:1.2}
+.ko-rw-sub{font-size:.72rem;opacity:.92;margin-top:3px}
+.ko-rw-bal{text-align:right;flex-shrink:0}
+.ko-rw-bal b{display:block;font-size:1.65rem;font-weight:800;line-height:1}
+.ko-rw-bal span{font-size:.66rem;opacity:.9}
+.ko-rw-bar{height:6px;background:rgba(255,255,255,.3);border-radius:99px;overflow:hidden;margin-top:11px}
+.ko-rw-bar i{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:width .4s ease}
+.ko-rw-bar-t{font-size:.7rem;opacity:.93;margin-top:5px}
+.ko-badges{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}
+.ko-bdg{text-align:center;padding:8px 3px;border-radius:10px;background:#F5F3EE;border:1px solid transparent;transition:.15s}
+.ko-bdg.got{background:linear-gradient(135deg,#FFF4D6,#FCE9B8);border-color:#E8C46A;box-shadow:0 2px 7px rgba(201,138,14,.16)}
+.ko-bdg i{font-size:1.28rem;font-style:normal;display:block;line-height:1.2;filter:grayscale(1);opacity:.32}
+.ko-bdg.got i{filter:none;opacity:1}
+.ko-bdg span{font-size:.58rem;color:var(--muted);display:block;margin-top:3px;line-height:1.25}
+.ko-bdg.got span{color:#8A5A12;font-weight:600}
+.ko-rw{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;background:#fff}
+.ko-rw-ic{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#FFF4D6,#FCE9B8);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
+.ko-rw-info{flex:1;min-width:0}
+.ko-rw-nm{font-size:.85rem;font-weight:600;line-height:1.35}
+.ko-rw-ct{font-size:.7rem;color:#B07D10;font-weight:700;margin-top:3px}
+.ko-rw-ct.no{color:var(--muted);font-weight:500}
+.ko-btn-rw{padding:7px 13px;border-radius:8px;border:none;background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;font-size:.76rem;font-weight:700;flex-shrink:0;min-height:34px}
+.ko-btn-rw:disabled{background:#E8E5DE;color:#A8A29A;cursor:not-allowed}
+.ko-btn-del{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--muted);font-size:.95rem;line-height:1;flex-shrink:0}
+.ko-hist{font-size:.74rem;color:var(--muted);line-height:1.75}
+.ko-hist b{color:var(--ink);font-weight:600}
+.ko-gain{position:fixed;left:50%;top:26%;transform:translateX(-50%);background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;padding:11px 22px;border-radius:99px;font-weight:800;font-size:.95rem;box-shadow:0 8px 26px rgba(201,138,14,.4);z-index:9999;pointer-events:none;opacity:0;transition:opacity .3s,top .5s}
+.ko-gain.show{opacity:1;top:22%}
 </style>
 </head>
 <body>
@@ -859,6 +894,19 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <div class="ko-stats mt" id="koStats"></div>
             <div class="ko-heat-h"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
             <div class="ko-heat" id="koHeat"></div>
+          </div>
+
+          <div class="card">
+            <div class="row between">
+              <h3 style="margin:0"><svg class="ic" style="color:#C98A0E"><use href="#i-zap"/></svg>积分 · 等级 · 奖励</h3>
+              <button class="btn btn-g btn-sm" onclick="openKoReward()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加奖励</button>
+            </div>
+            <div class="ko-rw-hero mt" id="koRwHero"></div>
+            <div class="muted" style="font-size:.75rem">🏅 成就徽章</div>
+            <div class="ko-badges" id="koBadges"></div>
+            <div class="muted mt" style="font-size:.75rem">🎁 奖励兑换 · 攒够积分就犒劳自己</div>
+            <div class="mt" id="koRewardList"></div>
+            <div class="mt" id="koRedeemHist"></div>
           </div>
 
           <div class="card">
@@ -1917,9 +1965,17 @@ function saveKoDaily(){
   const rec={d:t,m:_koMode,n:note,ts:Date.now()};
   if(i>=0)arr[i]=rec;else arr.push(rec);
   sv(K.siKoLog,arr);renderKorean();
+  if(i<0){
+    const got=(_koMode>=60?KO_PT_RULE.d60:KO_PT_RULE.d30)+(note?KO_PT_RULE.note:0);
+    koGain('+'+got+' P · 连续 '+koStreak()+' 天 🔥');
+  }
   toast(i>=0?'今日打卡已更新':'打卡成功 · 已连续 '+koStreak()+' 天 🔥');
 }
-function toggleKoTask(w){const d=g(K.siKoWeek,{});if(d[w])delete d[w];else d[w]=1;sv(K.siKoWeek,d);renderKorean()}
+function toggleKoTask(w){
+  const d=g(K.siKoWeek,{});
+  if(d[w])delete d[w];else{d[w]=1;koGain('+'+KO_PT_RULE.task+' P · 任务达成')}
+  sv(K.siKoWeek,d);renderKorean();
+}
 function toggleKoDone(){_koHideDone=!_koHideDone;document.getElementById('koDoneLbl').textContent=_koHideDone?'显示已完成':'隐藏已完成';renderKoPlan()}
 function copyKoKw(el){
   const t=(el.textContent||'').trim();
@@ -1989,8 +2045,136 @@ function renderKoPlan(){
   });
   box.innerHTML=h||'<div class="ko-empty">暂无任务</div>';
 }
+/* ---------- 奖励机制：积分 / 等级 / 徽章 / 兑换 ----------
+   设计要点：积分不存总额，每次从行为日志实时推导（幂等）。
+   好处：改打卡记录、取消任务勾选都不会算错账；也不用额外同步。
+   只有「已消费积分」需要落盘，因为它无法从行为反推。 */
+const KO_PT_RULE={
+  d60:10,            // 标准 60min 打卡
+  d30:6,             // 压缩 30min 打卡（保底也给，鼓励别断更）
+  note:2,            // 写小结额外
+  task:8,            // 完成一项阶段任务
+  streak:{7:30,14:50,30:120,60:200,100:400,180:600,270:800,365:1200}
+};
+const KO_LEVEL=[
+  {p:0,   n:'새싹',   cn:'幼苗'},   {p:100, n:'도전자', cn:'挑战者'},
+  {p:300, n:'열정',   cn:'热情'},   {p:600, n:'성실',   cn:'踏实'},
+  {p:1000,n:'도약',   cn:'飞跃'},   {p:1500,n:'중급자', cn:'中级'},
+  {p:2200,n:'능숙',   cn:'熟练'},   {p:3000,n:'고급자', cn:'高级'},
+  {p:4000,n:'달인',   cn:'达人'},   {p:5200,n:'마스터', cn:'大师'}
+];
+const KO_BADGES=[
+  {id:'first', e:'🌱',  n:'启程',    f:s=>s.total>=1},
+  {id:'s7',    e:'🔥',  n:'一周',    f:s=>s.best>=7},
+  {id:'s30',   e:'💪',  n:'满月',    f:s=>s.best>=30},
+  {id:'s100',  e:'💯',  n:'百日',    f:s=>s.best>=100},
+  {id:'t50',   e:'📚',  n:'半百',    f:s=>s.total>=50},
+  {id:'st1',   e:'🎯',  n:'发音通关', f:s=>s.s1>=4},
+  {id:'st2',   e:'🗣️', n:'日常开口', f:s=>s.s2>=8},
+  {id:'st3',   e:'✈️',  n:'旅行自由', f:s=>s.s3>=12},
+  {id:'st4',   e:'🎬',  n:'无字幕',  f:s=>s.s4>=5},
+  {id:'note30',e:'📝',  n:'复盘达人', f:s=>s.noteD>=30}
+];
+const KO_REWARD_DEF=[
+  {id:'r1',e:'🧋',n:'一杯喜欢的奶茶 / 咖啡',c:150},
+  {id:'r2',e:'🎬',n:'一集韩剧（挑战少字幕）',c:250},
+  {id:'r3',e:'📚',n:'买一本想看的书',c:400},
+  {id:'r4',e:'🍜',n:'一顿想吃的韩餐',c:600},
+  {id:'r5',e:'✈️',n:'韩国旅行基金 +100 元',c:2000}
+];
+/* 历史最长连击（不是当前连击）—— 连击断了不该把已得的里程碑分扣回去 */
+function koBestStreak(){
+  const arr=g(K.siKoLog,[]);if(!arr.length)return 0;
+  const ds=[];const set={};arr.forEach(x=>{if(!set[x.d]){set[x.d]=1;ds.push(x.d)}});
+  ds.sort();let best=0,cur=0,prev=null;
+  ds.forEach(d=>{ cur=(prev&&dAdd(prev,1)===d)?cur+1:1; if(cur>best)best=cur; prev=d; });
+  return best;
+}
+function koPoints(){
+  const log=g(K.siKoLog,[]),byD={};
+  log.forEach(x=>{byD[x.d]=x});           // 同一天多次保存只算一次，取最后一条
+  let p=0;
+  Object.keys(byD).forEach(d=>{
+    const r=byD[d];
+    p+=(+r.m>=60?KO_PT_RULE.d60:KO_PT_RULE.d30);
+    if((r.n||'').trim())p+=KO_PT_RULE.note;
+  });
+  p+=Object.keys(g(K.siKoWeek,{})).length*KO_PT_RULE.task;
+  const best=koBestStreak();
+  Object.keys(KO_PT_RULE.streak).forEach(k=>{ if(best>=+k)p+=KO_PT_RULE.streak[k] });
+  return p;
+}
+function koBalance(){return Math.max(0,koPoints()-(+g(K.siKoSpent,0)||0))}
+function koLevel(pts){let i=0;KO_LEVEL.forEach((l,idx)=>{if(pts>=l.p)i=idx});return i}
+function koBadgeState(){
+  const log=g(K.siKoLog,[]),byD={};log.forEach(x=>{byD[x.d]=x});
+  const vals=Object.keys(byD).map(d=>byD[d]);
+  const done=g(K.siKoWeek,{});
+  const cnt=s=>KO_PLAN.filter(x=>x.s===s&&done[x.w]).length;
+  return {total:vals.length,best:koBestStreak(),noteD:vals.filter(x=>(x.n||'').trim()).length,
+          s1:cnt(1),s2:cnt(2),s3:cnt(3),s4:cnt(4)};
+}
+function koGain(txt){
+  let b=document.getElementById('koGain');
+  if(!b){b=document.createElement('div');b.id='koGain';b.className='ko-gain';document.body.appendChild(b)}
+  b.textContent=txt;b.classList.add('show');
+  clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('show'),1800);
+}
+function seedKoRewardOnce(){
+  if(g(K.siKoReward,null)!==null)return;
+  sv(K.siKoReward,KO_REWARD_DEF.map(x=>({id:x.id,e:x.e,n:x.n,c:x.c})));
+}
+function openKoReward(){
+  const n=prompt('奖励名称（想怎么犒劳自己）');if(!n||!n.trim())return;
+  const c=parseInt(prompt('需要多少积分？','300'),10);
+  if(!c||c<=0)return toast('积分得是正数');
+  const arr=g(K.siKoReward,[]);arr.push({id:uid(),e:'🎁',n:n.trim(),c:c});
+  sv(K.siKoReward,arr);renderKoReward();toast('已添加');
+}
+function delKoReward(id){
+  if(!confirm('删掉这个奖励？（已兑换记录不受影响）'))return;
+  sv(K.siKoReward,g(K.siKoReward,[]).filter(x=>x.id!==id));renderKoReward();toast('已删除');
+}
+function redeemKoReward(id){
+  const r=(g(K.siKoReward,[])||[]).find(x=>x.id===id);if(!r)return;
+  const bal=koBalance();
+  if(bal<r.c)return toast('积分不够，还差 '+(r.c-bal)+' P');
+  if(!confirm('用 '+r.c+' P 兑换「'+r.n+'」？\n\n兑完记得真的去做 🎁'))return;
+  sv(K.siKoSpent,(+g(K.siKoSpent,0)||0)+r.c);
+  const h=g(K.siKoRedeem,[])||[];h.unshift({id:uid(),n:r.n,e:r.e,c:r.c,d:today()});
+  sv(K.siKoRedeem,h);renderKoReward();koGain('🎉 兑换成功 · '+r.n);
+}
+function renderKoReward(){
+  const hero=document.getElementById('koRwHero');if(!hero)return;
+  const pts=koPoints(),bal=koBalance(),li=koLevel(pts),lv=KO_LEVEL[li],next=KO_LEVEL[li+1];
+  const pct=next?Math.max(0,Math.min(100,Math.round((pts-lv.p)/(next.p-lv.p)*100))):100;
+  hero.innerHTML='<div class="ko-rw-top">'
+    +'<div class="ko-rw-lv"><b>'+(li+1)+'</b><span>LV</span></div>'
+    +'<div class="ko-rw-mid"><div class="ko-rw-name">'+esc(lv.n)+' · '+esc(lv.cn)+'</div>'
+    +'<div class="ko-rw-sub">累计 '+pts+' P · 已兑出 '+(g(K.siKoSpent,0)||0)+' P</div></div>'
+    +'<div class="ko-rw-bal"><b>'+bal+'</b><span>可用积分</span></div></div>'
+    +'<div class="ko-rw-bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="ko-rw-bar-t">'+(next?('距 Lv'+(li+2)+' '+esc(next.n)+' 还差 '+(next.p-pts)+' P'):'🏆 已达成最高等级')+'</div>';
+  const st=koBadgeState(),bg=document.getElementById('koBadges');
+  if(bg)bg.innerHTML=KO_BADGES.map(b=>{
+    const got=!!b.f(st);
+    return '<div class="ko-bdg'+(got?' got':'')+'" title="'+esc(b.n)+(got?'（已解锁）':'（未解锁）')+'"><i>'+b.e+'</i><span>'+esc(b.n)+'</span></div>';
+  }).join('');
+  const rw=g(K.siKoReward,[])||[],box=document.getElementById('koRewardList');
+  if(box)box.innerHTML=rw.length?rw.map(r=>{
+    const ok=bal>=r.c;
+    return '<div class="ko-rw"><div class="ko-rw-ic">'+esc(r.e||'🎁')+'</div>'
+      +'<div class="ko-rw-info"><div class="ko-rw-nm">'+esc(r.n)+'</div>'
+      +'<div class="ko-rw-ct'+(ok?'':' no')+'">'+r.c+' P'+(ok?'':' · 还差 '+(r.c-bal)+' P')+'</div></div>'
+      +'<button class="ko-btn-rw"'+(ok?'':' disabled')+' onclick="redeemKoReward(\''+r.id+'\')">兑换</button>'
+      +'<button class="ko-btn-del" onclick="delKoReward(\''+r.id+'\')">×</button></div>';
+  }).join(''):'<div class="ko-empty">还没有奖励，点右上角加一个你想犒劳自己的东西</div>';
+  const h=g(K.siKoRedeem,[])||[],hb=document.getElementById('koRedeemHist');
+  if(hb)hb.innerHTML=h.length?'<div class="ko-hist">已兑换 '+h.length+' 次 · 最近：'
+    +h.slice(0,3).map(x=>'<b>'+esc(x.e||'🎁')+esc(x.n)+'</b>（'+x.c+'P · '+x.d+'）').join('、')+'</div>':'';
+}
 function renderKorean(){
-  seedKoOnce();
+  seedKoOnce();seedKoRewardOnce();
   const el=id=>document.getElementById(id);
   if(!el('koStageName'))return;
   const cur=koCur(),st=KO_STAGE[cur.s]||KO_STAGE[1];
@@ -2018,7 +2202,7 @@ function renderKorean(){
   const nt=el('koStudyNote');
   if(nt&&document.activeElement!==nt)nt.value=g(K.siKoNote,'');
   if(nt&&!_koNoteBound){_koNoteBound=true;nt.addEventListener('input',()=>sv(K.siKoNote,nt.value))}
-  renderKoHeat();renderKoPlan();renderKoPhrase();
+  renderKoHeat();renderKoPlan();renderKoPhrase();renderKoReward();
 }
 let _langTab='en';
 function showLangTab(t){
