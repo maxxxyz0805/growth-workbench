@@ -399,6 +399,81 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .si-banner{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--si),var(--si-d));color:#fff;border-radius:var(--r);padding:13px 16px;margin-bottom:16px;font-size:.84rem;line-height:1.4;box-shadow:0 4px 16px rgba(62,107,88,.22)}
 .si-banner.warn{background:linear-gradient(135deg,#D96C5F,#B84A3E);box-shadow:0 4px 16px rgba(184,74,62,.22)}
 .si-banner .ic{width:18px;height:18px;flex-shrink:0}
+
+/* ---- 语言学习 · 三级子 Tab（英语/韩语） ---- */
+.subtabs2{display:flex;gap:6px;background:rgba(62,107,88,.08);border-radius:12px;padding:4px;margin-bottom:14px;overflow-x:auto}
+.subtabs2 .subtab2{flex:1;min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 6px;border-radius:9px;font-size:.8rem;color:var(--muted);min-height:38px;font-weight:500;transition:.15s;white-space:nowrap}
+.subtabs2 .subtab2 .ic{width:14px;height:14px}
+.subtabs2 .subtab2.on{background:#fff;color:var(--si-d);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.lang-pane{display:none;animation:fade .2s ease}
+.lang-pane.on{display:block}
+
+/* ---- 韩语板块（独立蓝系，区别于黛绿母板块） ---- */
+.ko-banner{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#5B7FD4,#3F63B8);color:#fff;border-radius:var(--r);padding:12px 15px;margin-bottom:14px;font-size:.83rem;line-height:1.4;box-shadow:0 4px 16px rgba(63,99,184,.22)}
+.ko-banner.warn{background:linear-gradient(135deg,#D96C5F,#B84A3E);box-shadow:0 4px 16px rgba(184,74,62,.22)}
+.ko-banner.ok{background:linear-gradient(135deg,#3E6B58,#2F5343);box-shadow:0 4px 16px rgba(62,107,88,.22)}
+.ko-banner .ic{width:17px;height:17px;flex-shrink:0}
+.ko-hero{background:linear-gradient(135deg,#5B7FD4,#3F63B8);color:#fff;border-radius:var(--r);padding:16px 18px;margin-bottom:16px;box-shadow:0 6px 22px rgba(63,99,184,.24)}
+.ko-hero-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ko-lb{font-size:.7rem;letter-spacing:1.2px;opacity:.85}
+.ko-stage{font-size:1.15rem;font-weight:700;margin-top:3px}
+.ko-goal{font-size:.78rem;opacity:.92;margin-top:6px;line-height:1.45}
+.ko-hero-r{text-align:right;flex-shrink:0}
+.ko-mw{font-size:.75rem;opacity:.9}
+.ko-day{font-size:1.5rem;font-weight:800;margin-top:2px}
+.ko-bar{height:7px;background:rgba(255,255,255,.28);border-radius:99px;overflow:hidden;margin-top:14px}
+.ko-bar span{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:width .4s ease}
+.ko-bar-t{font-size:.74rem;opacity:.9;margin-top:6px}
+.ko-modes{display:flex;gap:8px}
+.ko-mode{flex:1;padding:9px 6px;border:1.5px solid var(--line);background:#fff;border-radius:10px;font-size:.8rem;color:var(--muted);min-height:42px;font-weight:600;transition:.15s}
+.ko-mode.on{border-color:var(--si);background:var(--si-soft);color:var(--si-d)}
+.ko-mdesc{font-size:.76rem;color:var(--si-d);margin-top:8px;line-height:1.55;background:var(--si-soft);border-radius:8px;padding:8px 11px;border-left:3px solid var(--si)}
+.ko-ta{width:100%;min-height:88px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:.85rem;resize:vertical;font-family:inherit;background:#fff;color:var(--ink);line-height:1.6}
+.ko-stats{display:flex;gap:8px;flex-wrap:wrap}
+.ko-stat{flex:1;min-width:82px;background:var(--si-soft);border-radius:10px;padding:10px 12px;text-align:center}
+.ko-stat b{display:block;font-size:1.3rem;color:var(--si-d);line-height:1.25}
+.ko-stat span{font-size:.7rem;color:var(--muted)}
+.ko-heat-h{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px}
+.ko-heat-h span{text-align:center;font-size:.68rem;color:var(--muted)}
+.ko-heat{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:5px}
+.ko-heat i{aspect-ratio:1;border-radius:5px;background:#EDE9E1;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--muted);font-style:normal}
+.ko-heat i.on{background:var(--si);color:#fff}
+.ko-heat i.tdy{outline:2px solid var(--si-d);outline-offset:1px}
+.ko-heat i.fut{opacity:.32}
+.ko-det{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden;background:#fff}
+.ko-det summary{padding:11px 13px;font-size:.83rem;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;min-height:44px}
+.ko-det summary::-webkit-details-marker{display:none}
+.ko-det summary::before{content:'▸';color:var(--si);font-size:.8rem;transition:.15s}
+.ko-det[open] summary::before{transform:rotate(90deg)}
+.ko-det>div,.ko-det>ul,.ko-det>ol{padding:0 13px 12px}
+.ko-det>ul,.ko-det>ol{padding-left:30px}
+.ko-ul,.ko-ol{font-size:.8rem;line-height:1.75;color:var(--ink)}
+.ko-ul li,.ko-ol li{margin-bottom:3px}
+.ko-kw{display:inline-block;background:#E2EDFA;color:#1E4E8C;padding:3px 8px;border-radius:6px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;cursor:pointer;border:1px solid #CFE0F5;margin:3px 0;word-break:break-all;line-height:1.5}
+.ko-kw::after{content:' ⧉';opacity:.55;font-size:.7rem}
+.ko-kw:active{background:#CFE0F5}
+.ko-tip-sm{background:#FFF6E5;border-left:3px solid #E0A44A;border-radius:6px;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#6B4E1A}
+.ko-ok{background:#E8F6EE;border-left:3px solid #3E9B69;border-radius:6px;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#1E5D3C}
+.ko-warn{background:#FDECEA;border-left:3px solid #C9503F;border-radius:6px;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#7A2E22}
+.ko-plan{border:1px solid var(--line);border-radius:11px;margin-bottom:9px;overflow:hidden}
+.ko-plan.cur{border-color:var(--si);box-shadow:0 2px 10px rgba(62,107,88,.14)}
+.ko-plan-h{display:flex;align-items:center;gap:9px;padding:11px 13px;background:#FAF8F4}
+.ko-plan.cur .ko-plan-h{background:var(--si-soft)}
+.ko-plan-b{padding:9px 13px 11px;border-top:1px solid var(--line);font-size:.79rem;color:var(--muted);line-height:1.6}
+.ko-tag{font-size:.66rem;padding:2px 7px;border-radius:6px;background:var(--si-soft);color:var(--si-d);font-weight:700;flex-shrink:0}
+.ko-tag.now{background:var(--si);color:#fff}
+.ko-tag.buf{background:#FFF0D6;color:#8A5A12}
+.ko-tag.chk{background:#E8F6EE;color:#1E5D3C}
+.ko-pt{font-size:.83rem;font-weight:600;flex:1;line-height:1.4}
+.ko-pt.done{text-decoration:line-through;color:var(--muted);font-weight:500}
+.ko-chk{width:26px;height:26px;border-radius:7px;border:1.5px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:transparent}
+.ko-chk.on{background:var(--si);border-color:var(--si);color:#fff}
+.ko-chk .ic{width:15px;height:15px}
+.ko-acc{font-size:.74rem;color:var(--muted);margin-top:3px}
+.ko-phrase{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;background:#fff}
+.ko-phrase .k{font-size:.88rem;font-weight:600;color:var(--si-d)}
+.ko-phrase .m{font-size:.76rem;color:var(--muted);margin-left:auto;flex-shrink:0}
+.ko-empty{font-size:.8rem;color:var(--muted);padding:14px;text-align:center}
 .rec-item{background:#FBFAF7;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
 .rec-item .hd{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .rec-item .ti{font-weight:600;font-size:.92rem;color:var(--ink)}
@@ -709,8 +784,15 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         <button class="subtab" data-si="rev" onclick="showSiTab('rev')"><svg class="ic"><use href="#i-edit"/></svg>复盘</button>
       </div>
 
-      <!-- 语言学习（沿用原英语学习页：雅思倒计时 + 学习任务 + 口语素材，数据保留） -->
+      <!-- 语言学习（英语·雅思 + 韩语 两个子版块） -->
       <div class="si-pane on" data-si="lang">
+        <div class="subtabs2">
+          <button class="subtab2 on" data-lt="en" onclick="showLangTab('en')"><svg class="ic"><use href="#i-book"/></svg>英语 · 雅思</button>
+          <button class="subtab2" data-lt="ko" onclick="showLangTab('ko')"><svg class="ic"><use href="#i-zap"/></svg>韩语</button>
+        </div>
+
+        <!-- 英语·雅思（原有内容：雅思倒计时 + 学习任务 + 口语素材，数据完整保留） -->
+        <div class="lang-pane on" data-lt="en">
         <div class="countdown mb">
           <div class="muted" style="color:rgba(255,255,255,.85);font-size:.78rem;letter-spacing:1px" id="cdLabel">IELTS COUNTDOWN</div>
           <div class="days" id="cdDays">--</div>
@@ -733,6 +815,143 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <button class="btn btn-g btn-sm" onclick="openMatSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>收一句</button>
           </div>
           <div id="matList" class="mt"></div>
+        </div>
+        </div><!-- /英语·雅思 -->
+
+        <!-- 韩语 · 12 个月零基础计划 -->
+        <div class="lang-pane" data-lt="ko">
+          <div id="koBanner" class="ko-banner"></div>
+
+          <div class="ko-hero">
+            <div class="ko-hero-row">
+              <div class="ko-hero-l">
+                <div class="ko-lb">KOREAN · 12 个月零基础计划</div>
+                <div class="ko-stage" id="koStageName">阶段一 · 发音通关</div>
+                <div class="ko-goal" id="koStageGoal">—</div>
+              </div>
+              <div class="ko-hero-r">
+                <div class="ko-mw" id="koMonWeek">第 1 月 · 第 1 周</div>
+                <div class="ko-day" id="koDayNum">Day 1</div>
+              </div>
+            </div>
+            <div class="ko-bar"><span id="koBarIn"></span></div>
+            <div class="row between"><div class="ko-bar-t" id="koBarTxt">总进度 0%</div><div class="ko-bar-t" style="cursor:pointer;text-decoration:underline;flex-shrink:0;margin-left:10px" onclick="koSetStart()">改开始日期</div></div>
+          </div>
+
+          <div class="card">
+            <div class="row between">
+              <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-check"/></svg>今日打卡</h3>
+              <span class="muted" id="koDateLbl"></span>
+            </div>
+            <div class="ko-modes mt">
+              <button class="ko-mode on" data-km="60" onclick="setKoMode(60)">标准版 60min</button>
+              <button class="ko-mode" data-km="30" onclick="setKoMode(30)">压缩版 30min</button>
+            </div>
+            <div class="ko-mdesc" id="koModeDesc"></div>
+            <label class="f mt">今日小结（学了哪一课、难点、感想）</label>
+            <textarea id="koDailyNote" class="ko-ta" placeholder="今天学了什么、卡在哪里…"></textarea>
+            <button class="btn btn-p mt" style="width:100%" onclick="saveKoDaily()">保存今日打卡</button>
+            <div class="mt" id="koTodayBox"></div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-flame"/></svg>打卡记录</h3>
+            <div class="ko-stats mt" id="koStats"></div>
+            <div class="ko-heat-h"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+            <div class="ko-heat" id="koHeat"></div>
+          </div>
+
+          <div class="card">
+            <div class="row between">
+              <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-target"/></svg>12 个月阶段任务</h3>
+              <button class="btn btn-g btn-sm" onclick="toggleKoDone()"><span id="koDoneLbl">隐藏已完成</span></button>
+            </div>
+            <div id="koPlanList" class="mt"></div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-inbox"/></svg>学习物料库</h3>
+            <div class="ko-mat mt">
+              <details class="ko-det" open>
+                <summary>📖 纸质教材</summary>
+                <ul class="ko-ul">
+                  <li>《延世韩国语 1》+ 活用练习册 —— 第 1‑3 月</li>
+                  <li>《延世韩国语 2》+ 活用练习册 —— 第 4‑6 月（达成旅行目标）</li>
+                  <li>《延世韩国语 3》+ 活用练习册 —— 第 7‑12 月（冲韩剧听懂）</li>
+                </ul>
+              </details>
+              <details class="ko-det">
+                <summary>📱 APP（全部免费）</summary>
+                <ul class="ko-ul">
+                  <li><b>NAVER 词典</b>：查词、真人发音、例句，自学刚需</li>
+                  <li><b>墨墨背单词 / Anki</b>：单词间隔重复复习</li>
+                  <li><b>小宇宙</b>：第 7 个月之后开启听力输入</li>
+                </ul>
+              </details>
+              <details class="ko-det">
+                <summary>🎬 视频课程（点关键词即复制 → 粘到 B站搜）</summary>
+                <div class="ko-tip-sm">💡 点一下蓝色关键词就复制好了，粘贴到 B站搜索框即可。别用固定 BV 链接 —— UP 经常下架旧稿件，链接容易失效。</div>
+                <ul class="ko-ul">
+                  <li>第 1 月 · 四十音+音变<span class="ko-kw" onclick="copyKoKw(this)">韩语养乐多老师 四十音全集 收音音变</span><div class="ko-acc">零基础首选，口型讲解清晰</div></li>
+                  <li>第 2‑3 月 · 延世1 精讲<span class="ko-kw" onclick="copyKoKw(this)">韩语饼干老师 延世韩国语1 全册精讲</span></li>
+                  <li>第 4‑6 月 · 延世2 精讲<span class="ko-kw" onclick="copyKoKw(this)">天言韩语裴秀智 延世韩国语2 精讲</span></li>
+                  <li>第 7‑12 月 · 延世3 精讲<span class="ko-kw" onclick="copyKoKw(this)">宇宙胡迪 延世韩国语3 全套精讲</span></li>
+                  <li>中级 · 韩剧俚语口语<span class="ko-kw" onclick="copyKoKw(this)">Miss Vicky韩语 韩剧口语俚语合集</span></li>
+                  <li>中级 · 街头真实听力<span class="ko-kw" onclick="copyKoKw(this)">Easy Korean 韩国街头采访 生肉听力</span></li>
+                </ul>
+              </details>
+              <details class="ko-det">
+                <summary>🎧 播客（第 7 个月后启用）</summary>
+                <ol class="ko-ol">
+                  <li><b>Korean Class 101</b>｜中下难度，慢速带讲解，适合 TOPIK3 入门</li>
+                  <li><b>Talk To Me In Korean Podcast</b>｜中等，5‑15 分钟短集，大量生活化俚语</li>
+                  <li><b>Korean Listening Practice</b>｜中等，纯韩语对话，贴近韩剧真实语速</li>
+                  <li><b>Seoul Podcast</b>｜中高难度，本地人闲聊，适合 TOPIK4</li>
+                </ol>
+                <div class="ko-tip-sm">⚠️ 1‑6 个月不要听播客，听不懂＝无效磨耳朵。<br>✅ 精听步骤：完整听 1 遍 → 逐句听写 → 对照文本修正 → 影子跟读 2 遍。优先吃透 1 集，别刷量。</div>
+              </details>
+              <details class="ko-det">
+                <summary>📺 韩剧选材（第 7 个月后）</summary>
+                <div class="ko-ok">✅ 推荐（日常家庭向）：请回答系列、酒鬼都市女人们、都市男女爱情法</div>
+                <div class="ko-warn">❌ 不建议（术语太多）：古装、法庭、医疗、刑侦</div>
+              </details>
+              <details class="ko-det">
+                <summary>🧪 自测资源</summary>
+                <ul class="ko-ul">
+                  <li>延世配套练习册课后习题，<b>每课必做</b></li>
+                  <li>B站搜：<b>TOPIK1 真题</b> / <b>TOPIK2 真题</b>，每册课本结束做一套完整模拟</li>
+                  <li>目的：检验真实水平，避免「假性学会」</li>
+                </ul>
+              </details>
+              <details class="ko-det">
+                <summary>🚨 自学硬性避坑规则</summary>
+                <ol class="ko-ol">
+                  <li>前 6 个月不要拿全集韩剧当学习材料；只拿 1‑3 分钟片段精听，全集只做娱乐。</li>
+                  <li>敬语优先级最高，韩国旅行绝大多数场景用敬语，别先学非敬语。</li>
+                  <li>每周强制休息 1 天；设置缓冲复盘周，不要硬赶进度。</li>
+                  <li>不能只跟读，必须造句、自我角色扮演，避免学成哑巴韩语。</li>
+                  <li>某天没时间，启用 30 分钟压缩版保底，不要直接断更。</li>
+                  <li>定期自测，不要自我感觉学会就跳过检验。</li>
+                  <li>B站课程优先复制页面里的搜索关键词去搜，不要依赖旧 BV 链接 —— UP 经常下架旧稿件。</li>
+                </ol>
+              </details>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row between">
+              <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-link"/></svg>旅行应急短句库</h3>
+              <button class="btn btn-p btn-sm" onclick="openKoPhrase()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加一句</button>
+            </div>
+            <div class="muted mt">第 6 个月重点背诵 · 点句子可删除</div>
+            <div id="koPhraseList" class="mt"></div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-edit"/></svg>学习笔记</h3>
+            <div class="muted mt">易混淆语法、记错单词、旅行句型、错题总结 · 自动保存</div>
+            <textarea id="koStudyNote" class="ko-ta mt" placeholder="记录：易混淆语法、记错单词、旅行句型、错题总结…"></textarea>
+          </div>
         </div>
       </div>
 
@@ -1574,7 +1793,7 @@ function renderHabit(){
     cells+=`<span class="d" style="${n?`background:rgba(200,72,48,${op});border-color:transparent;color:#fff`:''}${isT?';outline:2px solid #C94830;outline-offset:1px':''}">${dd}</span>`}
   document.getElementById('heatmap').innerHTML=cells;
   // 热力图统计：完成度 + 连续天数
-  const cBox=g(K.tc,{});let totalDone=0,maxStreak=0,curStreak=0,prevWas=0;
+  const cBox=c;let totalDone=0,maxStreak=0,curStreak=0;
   for(let dd=1;dd<=dim;dd++){const ds=`${y}-${pad(m)}-${pad(dd)}`;
     const n=Object.keys(cBox[ds]||{}).filter(k=>habits.some(h=>h.id===k)).length;
     if(n>0){totalDone++;curStreak++;maxStreak=Math.max(maxStreak,curStreak);}else curStreak=0;}
@@ -1596,6 +1815,7 @@ function isThisWeek(d){if(!d)return false;const now=new Date(today()+'T00:00:00'
 function renderSelfImp(){
   if(typeof renderEng==='function') renderEng();
   renderRead();renderPod();renderRev();
+  if(typeof renderKorean==='function') renderKorean();
   const revs=g(K.siRev,[]);
   const tw=revs.filter(r=>isThisWeek(r.date));
   const b=document.getElementById('siBanner');
@@ -1619,6 +1839,187 @@ function seedSelfImpOnce(){
     {id:uid(),cycle:'周复盘',gain:'本周坚持了 5 天运动打卡，状态不错。',improve:'深度阅读时间偏少，容易被碎片信息占满。',next:'下周每天固定 30 分钟读《原子习惯》。',date:dAdd(t,-10),sample:true}
   ]);
   sv(K.siSeeded,true);
+}
+/* ================= 韩语 · 12 个月零基础计划 ================= */
+const KO_DEFAULT_START='2026-08-30';
+const KO_STAGE={
+  1:{n:'阶段一 · 发音通关',g:'看到韩文完整拼读，掌握全部收音、音变，不需要懂词义'},
+  2:{n:'阶段二 · 初级Ⅰ｜延世韩国语 1',g:'基础句型、基础敬语，800 基础词汇，看懂简单短句'},
+  3:{n:'阶段三 · 初级Ⅱ｜延世韩国语 2',g:'TOPIK2，旅行无痛交流；完整敬语；1500‑1800 词汇'},
+  4:{n:'阶段四 · 中级｜延世韩国语 3',g:'TOPIK3‑4；生活化韩剧 70% 听懂；积累俚语、口语缩略句式'}
+};
+const KO_MODE={
+  1:{60:'30min 视频学习｜20min 手写拼读｜10min 复习旧发音',30:'15min 拼读复习｜15min 跟读音频'},
+  2:{60:'25min 课程语法｜20min 背单词｜10min 跟读课文｜5min 造句（当日语法造 2‑3 句自己的话）',30:'15min 复习单词｜10min 跟读｜5min 造句'},
+  3:{60:'25min 课程语法｜20min 旅行高频单词｜10min 跟读｜5min 角色扮演造句（模拟旅行场景）',30:'15min 旅行句型复习｜10min 跟读｜5min 角色扮演自言自语'},
+  4:{60:'20min 课程语法｜20min 生活俚语单词｜15min 精听韩剧片段影子跟读｜5min 造句复述台词',30:'10min 复习单词｜15min 片段精听跟读｜5min 复述台词'}
+};
+const KO_PLAN=[
+  {w:1,s:1,m:1,t:'基础元音 + 基础辅音',c:'全部会读、会写'},
+  {w:2,s:1,m:1,t:'复合元音、紧音、送气音',c:'区分紧音和普通音，不混淆'},
+  {w:3,s:1,m:1,t:'7 种收音发音',c:'可以读出带收音的韩字'},
+  {w:4,s:1,m:1,t:'连读、同化、全部音变规则',c:'随机韩文片段流畅朗读'},
+  {w:5,s:2,m:2,t:'延世1 1‑2课：自我介绍、数字',c:'完成简单自我介绍'},
+  {w:6,s:2,m:2,t:'延世1 3‑4课：地点、核心助词',c:'分清 이/가 은/는 을/를'},
+  {w:7,s:2,m:2,t:'延世1 5‑6课：时间、爱好',c:'会表达几点做什么、爱好'},
+  {w:8,s:2,m:2,t:'月末复盘：复习全部语法，重做错题',c:'默写核心助词'},
+  {w:9,s:2,m:3,t:'延世1 7‑9课：购物、点餐',c:'看懂基础菜单词汇'},
+  {w:10,s:2,m:3,t:'延世1 10‑12课：过去时',c:'简单描述过去发生的事'},
+  {w:11,s:2,m:3,t:'延世1 13‑14课：将来、计划',c:'表达打算做某事'},
+  {w:12,s:2,m:3,t:'🛑 缓冲复盘周：不学新课，刷练习册错题 + 单词总复习 + TOPIK1 自测',c:'巩固全部延世1内容'},
+  {w:13,s:3,m:4,t:'延世2 1‑2课：出行交通',c:'会打车、地铁、问路'},
+  {w:14,s:3,m:4,t:'延世2 3‑4课：邀约、约会',c:'礼貌邀约、委婉拒绝'},
+  {w:15,s:3,m:4,t:'延世2 5‑6课：饮食点餐',c:'看懂菜单，完整对话点单'},
+  {w:16,s:3,m:4,t:'月末复盘：敬语基础系统复习',c:'说话习惯用 요 结尾敬语'},
+  {w:17,s:3,m:5,t:'延世2 7‑8课：购物退换货',c:'咨询商品、退换货表达'},
+  {w:18,s:3,m:5,t:'延世2 9‑10课：天气、生活习惯',c:'聊天气、日常习惯'},
+  {w:19,s:3,m:5,t:'月末复盘：整理旅行高频句型库',c:'口头完整模拟酒店入住对话'},
+  {w:20,s:3,m:5,t:'弹性复习周（机动补进度 / 巩固薄弱项）',c:'补齐前 3 周没消化的内容'},
+  {w:21,s:3,m:6,t:'延世2 11‑13课：高阶敬语、转述句',c:'区分正式 / 非正式敬语'},
+  {w:22,s:3,m:6,t:'延世2 14‑16课：综合场景',c:'多旅行场景综合演练'},
+  {w:23,s:3,m:6,t:'✅ 月末大验收：全套旅行模拟对话 + TOPIK2 真题自测',c:'旅行交流目标完成'},
+  {w:24,s:3,m:6,t:'🛑 缓冲复盘周：背诵旅行应急短句库 + 错题、单词大复盘',c:'完全巩固旅行全部表达'},
+  {w:25,s:4,m:7,sp:4,t:'延世3 1‑4课：复杂时态、敬语变体；开启小宇宙播客精听',c:'听懂慢速日常对话'},
+  {w:29,s:4,m:8,sp:4,t:'延世3 5‑8课：观点、理由表达',c:'可以完整表达个人想法'},
+  {w:33,s:4,m:9,sp:4,t:'延世3 9‑11课：开启韩剧片段精听（每次 1‑3 分钟）',c:'生活化片段 70% 听懂'},
+  {w:37,s:4,m:10,sp:4,t:'延世3 12‑14课：大量俚语积累',c:'家庭向韩剧可少字幕观看'},
+  {w:41,s:4,m:11,sp:8,t:'完成延世3；台词复述；播客持续输入；TOPIK3‑4 自测',c:'生活化韩剧接近无字幕'}
+];
+let _koMode=60,_koHideDone=false,_koNoteBound=false;
+function koStart(){return g(K.siKoStart,'')||KO_DEFAULT_START}
+function koSetStart(){const v=prompt('韩语学习开始日期 (YYYY-MM-DD)',koStart());if(!v)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(v.trim()))return toast('格式不对，例：2026-08-30');sv(K.siKoStart,v.trim());renderKorean();toast('已更新开始日期')}
+function koCur(){
+  const s=new Date(koStart()+'T00:00:00'),n=new Date(today()+'T00:00:00');
+  const dn=Math.max(1,Math.round((n-s)/86400000)+1);
+  const w=Math.floor((dn-1)/7)+1, m=Math.floor((w-1)/4)+1;
+  return {dn:dn,w:w,m:m,s:m===1?1:(m<=3?2:(m<=6?3:4))};
+}
+function koStreak(){
+  const arr=g(K.siKoLog,[]);if(!arr.length)return 0;
+  const set=new Set(arr.map(x=>x.d));let s=0,d=today();
+  if(!set.has(d))d=dAdd(d,-1);
+  while(set.has(d)){s++;d=dAdd(d,-1)}
+  return s;
+}
+function setKoMode(m){
+  _koMode=m;
+  document.querySelectorAll('.ko-mode').forEach(b=>b.classList.toggle('on',+b.dataset.km===m));
+  const st=koCur().s,d=document.getElementById('koModeDesc');
+  if(d)d.textContent=(KO_MODE[st]||KO_MODE[1])[m];
+}
+function saveKoDaily(){
+  const note=(document.getElementById('koDailyNote').value||'').trim();
+  const arr=g(K.siKoLog,[]),t=today(),i=arr.findIndex(x=>x.d===t);
+  const rec={d:t,m:_koMode,n:note,ts:Date.now()};
+  if(i>=0)arr[i]=rec;else arr.push(rec);
+  sv(K.siKoLog,arr);renderKorean();
+  toast(i>=0?'今日打卡已更新':'打卡成功 · 已连续 '+koStreak()+' 天 🔥');
+}
+function toggleKoTask(w){const d=g(K.siKoWeek,{});if(d[w])delete d[w];else d[w]=1;sv(K.siKoWeek,d);renderKorean()}
+function toggleKoDone(){_koHideDone=!_koHideDone;document.getElementById('koDoneLbl').textContent=_koHideDone?'显示已完成':'隐藏已完成';renderKoPlan()}
+function copyKoKw(el){
+  const t=(el.textContent||'').trim();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(()=>toast('已复制 · 去 B站粘贴搜索')).catch(()=>prompt('手动复制这段关键词',t));
+  }else prompt('手动复制这段关键词',t);
+}
+function koWeekCnt(){
+  const set=new Set(g(K.siKoLog,[]).map(x=>x.d));
+  const now=new Date(today()+'T00:00:00'),dw=(now.getDay()+6)%7;
+  let c=0;for(let i=0;i<=dw;i++){if(set.has(dAdd(today(),-i)))c++}
+  return c;
+}
+function seedKoOnce(){
+  if(g(K.siKoPhrase,null)!==null)return;
+  sv(K.siKoPhrase,[
+    {id:uid(),k:'저는 중국 사람이에요.',m:'我是中国人'},
+    {id:uid(),k:'이거 얼마예요?',m:'这个多少钱？'},
+    {id:uid(),k:'메뉴판 주세요.',m:'请给我菜单'},
+    {id:uid(),k:'화장실 어디예요?',m:'洗手间在哪里？'},
+    {id:uid(),k:'호텔까지 가주세요.',m:'请送到酒店'},
+    {id:uid(),k:'잠시만요.',m:'请稍等'},
+    {id:uid(),k:'감사합니다 / 죄송합니다',m:'谢谢 / 对不起'}
+  ]);
+}
+function openKoPhrase(){
+  const k=prompt('韩语句子');if(!k||!k.trim())return;
+  const m=prompt('中文意思','')||'';
+  const arr=g(K.siKoPhrase,[]);arr.unshift({id:uid(),k:k.trim(),m:m.trim()});
+  sv(K.siKoPhrase,arr);renderKoPhrase();toast('已添加');
+}
+function delKoPhrase(id){sv(K.siKoPhrase,g(K.siKoPhrase,[]).filter(x=>x.id!==id));renderKoPhrase();toast('已删除')}
+function renderKoPhrase(){
+  const arr=g(K.siKoPhrase,[]),box=document.getElementById('koPhraseList');if(!box)return;
+  box.innerHTML=arr.map(x=>`<div class="ko-phrase"><div><div class="k">${esc(x.k)}</div>${x.m?`<div class="ko-acc">${esc(x.m)}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="if(confirm('删除这句？'))delKoPhrase('${x.id}')">删</button></div>`).join('')||'<div class="ko-empty">还没有短句，点右上角加一句</div>';
+}
+function renderKoHeat(){
+  const box=document.getElementById('koHeat');if(!box)return;
+  const set=new Set(g(K.siKoLog,[]).map(x=>x.d)),t=today();
+  const now=new Date(t+'T00:00:00'),dw=(now.getDay()+6)%7;
+  const start=new Date(now);start.setDate(now.getDate()-dw-21);
+  let h='';
+  for(let i=0;i<28;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);const ds=dstr(d);
+    h+=`<i class="${set.has(ds)?'on':''}${ds===t?' tdy':''}${ds>t?' fut':''}">${d.getDate()}</i>`;
+  }
+  box.innerHTML=h;
+}
+function renderKoPlan(){
+  const box=document.getElementById('koPlanList');if(!box)return;
+  const cur=koCur(),done=g(K.siKoWeek,{});let h='';
+  [1,2,3,4].forEach(s=>{
+    const items=KO_PLAN.filter(x=>x.s===s);if(!items.length)return;
+    const dn=items.filter(x=>done[x.w]).length,active=cur.s===s;
+    h+=`<div class="ko-plan-h" style="border-radius:10px;margin:12px 0 6px;background:${active?'var(--si-soft)':'#F3F1EC'}"><span class="ko-tag${active?' now':''}">${KO_STAGE[s].n.split(' · ')[0]}</span><span class="ko-pt" style="font-size:.79rem">${dn} / ${items.length} 项</span></div>`;
+    items.forEach(x=>{
+      const isDone=!!done[x.w];if(_koHideDone&&isDone)return;
+      const isCur=x.s===cur.s&&(x.sp?(cur.w>=x.w&&cur.w<x.w+x.sp):x.w===cur.w);
+      const buf=/缓冲|复盘|验收|弹性/.test(x.t);
+      const tag=x.sp?`第${x.m}月`:`第${x.w}周`;
+      h+=`<div class="ko-plan${isCur?' cur':''}">
+        <div class="ko-plan-h"><span class="ko-tag${isCur?' now':''}${buf?' buf':''}">${tag}</span>
+        <span class="ko-pt${isDone?' done':''}">${esc(x.t)}</span>
+        <button class="ko-chk${isDone?' on':''}" onclick="toggleKoTask(${x.w})"><svg class="ic"><use href="#i-check"/></svg></button></div>
+        <div class="ko-plan-b">验收：${esc(x.c)}</div></div>`;
+    });
+  });
+  box.innerHTML=h||'<div class="ko-empty">暂无任务</div>';
+}
+function renderKorean(){
+  seedKoOnce();
+  const el=id=>document.getElementById(id);
+  if(!el('koStageName'))return;
+  const cur=koCur(),st=KO_STAGE[cur.s]||KO_STAGE[1];
+  el('koStageName').textContent=st.n;
+  el('koStageGoal').textContent=st.g;
+  el('koMonWeek').textContent=`第 ${cur.m} 月 · 第 ${((cur.w-1)%4)+1} 周`;
+  el('koDayNum').textContent='Day '+cur.dn;
+  el('koDateLbl').textContent=today()+' · 第 '+cur.dn+' 天';
+  const done=g(K.siKoWeek,{}),dn=KO_PLAN.filter(x=>done[x.w]).length;
+  const pct=Math.round(dn/KO_PLAN.length*100);
+  el('koBarIn').style.width=pct+'%';
+  el('koBarTxt').textContent=`任务进度 ${dn} / ${KO_PLAN.length} 项 · ${pct}%`;
+  setKoMode(_koMode);
+  const arr=g(K.siKoLog,[]),rec=arr.find(x=>x.d===today()),sk=koStreak();
+  el('koTodayBox').innerHTML=rec
+    ?`<div class="ko-ok">✅ 今日已打卡 · ${rec.m} 分钟${rec.n?'<br>'+esc(rec.n):''}</div>`
+    :'<div class="ko-tip-sm">今天还没打卡。没时间就用 <b>30 分钟压缩版</b> 保底，别断更。</div>';
+  const b=el('koBanner');
+  if(b){if(rec){b.className='ko-banner ok';b.innerHTML=`<svg class="ic"><use href="#i-check"/></svg> 今日已打卡 ${rec.m} 分钟 · 已连续 <b>${sk}</b> 天 🔥`}
+    else{b.className='ko-banner warn';b.innerHTML='<svg class="ic"><use href="#i-flame"/></svg> 今天还没打卡 —— 选时长 → 写小结 → 保存，30 分钟也算数'}}
+  el('koStats').innerHTML=`<div class="ko-stat"><b>${sk}</b><span>连续天数</span></div><div class="ko-stat"><b>${koWeekCnt()}/6</b><span>本周打卡</span></div><div class="ko-stat"><b>${arr.length}</b><span>累计打卡</span></div><div class="ko-stat"><b>${dn}</b><span>完成任务</span></div>`;
+  if(document.activeElement!==el('koDailyNote'))el('koDailyNote').value=rec?rec.n:'';
+  const nt=el('koStudyNote');
+  if(nt&&document.activeElement!==nt)nt.value=g(K.siKoNote,'');
+  if(nt&&!_koNoteBound){_koNoteBound=true;nt.addEventListener('input',()=>sv(K.siKoNote,nt.value))}
+  renderKoHeat();renderKoPlan();renderKoPhrase();
+}
+let _langTab='en';
+function showLangTab(t){
+  _langTab=t;
+  document.querySelectorAll('#page-selfimp .lang-pane').forEach(p=>p.classList.toggle('on',p.dataset.lt===t));
+  document.querySelectorAll('#page-selfimp .subtab2').forEach(b=>b.classList.toggle('on',b.dataset.lt===t));
+  if(t==='ko')renderKorean();
 }
 /* 阅读 */
 function openReadSheet(){['rdTitle','rdQuote'].forEach(i=>document.getElementById(i).value='');['rdType','rdStatus','rdCat'].forEach(i=>document.getElementById(i).selectedIndex=0);document.getElementById('rdRating').value='';document.getElementById('readMask').classList.add('show')}
