@@ -408,70 +408,70 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .lang-pane{display:none;animation:fade .2s ease}
 .lang-pane.on{display:block}
 
-/* ---- 韩语板块（独立蓝系，区别于黛绿母板块） ---- */
-.ko-banner{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#5B7FD4,#3F63B8);color:#fff;border-radius:var(--r);padding:12px 15px;margin-bottom:14px;font-size:.83rem;line-height:1.4;box-shadow:0 4px 16px rgba(63,99,184,.22)}
-.ko-banner.warn{background:linear-gradient(135deg,#D96C5F,#B84A3E);box-shadow:0 4px 16px rgba(184,74,62,.22)}
-.ko-banner.ok{background:linear-gradient(135deg,#3E6B58,#2F5343);box-shadow:0 4px 16px rgba(62,107,88,.22)}
+/* ---- 韩语板块（马里奥 NES 像素风） ---- */
+.ko-banner{display:flex;align-items:center;gap:8px;background:#E84C3D;color:#fff;border:3px solid #2B2B2B;border-radius:0;padding:11px 14px;margin-bottom:14px;font-size:.83rem;line-height:1.4}
+.ko-banner.warn{background:#E84C3D;border-color:#2B2B2B}
+.ko-banner.ok{background:#43B047;border-color:#2B2B2B}
 .ko-banner .ic{width:17px;height:17px;flex-shrink:0}
-.ko-hero{background:linear-gradient(135deg,#5B7FD4,#3F63B8);color:#fff;border-radius:var(--r);padding:16px 18px;margin-bottom:16px;box-shadow:0 6px 22px rgba(63,99,184,.24)}
+.ko-hero{background:#E84C3D;color:#fff;border:3px solid #2B2B2B;border-radius:0;padding:15px 17px;margin-bottom:16px}
 .ko-hero-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.ko-lb{font-size:.7rem;letter-spacing:1.2px;opacity:.85}
+.ko-lb{font-size:.7rem;letter-spacing:1.2px;opacity:.9}
 .ko-stage{font-size:1.15rem;font-weight:700;margin-top:3px}
-.ko-goal{font-size:.78rem;opacity:.92;margin-top:6px;line-height:1.45}
+.ko-goal{font-size:.78rem;opacity:.95;margin-top:6px;line-height:1.45}
 .ko-hero-r{text-align:right;flex-shrink:0}
 .ko-mw{font-size:.75rem;opacity:.9}
 .ko-day{font-size:1.5rem;font-weight:800;margin-top:2px}
-.ko-bar{height:7px;background:rgba(255,255,255,.28);border-radius:99px;overflow:hidden;margin-top:14px}
-.ko-bar span{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:width .4s ease}
-.ko-bar-t{font-size:.74rem;opacity:.9;margin-top:6px}
+.ko-bar{height:10px;background:#2B2B2B;border:2px solid #2B2B2B;overflow:hidden;margin-top:14px}
+.ko-bar span{display:block;height:100%;width:0;background:#F2C14E;transition:width .4s steps(10)}
+.ko-bar-t{font-size:.74rem;opacity:.95;margin-top:6px}
 .ko-modes{display:flex;gap:8px}
-.ko-mode{flex:1;padding:9px 6px;border:1.5px solid var(--line);background:#fff;border-radius:10px;font-size:.8rem;color:var(--muted);min-height:42px;font-weight:600;transition:.15s}
-.ko-mode.on{border-color:var(--si);background:var(--si-soft);color:var(--si-d)}
-.ko-mdesc{font-size:.76rem;color:var(--si-d);margin-top:8px;line-height:1.55;background:var(--si-soft);border-radius:8px;padding:8px 11px;border-left:3px solid var(--si)}
-.ko-ta{width:100%;min-height:88px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:.85rem;resize:vertical;font-family:inherit;background:#fff;color:var(--ink);line-height:1.6}
+.ko-mode{flex:1;padding:9px 6px;border:2px solid #2B2B2B;background:#fff;border-radius:0;font-size:.8rem;color:#2B2B2B;min-height:42px;font-weight:600;transition:.15s}
+.ko-mode.on{border-color:#2B2B2B;background:#43B047;color:#fff}
+.ko-mdesc{font-size:.76rem;color:#1E5D3C;margin-top:8px;line-height:1.55;background:#E8F6EE;border-left:4px solid #43B047;padding:8px 11px}
+.ko-ta{width:100%;min-height:88px;padding:11px 12px;border:2px solid #2B2B2B;border-radius:0;font-size:.85rem;resize:vertical;font-family:inherit;background:#fff;color:#2B2B2B;line-height:1.6}
 .ko-stats{display:flex;gap:8px;flex-wrap:wrap}
-.ko-stat{flex:1;min-width:82px;background:var(--si-soft);border-radius:10px;padding:10px 12px;text-align:center}
-.ko-stat b{display:block;font-size:1.3rem;color:var(--si-d);line-height:1.25}
-.ko-stat span{font-size:.7rem;color:var(--muted)}
+.ko-stat{flex:1;min-width:82px;background:#FDF6E3;border:2px solid #2B2B2B;border-radius:0;padding:10px 12px;text-align:center}
+.ko-stat b{display:block;font-size:1.3rem;color:#E84C3D;line-height:1.25}
+.ko-stat span{font-size:.7rem;color:#2B2B2B}
 .ko-heat-h{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px}
-.ko-heat-h span{text-align:center;font-size:.68rem;color:var(--muted)}
+.ko-heat-h span{text-align:center;font-size:.68rem;color:#2B2B2B}
 .ko-heat{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:5px}
-.ko-heat i{aspect-ratio:1;border-radius:5px;background:#EDE9E1;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--muted);font-style:normal}
-.ko-heat i.on{background:var(--si);color:#fff}
-.ko-heat i.tdy{outline:2px solid var(--si-d);outline-offset:1px}
+.ko-heat i{aspect-ratio:1;border:2px solid #2B2B2B;border-radius:0;background:#EDE9E1;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:#2B2B2B;font-style:normal}
+.ko-heat i.on{background:#43B047;color:#fff}
+.ko-heat i.tdy{outline:3px solid #E84C3D;outline-offset:1px}
 .ko-heat i.fut{opacity:.32}
-.ko-det{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden;background:#fff}
+.ko-det{border:2px solid #2B2B2B;border-radius:0;margin-bottom:8px;overflow:hidden;background:#fff}
 .ko-det summary{padding:11px 13px;font-size:.83rem;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;min-height:44px}
 .ko-det summary::-webkit-details-marker{display:none}
-.ko-det summary::before{content:'▸';color:var(--si);font-size:.8rem;transition:.15s}
+.ko-det summary::before{content:'▸';color:#E84C3D;font-size:.8rem;transition:.15s}
 .ko-det[open] summary::before{transform:rotate(90deg)}
 .ko-det>div,.ko-det>ul,.ko-det>ol{padding:0 13px 12px}
 .ko-det>ul,.ko-det>ol{padding-left:30px}
-.ko-ul,.ko-ol{font-size:.8rem;line-height:1.75;color:var(--ink)}
+.ko-ul,.ko-ol{font-size:.8rem;line-height:1.75;color:#2B2B2B}
 .ko-ul li,.ko-ol li{margin-bottom:3px}
-.ko-kw{display:inline-block;background:#E2EDFA;color:#1E4E8C;padding:3px 8px;border-radius:6px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;cursor:pointer;border:1px solid #CFE0F5;margin:3px 0;word-break:break-all;line-height:1.5}
-.ko-kw::after{content:' ⧉';opacity:.55;font-size:.7rem}
-.ko-kw:active{background:#CFE0F5}
-.ko-tip-sm{background:#FFF6E5;border-left:3px solid #E0A44A;border-radius:6px;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#6B4E1A}
-.ko-ok{background:#E8F6EE;border-left:3px solid #3E9B69;border-radius:6px;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#1E5D3C}
-.ko-warn{background:#FDECEA;border-left:3px solid #C9503F;border-radius:6px;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#7A2E22}
-.ko-plan{border:1px solid var(--line);border-radius:11px;margin-bottom:9px;overflow:hidden}
-.ko-plan.cur{border-color:var(--si);box-shadow:0 2px 10px rgba(62,107,88,.14)}
-.ko-plan-h{display:flex;align-items:center;gap:9px;padding:11px 13px;background:#FAF8F4}
-.ko-plan.cur .ko-plan-h{background:var(--si-soft)}
-.ko-plan-b{padding:9px 13px 11px;border-top:1px solid var(--line);font-size:.79rem;color:var(--muted);line-height:1.6}
-.ko-tag{font-size:.66rem;padding:2px 7px;border-radius:6px;background:var(--si-soft);color:var(--si-d);font-weight:700;flex-shrink:0}
-.ko-tag.now{background:var(--si);color:#fff}
-.ko-tag.buf{background:#FFF0D6;color:#8A5A12}
-.ko-tag.chk{background:#E8F6EE;color:#1E5D3C}
+.ko-kw{display:inline-block;background:#5BC0EB;color:#2B2B2B;padding:3px 8px;border:2px solid #2B2B2B;border-radius:0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;cursor:pointer;margin:3px 0;word-break:break-all;line-height:1.5}
+.ko-kw::after{content:' ⧉';opacity:.6;font-size:.7rem}
+.ko-kw:active{background:#fff}
+.ko-tip-sm{background:#FFF6E5;border-left:4px solid #F2C14E;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#6B4E1A}
+.ko-ok{background:#E8F6EE;border-left:4px solid #43B047;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#1E5D3C}
+.ko-warn{background:#FDECEA;border-left:4px solid #E84C3D;padding:8px 11px;font-size:.76rem;line-height:1.6;margin:8px 0;color:#7A2E22}
+.ko-plan{border:2px solid #2B2B2B;border-radius:0;margin-bottom:9px;overflow:hidden}
+.ko-plan.cur{border-color:#E84C3D}
+.ko-plan-h{display:flex;align-items:center;gap:9px;padding:11px 13px;background:#FDF6E3}
+.ko-plan.cur .ko-plan-h{background:#FDE9D6}
+.ko-plan-b{padding:9px 13px 11px;border-top:2px solid #2B2B2B;font-size:.79rem;color:#2B2B2B;line-height:1.6}
+.ko-tag{font-size:.66rem;padding:2px 7px;border-radius:0;background:#E8F6EE;color:#1E5D3C;font-weight:700;flex-shrink:0;border:2px solid #43B047}
+.ko-tag.now{background:#E84C3D;color:#fff;border-color:#2B2B2B}
+.ko-tag.buf{background:#FFF0D6;color:#8A5A12;border-color:#F2C14E}
+.ko-tag.chk{background:#43B047;color:#fff;border-color:#2B2B2B}
 .ko-pt{font-size:.83rem;font-weight:600;flex:1;line-height:1.4}
 .ko-pt.done{text-decoration:line-through;color:var(--muted);font-weight:500}
-.ko-chk{width:26px;height:26px;border-radius:7px;border:1.5px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:transparent}
-.ko-chk.on{background:var(--si);border-color:var(--si);color:#fff}
+.ko-chk{width:26px;height:26px;border-radius:0;border:2px solid #2B2B2B;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:transparent}
+.ko-chk.on{background:#43B047;border-color:#2B2B2B;color:#fff}
 .ko-chk .ic{width:15px;height:15px}
 .ko-acc{font-size:.74rem;color:var(--muted);margin-top:3px}
-.ko-phrase{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;background:#fff}
-.ko-phrase .k{font-size:.88rem;font-weight:600;color:var(--si-d)}
+.ko-phrase{display:flex;align-items:center;gap:9px;padding:9px 11px;border:2px solid #2B2B2B;border-radius:0;margin-bottom:6px;background:#fff}
+.ko-phrase .k{font-size:.88rem;font-weight:600;color:#2B2B2B}
 .ko-phrase .m{font-size:.76rem;color:var(--muted);margin-left:auto;flex-shrink:0}
 .ko-empty{font-size:.8rem;color:var(--muted);padding:14px;text-align:center}
 .rec-item{background:#FBFAF7;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
@@ -482,41 +482,50 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .rec-item .qt{font-size:.82rem;color:var(--si-d);background:var(--si-soft);border-left:3px solid var(--si);padding:8px 10px;border-radius:8px;margin-top:8px;line-height:1.6;white-space:pre-wrap}
 .rec-item .tag{background:var(--si-soft);color:var(--si-d)}
 .stars{color:#E0A93B;letter-spacing:1px;font-size:.85rem}
-/* ---------- 韩语 · 奖励机制 ---------- */
-.ko-rw-hero{background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;border-radius:var(--r);padding:15px 17px;margin-bottom:14px;box-shadow:0 5px 18px rgba(201,138,14,.26)}
+/* ---------- 韩语 · 奖励机制（马里奥 NES 像素风） ---------- */
+.ko-rw-hero{background:#F2C14E;color:#2B2B2B;border:3px solid #2B2B2B;border-radius:0;padding:15px 17px;margin-bottom:14px}
 .ko-rw-top{display:flex;align-items:center;gap:13px}
-.ko-rw-lv{width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid rgba(255,255,255,.4)}
+.ko-rw-lv{width:52px;height:52px;border-radius:0;background:#E84C3D;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #2B2B2B;color:#fff}
 .ko-rw-lv b{font-size:1.35rem;line-height:1;font-weight:800}
-.ko-rw-lv span{font-size:.58rem;opacity:.9;margin-top:2px}
+.ko-rw-lv span{font-size:.58rem;opacity:.95;margin-top:2px}
 .ko-rw-mid{flex:1;min-width:0}
 .ko-rw-name{font-size:.95rem;font-weight:800;line-height:1.2}
-.ko-rw-sub{font-size:.72rem;opacity:.92;margin-top:3px}
+.ko-rw-sub{font-size:.72rem;opacity:.9;margin-top:3px}
 .ko-rw-bal{text-align:right;flex-shrink:0}
 .ko-rw-bal b{display:block;font-size:1.65rem;font-weight:800;line-height:1}
 .ko-rw-bal span{font-size:.66rem;opacity:.9}
-.ko-rw-bar{height:6px;background:rgba(255,255,255,.3);border-radius:99px;overflow:hidden;margin-top:11px}
-.ko-rw-bar i{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:width .4s ease}
-.ko-rw-bar-t{font-size:.7rem;opacity:.93;margin-top:5px}
+.ko-rw-bar{height:8px;background:#2B2B2B;border:2px solid #2B2B2B;overflow:hidden;margin-top:11px}
+.ko-rw-bar i{display:block;height:100%;width:0;background:#E84C3D;transition:width .4s steps(10)}
+.ko-rw-bar-t{font-size:.7rem;opacity:.92;margin-top:5px}
 .ko-badges{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}
-.ko-bdg{text-align:center;padding:8px 3px;border-radius:10px;background:#F5F3EE;border:1px solid transparent;transition:.15s}
-.ko-bdg.got{background:linear-gradient(135deg,#FFF4D6,#FCE9B8);border-color:#E8C46A;box-shadow:0 2px 7px rgba(201,138,14,.16)}
+.ko-bdg{text-align:center;padding:8px 3px;border-radius:0;background:#F5F3EE;border:2px solid #2B2B2B;transition:.15s}
+.ko-bdg.got{background:#FDF6E3;border-color:#F2C14E}
 .ko-bdg i{font-size:1.28rem;font-style:normal;display:block;line-height:1.2;filter:grayscale(1);opacity:.32}
 .ko-bdg.got i{filter:none;opacity:1}
 .ko-bdg span{font-size:.58rem;color:var(--muted);display:block;margin-top:3px;line-height:1.25}
 .ko-bdg.got span{color:#8A5A12;font-weight:600}
-.ko-rw{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;background:#fff}
-.ko-rw-ic{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#FFF4D6,#FCE9B8);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
+.ko-rw{display:flex;align-items:center;gap:9px;padding:10px 12px;border:2px solid #2B2B2B;border-radius:0;margin-bottom:7px;background:#fff}
+.ko-rw-ic{width:34px;height:34px;border-radius:0;background:#F2C14E;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;border:2px solid #2B2B2B}
 .ko-rw-info{flex:1;min-width:0}
 .ko-rw-nm{font-size:.85rem;font-weight:600;line-height:1.35}
 .ko-rw-ct{font-size:.7rem;color:#B07D10;font-weight:700;margin-top:3px}
 .ko-rw-ct.no{color:var(--muted);font-weight:500}
-.ko-btn-rw{padding:7px 13px;border-radius:8px;border:none;background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;font-size:.76rem;font-weight:700;flex-shrink:0;min-height:34px}
-.ko-btn-rw:disabled{background:#E8E5DE;color:#A8A29A;cursor:not-allowed}
-.ko-btn-del{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--muted);font-size:.95rem;line-height:1;flex-shrink:0}
+.ko-btn-rw{padding:7px 13px;border-radius:0;border:2px solid #2B2B2B;background:#F2C14E;color:#2B2B2B;font-size:.76rem;font-weight:700;flex-shrink:0;min-height:34px}
+.ko-btn-rw:disabled{background:#E8E5DE;color:#A8A29A;border-color:#C9C4BB;cursor:not-allowed}
+.ko-btn-del{width:26px;height:26px;border-radius:0;border:2px solid #2B2B2B;background:#fff;color:var(--muted);font-size:.95rem;line-height:1;flex-shrink:0}
 .ko-hist{font-size:.74rem;color:var(--muted);line-height:1.75}
 .ko-hist b{color:var(--ink);font-weight:600}
-.ko-gain{position:fixed;left:50%;top:26%;transform:translateX(-50%);background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;padding:11px 22px;border-radius:99px;font-weight:800;font-size:.95rem;box-shadow:0 8px 26px rgba(201,138,14,.4);z-index:9999;pointer-events:none;opacity:0;transition:opacity .3s,top .5s}
+.ko-gain{position:fixed;left:50%;top:26%;transform:translateX(-50%);background:#E84C3D;color:#fff;padding:11px 22px;border:3px solid #2B2B2B;border-radius:0;font-weight:800;font-size:.95rem;z-index:9999;pointer-events:none;opacity:0;transition:opacity .3s,top .5s}
 .ko-gain.show{opacity:1;top:22%}
+/* ---- 韩语像素风增强：更粗描边 + 硬阴影像素感 + 砖纹 ---- */
+.ko-hero{display:flex;align-items:flex-end;gap:12px}
+.ko-hero-main{flex:1;min-width:0}
+.ko-mario{image-rendering:pixelated;filter:drop-shadow(3px 3px 0 #2B2B2B);flex-shrink:0}
+.ko-banner,.ko-hero,.ko-rw-hero{border-width:4px;box-shadow:5px 5px 0 0 #2B2B2B}
+.ko-stat,.ko-mode,.ko-kw,.ko-bdg,.ko-det,.ko-plan,.ko-phrase,.ko-rw,.ko-rw-ic,.ko-btn-rw,.ko-btn-del{border-width:3px;box-shadow:4px 4px 0 0 #2B2B2B}
+.ko-bar,.ko-rw-bar{border-width:3px}
+.ko-hero{background-image:repeating-linear-gradient(45deg,#E84C3D 0 9px,#D9432F 9px 18px)}
+.ko-rw-hero{background-image:repeating-linear-gradient(45deg,#F2C14E 0 9px,#E6B23E 9px 18px)}
 /* 今日看板 · 积分迷你条（与韩语板块共用同一积分池） */
 .rw-mini{display:flex;align-items:center;gap:11px;margin-top:13px;padding:11px 13px;border-radius:11px;background:linear-gradient(135deg,#FFF8E8,#FDEFCF);border:1px solid #F0DCA8}
 .rw-mini-lv{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0}
@@ -868,6 +877,26 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <div id="koBanner" class="ko-banner"></div>
 
           <div class="ko-hero">
+            <svg class="ko-mario" viewBox="0 0 16 16" width="58" height="58" shape-rendering="crispEdges" aria-hidden="true">
+              <rect x="4" y="1" width="8" height="1" fill="#E84C3D"/>
+              <rect x="3" y="2" width="10" height="1" fill="#E84C3D"/>
+              <rect x="3" y="3" width="10" height="4" fill="#F6C9A0"/>
+              <rect x="3" y="3" width="1" height="4" fill="#6B3E1E"/>
+              <rect x="12" y="3" width="1" height="4" fill="#6B3E1E"/>
+              <rect x="6" y="5" width="1" height="1" fill="#2B2B2B"/>
+              <rect x="9" y="5" width="1" height="1" fill="#2B2B2B"/>
+              <rect x="3" y="7" width="10" height="1" fill="#6B3E1E"/>
+              <rect x="2" y="8" width="12" height="1" fill="#E84C3D"/>
+              <rect x="4" y="9" width="8" height="3" fill="#3A5BDC"/>
+              <rect x="2" y="9" width="2" height="3" fill="#E84C3D"/>
+              <rect x="12" y="9" width="2" height="3" fill="#E84C3D"/>
+              <rect x="6" y="10" width="1" height="1" fill="#F2C14E"/>
+              <rect x="9" y="10" width="1" height="1" fill="#F2C14E"/>
+              <rect x="3" y="12" width="10" height="1" fill="#E84C3D"/>
+              <rect x="3" y="13" width="3" height="2" fill="#6B3E1E"/>
+              <rect x="10" y="13" width="3" height="2" fill="#6B3E1E"/>
+            </svg>
+            <div class="ko-hero-main">
             <div class="ko-hero-row">
               <div class="ko-hero-l">
                 <div class="ko-lb">KOREAN · 12 个月零基础计划</div>
@@ -881,6 +910,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             </div>
             <div class="ko-bar"><span id="koBarIn"></span></div>
             <div class="row between"><div class="ko-bar-t" id="koBarTxt">总进度 0%</div><div class="ko-bar-t" style="cursor:pointer;text-decoration:underline;flex-shrink:0;margin-left:10px" onclick="koSetStart()">改开始日期</div></div>
+            </div>
           </div>
 
           <div class="card">
