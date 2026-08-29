@@ -53,7 +53,8 @@ window.K = {
   backup:'wb_growth_backup_dismissed', kbImport:'wb_growth_kb_lastimport',
   siRead:'wb_growth_si_read', siPod:'wb_growth_si_podcast', siRev:'wb_growth_si_review', siSeeded:'wb_growth_si_seeded',
   siKoLog:'wb_growth_si_ko_log', siKoWeek:'wb_growth_si_ko_week', siKoStart:'wb_growth_si_ko_start',
-  siKoNote:'wb_growth_si_ko_note', siKoPhrase:'wb_growth_si_ko_phrase'
+  siKoNote:'wb_growth_si_ko_note', siKoPhrase:'wb_growth_si_ko_phrase',
+  siKoReward:'wb_growth_si_ko_reward', siKoSpent:'wb_growth_si_ko_spent', siKoRedeem:'wb_growth_si_ko_redeem'
 };
 
 /* ---------- 2. 内存数据缓存（页面运行时唯一数据源） ---------- */
