@@ -16,6 +16,35 @@ var SB_ANON = window.SB_ANON || '';
 var TABLE   = window.SB_TABLE || 'wb_store';
 var CONFIGURED = SB_URL.indexOf('YOUR-PROJECT') === -1 && SB_ANON.indexOf('YOUR-SUPABASE-ANON-KEY') === -1;
 
+/* ---------- 0b. 全局错误可视化 ----------
+   历史教训：曾两次出现「登录失败」，真凶其实是 JS 运行时崩溃 / 缓存错配，
+   却被包装成无意义的 HTTP 状态码，导致反复误诊。这里把真实错误直接暴露出来。 */
+var _lastJsErr = null;
+function reportJsErr(msg){
+  _lastJsErr = msg;
+  try{ console.error('[PWA ERROR]', msg); }catch(_){}
+  try{
+    var e = document.getElementById('liErr');
+    var ov = document.getElementById('loginOverlay');
+    if(e && ov && ov.style.display !== 'none'){
+      e.innerHTML = '<b>⚠️ 页面脚本出错（不是密码问题）：</b><br>' + String(msg).slice(0, 300);
+      e.style.color = '#B3261E';
+    } else if(window.toast){
+      toast('⚠️ 脚本出错：' + String(msg).slice(0, 120));
+    }
+  }catch(_){}
+}
+window.addEventListener('error', function(ev){
+  var m = ev.message || '未知错误';
+  if(ev.filename) m += '  @ ' + String(ev.filename).split('/').pop() + ':' + ev.lineno;
+  reportJsErr(m);
+});
+window.addEventListener('unhandledrejection', function(ev){
+  var r = ev.reason;
+  reportJsErr((r && (r.message || r)) || '未处理的 Promise 异常');
+});
+window.PWA_LAST_ERR = function(){ return _lastJsErr; };
+
 /* ---------- 1. 存储键名（与旧版 localStorage key 保持一致，便于迁移语义） ---------- */
 window.K = {
   tx:'wb_growth_tx', health:'wb_growth_health', habits:'wb_growth_habits',
@@ -214,15 +243,46 @@ function pullAndRender(){
 }
 
 /* ---------- 8. Supabase REST 封装（零依赖，纯 fetch） ---------- */
+/* Supabase 新版 Auth 的报错体用的是 msg / error_code（旧版才是 error_description / message），
+   漏掉 msg 会导致所有登录失败一律退化成「HTTP 400」，看不出真实原因。 */
+var AUTH_ERR_CN = {
+  invalid_credentials: '邮箱或密码不对',
+  invalid_grant:       '邮箱或密码不对',
+  email_not_confirmed: '邮箱还没验证 —— 去收件箱点确认邮件后再登录',
+  user_not_found:      '这个邮箱还没注册（先用「注册」建号）',
+  over_request_rate_limit: '尝试太频繁，被限流了 —— 等 1~2 分钟再试',
+  over_email_send_rate_limit: '邮件发送太频繁 —— 等几分钟再试',
+  weak_password:       '密码太弱，至少 6 位',
+  email_exists:        '这个邮箱已注册，请直接登录',
+  signup_disabled:     '该项目关闭了注册，只能用已有账号登录',
+  session_not_found:   '登录状态已失效，请重新登录',
+  refresh_token_not_found: '登录状态已失效，请重新登录'
+};
+function describeErr(j, status){
+  j = j || {};
+  var code = j.error_code || j.error || j.code || '';
+  var cn = AUTH_ERR_CN[code];
+  var raw = j.msg || j.message || j.error_description || (typeof j.error === 'string' ? j.error : '');
+  var parts = [];
+  if(cn) parts.push(cn);
+  else if(raw) parts.push(raw);
+  else if(status) parts.push('HTTP ' + status);
+  if(code && cn) parts.push('(' + code + ')');
+  return parts.join(' ') || '未知错误';
+}
 function rest(method, path, body, extra){
   var headers = { 'apikey': SB_ANON, 'Content-Type':'application/json' };
   if(session && session.access_token) headers['Authorization'] = 'Bearer ' + session.access_token;
   if(extra) Object.keys(extra).forEach(function(k){ headers[k] = extra[k]; });
   return fetch(SB_URL + path, { method:method, headers:headers, body: body ? JSON.stringify(body) : undefined })
+    .catch(function(e){   // 仅捕获网络层失败（DNS / 断网 / VPN 拦截），HTTP 错误留给下面的 then 处理
+      if(!navigator.onLine) throw new Error('当前处于离线状态，连不上服务器');
+      throw new Error('连不上服务器（网络异常或 VPN 干扰）：' + ((e && e.message) || e));
+    })
     .then(function(res){
       if(!res.ok){
         var p = res.json().catch(function(){ return {}; });
-        return p.then(function(j){ throw new Error(j.error_description || j.message || j.error || ('HTTP ' + res.status)); });
+        return p.then(function(j){ throw new Error(describeErr(j, res.status)); });
       }
       if(res.status === 204) return null;
       var ct = res.headers.get('content-type') || '';
@@ -275,6 +335,33 @@ function injectStyles(){
   + '.sync-badge a{color:#C94830;cursor:pointer;margin-left:6px;text-decoration:underline}';
   var s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
 }
+/* ---------- 10b. 登录页自检：一眼区分「服务器问题」和「密码问题」 ---------- */
+function selfCheck(){
+  var box = document.getElementById('liDiag');
+  if(!box) return;
+  var t0 = Date.now(), lines = [];
+  var swInfo = '未启用';
+  try{ if(navigator.serviceWorker && navigator.serviceWorker.controller) swInfo = '已启用'; }catch(_){}
+  if(!CONFIGURED){
+    box.innerHTML = '❌ config.js 未配置 Supabase';
+    return;
+  }
+  fetch(SB_URL + '/auth/v1/settings', { headers:{ 'apikey': SB_ANON }, cache:'no-store' })
+    .then(function(r){
+      lines.push(r.ok ? '✅ 后端正常（' + (Date.now() - t0) + 'ms）' : '❌ 后端返回 HTTP ' + r.status);
+    })
+    .catch(function(e){
+      lines.push('❌ 连不上后端：' + ((e && e.message) || '网络异常') + '（检查网络 / VPN）');
+    })
+    .then(function(){
+      lines.push('· 离线缓存：' + swInfo);
+      if(_lastJsErr){
+        lines.push('<b style="color:#B3261E">· 已捕获脚本错误：' + escS(String(_lastJsErr).slice(0,120)) + '</b>');
+      }
+      box.innerHTML = lines.join('<br>');
+    });
+}
+
 function buildLoginUI(){
   injectStyles();
   var ov = document.createElement('div'); ov.id = 'loginOverlay'; ov.className = 'login-overlay';
@@ -287,6 +374,7 @@ function buildLoginUI(){
     +   '<div id="liErr" class="li-err"></div>'
     +   '<button id="liLogin" class="btn btn-p">登录</button>'
     +   '<button id="liReg" class="btn btn-g">注册新账号</button>'
+    +   '<div id="liDiag" class="li-hint" style="color:#B07A4E">自检中…</div>'
     +   '<div id="liHint" class="li-hint"></div>'
     + '</div>';
   document.body.appendChild(ov);
@@ -296,6 +384,7 @@ function buildLoginUI(){
   } else {
     hint.innerHTML = '首次使用点「注册新账号」即可（建议关闭 Supabase 的邮件确认）。';
   }
+  selfCheck();
   document.getElementById('liLogin').addEventListener('click', function(){
     doLogin(document.getElementById('liEmail').value.trim(), document.getElementById('liPw').value);
   });
