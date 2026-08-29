@@ -453,11 +453,19 @@ function afterAuth(){
     .catch(function(){ toast && toast('⚠️ 云端拉取失败，显示本地缓存'); })
     .then(function(){ return drainQueue(); })
     .then(function(){
-      if(typeof seed === 'function') seed();
-      if(typeof setTxType === 'function') setTxType('expense');
-      if(typeof render === 'function') render();
-      if(typeof ingestImport === 'function') ingestImport();
+      // 先关登录框：即使下面任何一步渲染出错，也不会把人卡在登录界面外
+      // （历史事故：render() 抛异常导致 hideLogin() 永不执行，看起来就像"登录失败"）
       hideLogin();
+      var steps = [
+        ['seed',         function(){ if(typeof seed === 'function') seed(); }],
+        ['setTxType',    function(){ if(typeof setTxType === 'function') setTxType('expense'); }],
+        ['render',       function(){ if(typeof render === 'function') render(); }],
+        ['ingestImport', function(){ if(typeof ingestImport === 'function') ingestImport(); }]
+      ];
+      steps.forEach(function(s){
+        try{ s[1](); }
+        catch(e){ reportJsErr('启动阶段 ' + s[0] + '() 出错：' + ((e && e.message) || e)); }
+      });
       setSync('synced');
     });
 }
