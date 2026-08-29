@@ -374,6 +374,7 @@ function buildLoginUI(){
     +   '<div id="liErr" class="li-err"></div>'
     +   '<button id="liLogin" class="btn btn-p">登录</button>'
     +   '<button id="liReg" class="btn btn-g">注册新账号</button>'
+    +   '<button id="liForgot" class="btn btn-g" style="background:none;border:none;color:#B07A4E;font-size:.72rem;text-decoration:underline;margin-top:6px">忘记密码？发重置邮件</button>'
     +   '<div id="liDiag" class="li-hint" style="color:#B07A4E">自检中…</div>'
     +   '<div id="liHint" class="li-hint"></div>'
     + '</div>';
@@ -392,6 +393,82 @@ function buildLoginUI(){
     doRegister(document.getElementById('liEmail').value.trim(), document.getElementById('liPw').value);
   });
   document.getElementById('liPw').addEventListener('keydown', function(e){ if(e.key === 'Enter') doLogin(document.getElementById('liEmail').value.trim(), e.target.value); });
+  document.getElementById('liForgot').addEventListener('click', function(){
+    doRecover(document.getElementById('liEmail').value.trim());
+  });
+}
+
+/* ---------- 11b. 自助重置密码 ----------
+   Supabase 的 Site URL 若仍指向 localhost，重置邮件里的链接会打不开。
+   这里显式传 redirect_to 覆盖它，指回本页，从而绕开后台配置。 */
+function doRecover(email){
+  showLoginErr('');
+  if(!CONFIGURED){ showLoginErr('请先配置 config.js 中的 Supabase 信息'); return; }
+  if(!email){ showLoginErr('先在上方填邮箱，再点「忘记密码」'); return; }
+  var btn = document.getElementById('liForgot');
+  if(btn){ btn.disabled = true; btn.textContent = '发送中…'; }
+  rest('POST', '/auth/v1/recover', { email: email, redirect_to: location.origin + location.pathname })
+    .then(function(){
+      showLoginErr('✅ 重置邮件已发往 ' + email + '\n去收件箱点开链接（也看下垃圾箱），回来后即可设新密码。');
+    })
+    .catch(function(e){ showLoginErr('发送失败：' + (e.message || e)); })
+    .then(function(){ if(btn){ btn.disabled = false; btn.textContent = '忘记密码？发重置邮件'; } });
+}
+
+/* 已登录状态下自助改密码（补上 8/13 就发现的缺失能力，不再依赖 Admin API） */
+function changePassword(){
+  var pw = prompt('新密码（至少 6 位）：');
+  if(!pw) return;
+  if(pw.length < 6){ if(window.toast) toast('密码至少 6 位'); return; }
+  if(prompt('再输一次确认：') !== pw){ if(window.toast) toast('两次输入不一致，已取消'); return; }
+  rest('PUT', '/auth/v1/user', { password: pw })
+    .then(function(){
+      if(window.toast) toast('✅ 密码已更新');
+      /* 改密后旧 refresh_token 会失效，用新密码重新登录一次以保持会话新鲜 */
+      if(session && session.email){
+        return authSignIn(session.email, pw).then(function(j){
+          session = normalizeSession(j); return saveSession(session);
+        }).catch(function(){ /* 失败也无妨，下次手动登录即可 */ });
+      }
+    })
+    .catch(function(e){ if(window.toast) toast('改密码失败：' + ((e && e.message) || e)); });
+}
+
+/* 解析 URL 片段：Supabase 隐式流会把令牌放在 #access_token=...&type=recovery */
+function parseHash(){
+  var h = (location.hash || '').replace(/^#/, '');
+  var o = {};
+  if(!h) return o;
+  h.split('&').forEach(function(kv){
+    var i = kv.indexOf('=');
+    if(i > 0) o[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1));
+  });
+  return o;
+}
+
+/* 邮件链接跳回来时：用 URL 里的一次性令牌直接设置新密码并登录 */
+function handleRecovery(p){
+  session = { access_token: p.access_token, refresh_token: p.refresh_token || null, uid: null, email: null };
+  setSync('syncing');
+  return authGetUser()
+    .then(function(u){ session.uid = (u && u.id) || null; session.email = (u && u.email) || null; })
+    .catch(function(){ /* 拿不到用户信息也允许继续改密码 */ })
+    .then(function(){
+      hideLogin();
+      var pw = prompt('为新密码（至少 6 位）：');
+      if(!pw){ showLogin('已取消。需要的话重新点「忘记密码」。'); return; }
+      if(pw.length < 6){ showLogin('密码至少 6 位，请重新点「忘记密码」。'); return; }
+      return rest('PUT', '/auth/v1/user', { password: pw })
+        .then(function(){
+          try{ history.replaceState(null, '', location.pathname + location.search); }catch(_){}
+          if(!session.email){ showLogin('密码已更新，请用新密码登录'); return; }
+          return authSignIn(session.email, pw)
+            .then(function(j){ session = normalizeSession(j); return saveSession(session); })
+            .then(function(){ return afterAuth(); })
+            .then(function(){ if(window.toast) toast('✅ 密码已重置并登录成功'); });
+        })
+        .catch(function(e){ showLogin('设置新密码失败：' + (e.message || e)); });
+    });
 }
 function showLoginErr(msg){ var e = document.getElementById('liErr'); if(e) e.textContent = msg || ''; }
 function showLogin(msg){ var ov = document.getElementById('loginOverlay'); if(ov) ov.style.display = 'flex'; if(msg) showLoginErr(msg); }
@@ -409,9 +486,11 @@ function setSync(state){
   else if(state === 'synced'){
     var email = session && session.email ? escS(session.email) : '';
     el.innerHTML = '<span class="dot ok"></span> 已同步' + (email ? ' · ' + email : '')
-      + '<a id="liOut">退出</a>';
+      + '<a id="liPwChg">改密码</a><a id="liOut">退出</a>';
     var out = document.getElementById('liOut');
     if(out) out.addEventListener('click', function(){ if(confirm('退出登录？本地缓存会保留，重新登录即可恢复。')) doLogout(); });
+    var pc = document.getElementById('liPwChg');
+    if(pc) pc.addEventListener('click', changePassword);
   }
   else { el.innerHTML = '<span class="dot"></span> 未登录'; }
 }
@@ -501,6 +580,11 @@ function boot(){
   buildLoginUI();
   buildSyncBadge();
   registerSW();
+
+  /* 从重置邮件跳回来：URL 片段里带 type=recovery → 独占走改密码流程 */
+  var hp = parseHash();
+  if(hp.type === 'recovery' && hp.access_token){ handleRecovery(hp); return; }
+
   window.addEventListener('online', onOnline);
   window.addEventListener('offline', onOffline);
   window.addEventListener('focus', pullAndRender);
