@@ -517,6 +517,15 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .ko-hist b{color:var(--ink);font-weight:600}
 .ko-gain{position:fixed;left:50%;top:26%;transform:translateX(-50%);background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;padding:11px 22px;border-radius:99px;font-weight:800;font-size:.95rem;box-shadow:0 8px 26px rgba(201,138,14,.4);z-index:9999;pointer-events:none;opacity:0;transition:opacity .3s,top .5s}
 .ko-gain.show{opacity:1;top:22%}
+/* 今日看板 · 积分迷你条（与韩语板块共用同一积分池） */
+.rw-mini{display:flex;align-items:center;gap:11px;margin-top:13px;padding:11px 13px;border-radius:11px;background:linear-gradient(135deg,#FFF8E8,#FDEFCF);border:1px solid #F0DCA8}
+.rw-mini-lv{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0}
+.rw-mini-mid{flex:1;min-width:0}
+.rw-mini-nm{font-size:.84rem;font-weight:700;color:#8A5A12;line-height:1.3}
+.rw-mini-sub{font-size:.68rem;color:#A98132;margin-top:3px}
+.rw-mini-bal{text-align:right;flex-shrink:0}
+.rw-mini-bal b{font-size:1.28rem;font-weight:800;color:#B07D10;line-height:1}
+.rw-mini-bal span{font-size:.64rem;color:#A98132;margin-left:2px}
 </style>
 </head>
 <body>
@@ -622,6 +631,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <div class="heat heat-light" id="heatmap"></div>
           <div class="heat-stats" id="heatStats"></div>
         </div>
+        <div class="rw-mini" id="rwMini"></div>
       </div>
 
       <div class="ink-pool mb">
@@ -1803,7 +1813,8 @@ function startEditHabitTitle(){
   inp.addEventListener('blur',()=>finish(!cancel));
 }
 function toggleHabit(id){const c=g(K.checks,{}),t=today();c[t]=c[t]||{};
-  if(c[t][id])delete c[t][id];else{c[t][id]=1;toast('打卡成功')}
+  if(c[t][id])delete c[t][id];
+  else{c[t][id]=1;toast('打卡成功');if(typeof koGain==='function')koGain('+'+HB_PT_RULE.each+' P')}
   sv(K.checks,c);render()}
 function habitStreak(id){
   const habits=g(K.habits,[]),hb=habits.find(h=>h.id===id);
@@ -1854,6 +1865,7 @@ function renderHabit(){
   const htEl=document.getElementById('heatTrack');
   if(htEl)htEl.textContent=`${totalDone} / ${dim} 天完成 · 完成率 ${pct}%`;
   if(hsEl)hsEl.innerHTML=`<div class="flame">最长连 <b>${maxStreak}</b> 天 🔥</div>`;
+  if(typeof renderRwMini==='function')renderRwMini();
 }
 
 /* ================= 自我提升（学习中心升级） ================= */
@@ -2059,8 +2071,8 @@ const KO_PT_RULE={
 const KO_LEVEL=[
   {p:0,   n:'새싹',   cn:'幼苗'},   {p:100, n:'도전자', cn:'挑战者'},
   {p:300, n:'열정',   cn:'热情'},   {p:600, n:'성실',   cn:'踏实'},
-  {p:1000,n:'도약',   cn:'飞跃'},   {p:1500,n:'중급자', cn:'中级'},
-  {p:2200,n:'능숙',   cn:'熟练'},   {p:3000,n:'고급자', cn:'高级'},
+  {p:1000,n:'도약',   cn:'飞跃'},   {p:1500,n:'중급자', cn:'坚韧'},
+  {p:2200,n:'능숙',   cn:'自律'},   {p:3000,n:'고급자', cn:'精通'},
   {p:4000,n:'달인',   cn:'达人'},   {p:5200,n:'마스터', cn:'大师'}
 ];
 const KO_BADGES=[
@@ -2146,12 +2158,13 @@ function redeemKoReward(id){
 }
 function renderKoReward(){
   const hero=document.getElementById('koRwHero');if(!hero)return;
-  const pts=koPoints(),bal=koBalance(),li=koLevel(pts),lv=KO_LEVEL[li],next=KO_LEVEL[li+1];
+  const koPt=koPoints(),hbPt=hbPoints(),pts=koPt+hbPt,bal=Math.max(0,pts-gpSpent());
+  const li=koLevel(pts),lv=KO_LEVEL[li],next=KO_LEVEL[li+1];
   const pct=next?Math.max(0,Math.min(100,Math.round((pts-lv.p)/(next.p-lv.p)*100))):100;
   hero.innerHTML='<div class="ko-rw-top">'
     +'<div class="ko-rw-lv"><b>'+(li+1)+'</b><span>LV</span></div>'
     +'<div class="ko-rw-mid"><div class="ko-rw-name">'+esc(lv.n)+' · '+esc(lv.cn)+'</div>'
-    +'<div class="ko-rw-sub">累计 '+pts+' P · 已兑出 '+(g(K.siKoSpent,0)||0)+' P</div></div>'
+    +'<div class="ko-rw-sub">韩语 '+koPt+' P + 习惯 '+hbPt+' P ＝ 累计 '+pts+' P · 已兑出 '+gpSpent()+' P</div></div>'
     +'<div class="ko-rw-bal"><b>'+bal+'</b><span>可用积分</span></div></div>'
     +'<div class="ko-rw-bar"><i style="width:'+pct+'%"></i></div>'
     +'<div class="ko-rw-bar-t">'+(next?('距 Lv'+(li+2)+' '+esc(next.n)+' 还差 '+(next.p-pts)+' P'):'🏆 已达成最高等级')+'</div>';
@@ -2169,9 +2182,60 @@ function renderKoReward(){
       +'<button class="ko-btn-rw"'+(ok?'':' disabled')+' onclick="redeemKoReward(\''+r.id+'\')">兑换</button>'
       +'<button class="ko-btn-del" onclick="delKoReward(\''+r.id+'\')">×</button></div>';
   }).join(''):'<div class="ko-empty">还没有奖励，点右上角加一个你想犒劳自己的东西</div>';
-  const h=g(K.siKoRedeem,[])||[],hb=document.getElementById('koRedeemHist');
-  if(hb)hb.innerHTML=h.length?'<div class="ko-hist">已兑换 '+h.length+' 次 · 最近：'
+  const h=g(K.siKoRedeem,[])||[],hbEl=document.getElementById('koRedeemHist');
+  if(hbEl)hbEl.innerHTML=h.length?'<div class="ko-hist">已兑换 '+h.length+' 次 · 最近：'
     +h.slice(0,3).map(x=>'<b>'+esc(x.e||'🎁')+esc(x.n)+'</b>（'+x.c+'P · '+x.d+'）').join('、')+'</div>':'';
+}
+/* ---------- 习惯打卡积分 ----------
+   与韩语**共用同一积分池 / 等级 / 兑换池**：今天没学韩语但运动了，也是在变好，
+   该算分就算分。等级名因此取通用成长语义，而非语言水平。 */
+const HB_PT_RULE={each:5, all:10, streak:{7:30,14:60,30:150,60:300,100:600,180:1000}};
+/* 活跃日 = 当天至少完成 1 个习惯（只看当前存在的习惯，示例历史残留不计） */
+function hbActiveDays(){
+  const c=g(K.checks,{}),ids=g(K.habits,[]).map(h=>h.id);
+  const out=[];
+  if(!ids.length)return out;
+  Object.keys(c).forEach(d=>{ if(ids.some(id=>c[d]&&c[d][id]))out.push(d) });
+  return out;
+}
+function hbBestStreak(){
+  const ds=[],set={};hbActiveDays().forEach(d=>{if(!set[d]){set[d]=1;ds.push(d)}});
+  ds.sort();let best=0,cur=0,prev=null;
+  ds.forEach(d=>{ cur=(prev&&dAdd(prev,1)===d)?cur+1:1; if(cur>best)best=cur; prev=d; });
+  return best;
+}
+function hbPoints(){
+  const c=g(K.checks,{}),habits=g(K.habits,[]);
+  if(!habits.length)return 0;
+  const ids=habits.map(h=>h.id);let p=0;
+  Object.keys(c).forEach(d=>{
+    const n=ids.filter(id=>c[d]&&c[d][id]).length;
+    if(!n)return;
+    p+=n*HB_PT_RULE.each;
+    // 全勤额外：只在习惯数 ≥2 时才有意义 —— 只有 1 个习惯时「打了＝全勤」等于白送
+    if(ids.length>=2&&n===ids.length)p+=HB_PT_RULE.all;
+  });
+  const best=hbBestStreak();
+  Object.keys(HB_PT_RULE.streak).forEach(k=>{ if(best>=+k)p+=HB_PT_RULE.streak[k] });
+  return p;
+}
+function gpPoints(){return koPoints()+hbPoints()}
+function gpSpent(){return +g(K.siKoSpent,0)||0}
+function gpBalance(){return Math.max(0,gpPoints()-gpSpent())}
+function gotoReward(){
+  if(typeof showPage==='function')showPage('selfimp');
+  if(typeof showSiTab==='function')showSiTab('lang');
+  if(typeof showLangTab==='function')showLangTab('ko');
+}
+function renderRwMini(){
+  const box=document.getElementById('rwMini');if(!box)return;
+  const koPt=koPoints(),hbPt=hbPoints(),tot=koPt+hbPt,bal=Math.max(0,tot-gpSpent());
+  const li=koLevel(tot),lv=KO_LEVEL[li];
+  box.innerHTML='<div class="rw-mini-lv">Lv'+(li+1)+'</div>'
+    +'<div class="rw-mini-mid"><div class="rw-mini-nm">'+esc(lv.n)+' · '+esc(lv.cn)+'</div>'
+    +'<div class="rw-mini-sub">韩语 '+koPt+' P · 习惯 '+hbPt+' P</div></div>'
+    +'<div class="rw-mini-bal"><b>'+bal+'</b><span>P</span></div>'
+    +'<button class="btn btn-g btn-sm" onclick="gotoReward()">去兑换</button>';
 }
 function renderKorean(){
   seedKoOnce();seedKoRewardOnce();
