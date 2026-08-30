@@ -547,6 +547,14 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .ko-phr-ws:active{transform:translate(2px,2px)}
 .ko-btn-save{width:100%;margin-top:8px;border:2px solid #2B2B2B;background:#5BC0EB;color:#2B2B2B;font-weight:800;font-size:.8rem;padding:8px 6px;cursor:pointer;border-radius:0;box-shadow:3px 3px 0 0 #2B2B2B;font-family:inherit}
 .ko-btn-save:active{transform:translate(3px,3px);box-shadow:0 0 0 0 #2B2B2B}
+.ko-saved{background:#FFF7E0;border:3px solid #2B2B2B;box-shadow:4px 4px 0 0 #2B2B2B;padding:6px 10px;font-family:inherit}
+.ko-saved>summary{cursor:pointer;font-weight:800;color:#2B2B2B;padding:6px 0;font-size:.9rem;list-style:revert}
+.ko-saved[open]>summary{margin-bottom:4px}
+.ko-saved .ko-saved-add{margin:6px 0}
+.ko-saved .ko-btn-sm{border:2px solid #2B2B2B;background:#5BC0EB;color:#2B2B2B;font-weight:700;font-size:.75rem;padding:4px 8px;cursor:pointer;border-radius:0;font-family:inherit}
+.ko-saved .ko-btn-sm:active{transform:translate(2px,2px)}
+.ko-saved .ko-phrase{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:8px 4px;border-bottom:1px dashed #2B2B2B}
+.ko-saved .ko-phrase:last-child{border-bottom:0}
 /* ---- 韩语像素风增强：更粗描边 + 硬阴影像素感 + 砖纹 ---- */
 .ko-hero{display:flex;align-items:flex-end;gap:12px}
 .ko-hero-main{flex:1;min-width:0}
@@ -1062,15 +1070,6 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
                 </ol>
               </details>
             </div>
-          </div>
-
-          <div class="card">
-            <div class="row between">
-              <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-link"/></svg>旅行应急短句库</h3>
-              <button class="btn btn-p btn-sm" onclick="openKoPhrase()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加一句</button>
-            </div>
-            <div class="muted mt">第 6 个月重点背诵 · 点句子可删除</div>
-            <div id="koPhraseList" class="mt"></div>
           </div>
 
           <div class="card">
@@ -2184,7 +2183,8 @@ function renderKoDailyPhrase(){
         +'<span class="ko-phr-wm">'+esc(q.m)+'</span></span>'
         +'<button class="ko-phr-ws" onclick="koSpeakPhr('+ix+')">🔊</button></div>';
     }).join('')
-   +'</div></div>';
+   +'</div></div>'
+   +'<div id="koSavedBox" class="mt"></div>';
 }
 function koStart(){return g(K.siKoStart,'')||KO_DEFAULT_START}
 function koSetStart(){const v=prompt('韩语学习开始日期 (YYYY-MM-DD)',koStart());if(!v)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(v.trim()))return toast('格式不对，例：2026-08-30');sv(K.siKoStart,v.trim());renderKorean();toast('已更新开始日期')}
@@ -2249,16 +2249,32 @@ function seedKoOnce(){
     {id:uid(),k:'감사합니다 / 죄송합니다',m:'谢谢 / 对不起'}
   ]);
 }
-function openKoPhrase(){
+function renderKoSaved(){
+  const arr=g(K.siKoPhrase,[]),box=document.getElementById('koSavedBox');if(!box)return;
+  box.innerHTML='<details class="ko-saved"><summary>📚 我收藏的短句（'+arr.length+'）</summary>'
+    +'<div class="ko-saved-add"><button class="ko-btn-sm" onclick="addKoManual()">➕ 自己加一句</button></div>'
+    +(arr.length?arr.map(x=>`<div class="ko-phrase">`
+      +'<div class="ko-phr-w2"><span class="ko-phr-wk2">'+esc(x.k)+'</span>'
+      +'<span class="ko-phr-wr">'+(x.r?esc(x.r):'')+'</span>'
+      +'<span class="ko-phr-wm">'+esc(x.m||'')+'</span></div>'
+      +'<button class="ko-btn-sm" onclick="koSpeakSaved(\''+esc(x.k)+'\')">🔊</button>'
+      +'<button class="ko-btn-sm" onclick="if(confirm(\'删除这句？\'))delKoSaved(\''+x.id+'\')">删</button>'
+      +'</div>').join(''):'<div class="ko-empty" style="padding:8px">还没有收藏，点每日一句下的「收进我的短句本」或上方加一句</div>')
+    +'</details>';
+}
+/* 收藏池里点 🔊：和每日一句同套语音检测逻辑 */
+function koSpeakSaved(k){
+  if(typeof koSpeakPhr==='function'){const i=KO_PHRASE.findIndex(p=>p.k===k);if(i>=0){koSpeakPhr(i);return}}
+  toast('已复制，去浏览器/外部 TTS 听：'+k);
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(k);
+}
+function delKoSaved(id){sv(K.siKoPhrase,g(K.siKoPhrase,[]).filter(x=>x.id!==id));renderKoSaved()}
+function addKoManual(){
   const k=prompt('韩语句子');if(!k||!k.trim())return;
   const m=prompt('中文意思','')||'';
-  const arr=g(K.siKoPhrase,[]);arr.unshift({id:uid(),k:k.trim(),m:m.trim()});
-  sv(K.siKoPhrase,arr);renderKoPhrase();toast('已添加');
-}
-function delKoPhrase(id){sv(K.siKoPhrase,g(K.siKoPhrase,[]).filter(x=>x.id!==id));renderKoPhrase();toast('已删除')}
-function renderKoPhrase(){
-  const arr=g(K.siKoPhrase,[]),box=document.getElementById('koPhraseList');if(!box)return;
-  box.innerHTML=arr.map(x=>`<div class="ko-phrase"><div><div class="k">${esc(x.k)}</div>${x.m?`<div class="ko-acc">${esc(x.m)}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="if(confirm('删除这句？'))delKoPhrase('${x.id}')">删</button></div>`).join('')||'<div class="ko-empty">还没有短句，点右上角加一句</div>';
+  const r=prompt('罗马音（可空）','')||'';
+  const arr=g(K.siKoPhrase,[]);arr.unshift({id:uid(),k:k.trim(),m:m.trim(),r:r.trim()});
+  sv(K.siKoPhrase,arr);renderKoSaved();toast('已添加');
 }
 function renderKoHeat(){
   const box=document.getElementById('koHeat');if(!box)return;
@@ -2503,7 +2519,7 @@ function renderKorean(){
   const nt=el('koStudyNote');
   if(nt&&document.activeElement!==nt)nt.value=g(K.siKoNote,'');
   if(nt&&!_koNoteBound){_koNoteBound=true;nt.addEventListener('input',()=>sv(K.siKoNote,nt.value))}
-  renderKoHeat();renderKoPlan();renderKoPhrase();renderKoReward();
+  renderKoHeat();renderKoPlan();renderKoSaved();renderKoReward();
 }
 let _langTab='en';
 function showLangTab(t){
