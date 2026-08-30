@@ -2099,12 +2099,38 @@ const KO_PHRASE=[
 function koPhraseIdx(dn){const n=KO_PHRASE.length;return ((dn-1)%n+n)%n}
 /* 本周（学习周，非自然周）7 句索引 */
 function koWeekPhrase(){const w=koCur().w,o=[];for(let i=0;i<7;i++)o.push(koPhraseIdx((w-1)*7+1+i));return o}
-/* 朗读：Web Speech API，零依赖零流量（无 ko-KR 语音包的设备会静默，属正常） */
-function koSpeakPhr(i){
-  const p=KO_PHRASE[i];if(!p)return;
-  if(!('speechSynthesis' in window)){toast('当前浏览器不支持朗读，照罗马音念就行');return}
-  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(p.k);u.lang='ko-KR';u.rate=.85;speechSynthesis.speak(u)}
-  catch(e){toast('朗读失败：'+((e&&e.message)||e))}
+/* 预加载语音列表：Chrome/Edge 首次 getVoices() 常返回空，需监听 voiceschanged */
+let _koVoices=null;
+function koLoadVoices(){
+  if(_koVoices)return Promise.resolve(_koVoices);
+  return new Promise(function(resolve){
+    var v=speechSynthesis.getVoices();
+    if(v&&v.length){_koVoices=v;return resolve(v)}
+    var done=false;
+    function ok(){if(done)return;done=true;_koVoices=speechSynthesis.getVoices()||[];resolve(_koVoices)}
+    speechSynthesis.addEventListener('voiceschanged',ok,{once:true});
+    /* 兜底：800ms 后还没触发就当空处理（不卡 UI） */
+    setTimeout(ok,800);
+  });
+}
+/* 朗读：自动选最佳韩语语音，没有则降级读罗马音（en-US 总是有） */
+async function koSpeakPhr(i){
+  var p=KO_PHRASE[i];if(!p)return;
+  if(!('speechSynthesis'in window)){toast('当前浏览器不支持朗读，照罗马音念就行');return}
+  try{
+    var voices=await koLoadVoices();
+    /* 优先 Microsoft / Google / Apple 的韩语语音 */
+    var ko=voices.find(function(v){return v.lang==='ko-KR'})||
+           voices.find(function(v){return/^ko/i.test(v.lang)});
+    try{speechSynthesis.cancel()}catch(e){}
+    var u=new SpeechSynthesisUtterance(ko?p.k:p.r);
+    u.lang=ko?ko.lang:'en-US';
+    u.rate=.85;
+    if(ko)u.voice=ko;
+    u.onstart=function(){toast(ko?'朗读中… 韩语':'设备没装韩语语音包，已改读罗马音')};
+    u.onerror=function(ev){if(ev&&ev.error&&ev.error!=='canceled'&&ev.error!=='interrupted')toast('朗读失败：'+ev.error)};
+    speechSynthesis.speak(u);
+  }catch(e){toast('朗读失败：'+((e&&e.message)||e))}
 }
 function koCopyPhr(i){
   const p=KO_PHRASE[i];if(!p)return;
