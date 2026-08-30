@@ -558,7 +558,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 /* ---- 韩语像素风增强：更粗描边 + 硬阴影像素感 + 砖纹 ---- */
 .ko-hero{display:flex;align-items:flex-end;gap:12px}
 .ko-hero-main{flex:1;min-width:0}
-.ko-mario{image-rendering:pixelated;filter:drop-shadow(3px 3px 0 #2B2B2B);flex-shrink:0}
+.ko-mario{image-rendering:pixelated;filter:drop-shadow(4px 4px 0 #2B2B2B);flex-shrink:0;width:200px;height:100px}
 .ko-banner,.ko-hero,.ko-rw-hero{border-width:4px;box-shadow:5px 5px 0 0 #2B2B2B}
 .ko-stat,.ko-mode,.ko-kw,.ko-bdg,.ko-det,.ko-plan,.ko-phrase,.ko-rw,.ko-rw-ic,.ko-btn-rw,.ko-btn-del{border-width:3px;box-shadow:4px 4px 0 0 #2B2B2B}
 .ko-bar,.ko-rw-bar{border-width:3px}
@@ -627,14 +627,29 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .sd-details[open] summary{margin-bottom:0;border-bottom:2px dashed #C9B68E}
 .sd-card svg.ic{color:#5B9531}
 /* ★ 英语板块顶部 Mario 跳拿金币横幅（暖绿底 + 棕方框，与 Stardew 卡同调）★ */
-.en-mario-scene{background:linear-gradient(135deg,#7CAE3F 0%,#5B9531 60%,#3B7A28 100%);border:4px solid #3B1F0E;border-radius:0;box-shadow:4px 4px 0 0 #3B1F0E;padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;overflow:hidden}
+.en-mario-scene{background:linear-gradient(135deg,#7CAE3F 0%,#5B9531 60%,#3B7A28 100%);border:4px solid #3B1F0E;border-radius:0;box-shadow:4px 4px 0 0 #3B1F0E;padding:18px;display:flex;align-items:center;gap:22px;margin-bottom:14px;position:relative;overflow:hidden}
 .en-mario-scene::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 6px,transparent 6px 14px);pointer-events:none}
 .en-mario-scene>*{position:relative;z-index:1}
-.en-mario-scene-svg{width:160px;height:80px;image-rendering:pixelated;flex-shrink:0;filter:drop-shadow(3px 3px 0 #2B2B2B)}
+.en-mario-scene-svg{width:240px;height:120px;image-rendering:pixelated;flex-shrink:0;filter:drop-shadow(4px 4px 0 #2B2B2B)}
 .en-mario-text{flex:1;min-width:0}
 .en-mario-lb{display:inline-block;background:#D4A848;color:#3B1F0E;border:2px solid #3B1F0E;font-size:.7rem;font-weight:800;padding:3px 8px;letter-spacing:1.5px;margin-bottom:6px;font-family:ui-monospace,Consolas,monospace}
 .en-mario-h{font-size:1.08rem;font-weight:800;color:#FFFCEC;margin:0 0 5px;text-shadow:2px 2px 0 #3B1F0E;line-height:1.3}
 .en-mario-sub{font-size:.78rem;color:#FFFCEC;opacity:.94;line-height:1.5}
+/* ★ 今日打卡监督横幅 · 英语版 ★ */
+.en-banner{display:flex;align-items:center;gap:9px;background:#C9382D;color:#fff;border:3px solid #3B1F0E;border-radius:0;padding:10px 13px;margin-bottom:14px;font-size:.83rem;line-height:1.4;box-shadow:3px 3px 0 0 #3B1F0E}
+.en-banner.ok{background:#5B9531;border-color:#3B1F0E}
+.en-banner .ic{width:17px;height:17px;flex-shrink:0;color:#FFFCEC}
+/* ★ 英语月历热力图 · 星露谷配色 ★ */
+.en-stats{display:flex;gap:14px;margin:10px 0 14px;flex-wrap:wrap}
+.en-stat{flex:1;min-width:96px;background:#FFFCEC;border:3px solid #3B1F0E;padding:9px 10px;box-shadow:2px 2px 0 0 #3B1F0E}
+.en-stat b{font-size:1.16rem;color:#3B1F0E;display:block;font-weight:800;line-height:1.05}
+.en-stat span{font-size:.66rem;color:#7A5C3A;margin-top:3px;display:block;font-weight:600}
+.en-heat-h{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:8px 0 4px;font-size:.66rem;color:#7A5C3A;font-weight:700;text-align:center}
+.en-heat{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.en-heat i{aspect-ratio:1;background:#FBF1D7;border:2px solid #3B1F0E;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#7A5C3A;font-weight:700}
+.en-heat i.on{background:#7CAE3F;color:#FFFCEC;border-color:#3B1F0E}
+.en-heat i.tdy{outline:3px solid #D4A848;outline-offset:-3px}
+.en-heat i.fut{opacity:.4}
 /* 今日看板 · 积分迷你条（与韩语板块共用同一积分池） */
 .rw-mini{display:flex;align-items:center;gap:11px;margin-top:13px;padding:11px 13px;border-radius:11px;background:linear-gradient(135deg,#FFF8E8,#FDEFCF);border:1px solid #F0DCA8}
 .rw-mini-lv{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#F0B429,#C98A0E);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0}
@@ -957,11 +972,35 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
         <!-- 英语（每日口语素材句 + 今日打卡 2 项 + 老学习任务折叠保留） -->
         <div class="lang-pane on" data-lt="en">
 
-        <!-- ★ 马里奥跳拿金币横幅（英语板块顶部 · 与韩语 hero 同款画风）★ -->
+        <!-- ★ 马里奥跳拿金币横幅（英语板块顶部 · 与韩语 hero 同款画风）★
+             v2 加翅膀+冲刺尘土+100-200-400-800-1000 学分递进（从地面升向金币） -->
         <div class="en-mario-scene">
-          <svg class="en-mario-scene-svg" viewBox="0 0 32 16" width="160" height="80" shape-rendering="crispEdges" aria-hidden="true">
+          <svg class="en-mario-scene-svg" viewBox="0 0 32 16" shape-rendering="crispEdges" aria-hidden="true">
+            <!-- ★ 学分递进标签（从地面 → 金币，5 段递进，红→金→橙渐变，shape-rendering=auto 避免被 crispEdges 误伤）★ -->
+            <g font-family="ui-monospace,Consolas,monospace" font-weight="900" shape-rendering="auto" paint-order="stroke" text-anchor="middle">
+              <text x="9"  y="14"   font-size="2.6" fill="#FFD3B0" stroke="#3B1F0E" stroke-width=".35">100</text>
+              <text x="12" y="11.6" font-size="2.2" fill="#FFD24A" stroke="#3B1F0E" stroke-width=".30">200</text>
+              <text x="15" y="9.4"  font-size="1.9" fill="#F2C14E" stroke="#3B1F0E" stroke-width=".27">400</text>
+              <text x="18" y="7.4"  font-size="1.6" fill="#E6A92F" stroke="#3B1F0E" stroke-width=".23">800</text>
+              <text x="21" y="5.6"  font-size="1.4" fill="#D96B2D" stroke="#3B1F0E" stroke-width=".21">1000</text>
+            </g>
+
+            <!-- ★ 冲刺尘土粒子（马里奥起跳点留下）★ -->
+            <g>
+              <rect x="2"  y="14" width="1" height="1" fill="#E6CDAB"/>
+              <rect x="3"  y="13" width="1" height="1" fill="#C9B68E" opacity=".7"/>
+              <rect x="5"  y="14" width="2" height="1" fill="#E6CDAB" opacity=".75"/>
+              <rect x="6"  y="13" width="1" height="1" fill="#A99268" opacity=".65"/>
+              <rect x="8"  y="14" width="2" height="1" fill="#E6CDAB" opacity=".55"/>
+              <rect x="9"  y="13" width="1" height="1" fill="#C9B68E" opacity=".7"/>
+              <rect x="11" y="14" width="1" height="1" fill="#A99268" opacity=".45"/>
+            </g>
+
+            <!-- 远景云 -->
             <rect x="10" y="1" width="4" height="1" fill="#FFFCEC" opacity=".9"/>
             <rect x="9"  y="2" width="6" height="1" fill="#FFFCEC" opacity=".9"/>
+
+            <!-- 问号块 · 左上 5x5 金棕色立体块 -->
             <rect x="3" y="3" width="5" height="5" fill="#F2C14E"/>
             <rect x="3" y="3" width="5" height="1" fill="#FFE08A"/>
             <rect x="3" y="7" width="5" height="1" fill="#A37A1E"/>
@@ -971,6 +1010,17 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <rect x="6" y="5" width="1" height="1" fill="#FFFCEC"/>
             <rect x="5" y="6" width="1" height="1" fill="#FFFCEC"/>
             <rect x="5" y="7" width="1" height="1" fill="#FFFCEC"/>
+
+            <!-- ★ 后翼（马里奥身后·场景左侧，像小羽毛翅膀） -->
+            <rect x="13" y="5"  width="1" height="1" fill="#F2C14E"/>
+            <rect x="12" y="6"  width="2" height="2" fill="#FFFCEC"/>
+            <rect x="11" y="7"  width="2" height="2" fill="#FFFFFF"/>
+            <rect x="12" y="9"  width="2" height="2" fill="#FFFCEC"/>
+            <rect x="13" y="10" width="1" height="1" fill="#F2C14E"/>
+            <rect x="11" y="11" width="1" height="1" fill="#FFFCEC" opacity=".85"/>
+            <rect x="13" y="11" width="1" height="1" fill="#F2C14E" opacity=".85"/>
+
+            <!-- 马里奥跳跃姿势 · 13-21 -->
             <rect x="15" y="1" width="5" height="1" fill="#E84C3D"/>
             <rect x="14" y="2" width="7" height="1" fill="#E84C3D"/>
             <rect x="14" y="3" width="7" height="1" fill="#E84C3D"/>
@@ -1002,6 +1052,8 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <rect x="21" y="12" width="2" height="1" fill="#6B3E1E"/>
             <rect x="13" y="13" width="1" height="1" fill="#6B3E1E"/>
             <rect x="22" y="13" width="1" height="1" fill="#6B3E1E"/>
+
+            <!-- 金币 · 右上 5x5 -->
             <rect x="24" y="2" width="5" height="5" fill="#F2C14E"/>
             <rect x="24" y="2" width="5" height="1" fill="#FFE08A"/>
             <rect x="24" y="6" width="5" height="1" fill="#A37A1E"/>
@@ -1012,22 +1064,27 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <rect x="27" y="4" width="1" height="1" fill="#A37A1E"/>
             <rect x="25" y="5" width="3" height="1" fill="#A37A1E"/>
             <rect x="28" y="2" width="1" height="1" fill="#FFFCEC"/>
+
+            <!-- 砖地 -->
             <rect x="0" y="15" width="32" height="1" fill="#3B1F0E"/>
           </svg>
           <div class="en-mario-text">
-            <span class="en-mario-lb">★ ENGLISH · 像素英语 ★</span>
-            <h3 class="en-mario-h">今天，跳起来拿一枚金币</h3>
-            <div class="en-mario-sub">坚持每天一句口语素材，就像马里奥顶出问号块 —— 日拱一卒，小步向前。</div>
+            <span class="en-mario-lb">★ ENGLISH POWER-UP ★</span>
+            <h3 class="en-mario-h">学一天英语 · 顶一枚问号块</h3>
+            <div class="en-mario-sub">每天读懂、开口一句。从第一枚「100」金币攒到「1000」满屏金币 —— 你敢开口说的那一天，就是顶出来的。</div>
           </div>
         </div>
 
         <div class="countdown mb sd-countdown">
-          <div class="muted" style="color:rgba(255,255,255,.92);font-size:.78rem;letter-spacing:1px;font-weight:700" id="cdLabel">ENGLISH STREAK · 英语积累中</div>
+          <div class="muted" style="color:rgba(255,255,255,.92);font-size:.78rem;letter-spacing:1px;font-weight:700" id="cdLabel">学习计划</div>
           <div class="days" id="cdDays">--</div>
-          <div style="font-size:.84rem;opacity:.92" id="cdDate">设置考试日期</div>
+          <div style="font-size:.84rem;opacity:.92" id="cdDate">设置开始日期</div>
           <div class="countdown-sub mt" id="cdSub" style="color:rgba(255,255,255,.85)"></div>
-          <button class="btn btn-sm mt" style="background:rgba(255,255,255,.22);color:#fff" onclick="setExamDate()">设置/修改日期</button>
+          <button class="btn btn-sm mt" style="background:rgba(255,255,255,.22);color:#fff" onclick="enSetStart()">改开始日期</button>
         </div>
+
+        <!-- ★ 英语今日打卡监督横幅 · 仿韩语 ko-banner（未打卡红 / 已打卡绿）★ -->
+        <div id="enBanner" class="en-banner"></div>
 
         <!-- 每日口语素材句（星露谷风） -->
         <div class="card sd-card" id="enPhraseCard">
@@ -1035,7 +1092,6 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <h3 style="margin:0"><svg class="ic" style="color:#5B9531"><use href="#i-seed"/></svg>每日口语素材</h3>
             <span class="sd-tag" id="enDayLbl"></span>
           </div>
-          <div class="muted mt" style="font-size:.78rem">第 N 天推一句雅思口语话题（含短语搭配 + 句式）· 周末合集复习</div>
           <div id="enPhraseBox" class="mt"></div>
         </div>
 
@@ -1045,30 +1101,31 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <h3 style="margin:0"><svg class="ic" style="color:#D4A848"><use href="#i-flame"/></svg>今日英语打卡</h3>
             <span class="sd-tag" id="enTodayPct">0/2</span>
           </div>
-          <div class="muted mt" style="font-size:.78rem">完成即算今日英语学习打卡，与底部 streak 同步</div>
+          <div class="muted mt" style="font-size:.78rem">学完两标，积分 + streak 同步</div>
           <div class="sd-checks mt" id="enChecks"></div>
         </div>
 
-        <!-- 我收藏的口语句（合集 + 手动加） -->
+        <!-- ★ 打卡记录 + 月历热力图 ★ -->
         <div class="card sd-card">
-          <div class="row between">
-            <h3 style="margin:0"><svg class="ic" style="color:#5B9531"><use href="#i-edit"/></svg>我收藏的口语句</h3>
-            <button class="btn btn-g btn-sm sd-mini-btn" onclick="openMatSheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>手动加一句</button>
-          </div>
-          <div id="enSavedBox" class="mt"></div>
+          <h3 style="margin:0"><svg class="ic" style="color:#5B9531"><use href="#i-target"/></svg>打卡记录</h3>
+          <div class="en-stats mt" id="enStats"></div>
+          <div class="en-heat-h"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="en-heat mt" id="enHeat"></div>
         </div>
 
-        <!-- 老学习任务 + 加任务功能：折叠保留 -->
-        <details class="sd-details">
-          <summary>📋 旧学习任务（可选 · 历史数据）</summary>
-          <div class="card sd-card mt" style="margin-top:10px">
-            <div class="row between">
-              <h3 style="margin:0"><svg class="ic" style="color:var(--rose)"><use href="#i-target"/></svg>学习任务</h3>
-              <button class="btn btn-p btn-sm sd-mini-btn" onclick="openStudySheet()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加任务</button>
-            </div>
-            <div id="studyList" class="mt"></div>
+        <!-- ★ 积分·等级·奖励 · 仿韩语同款三件套，共享积分池 ★ -->
+        <div class="card sd-card">
+          <div class="row between">
+            <h3 style="margin:0"><svg class="ic" style="color:#C98A0E"><use href="#i-zap"/></svg>积分 · 等级 · 奖励</h3>
+            <button class="btn btn-g btn-sm" onclick="openEnReward()"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>加奖励</button>
           </div>
-        </details>
+          <div class="ko-rw-hero mt" id="enRwHero"></div>
+          <div class="muted" style="font-size:.75rem">🏅 成就徽章</div>
+          <div class="ko-badges" id="enBadges"></div>
+          <div class="muted mt" style="font-size:.75rem">🎁 奖励兑换 · 攒够积分就犒劳自己</div>
+          <div class="mt" id="enRewardList"></div>
+          <div class="mt" id="enRedeemHist"></div>
+        </div>
         </div><!-- /英语 -->
 
         <!-- 韩语 · 12 个月零基础计划 -->
@@ -1076,26 +1133,45 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <div id="koBanner" class="ko-banner"></div>
 
           <div class="ko-hero">
-            <!-- ★ 马里奥跳起拿金币场景（32x16 viewBox → 160x80，5px/格子，硬阴影）★ -->
-            <svg class="ko-mario" viewBox="0 0 32 16" width="160" height="80" shape-rendering="crispEdges" aria-hidden="true">
-              <!-- 远景云（小细节，不抢眼） -->
+            <!-- ★ 马里奥跳起拿金币场景（32x16 viewBox → 160x80，5px/格子，硬阴影）★
+                 v2 加翅膀+冲刺尘土（与英语同款） -->
+            <svg class="ko-mario" viewBox="0 0 32 16" shape-rendering="crispEdges" aria-hidden="true">
+              <!-- 冲刺尘土粒子 -->
+              <g>
+                <rect x="2"  y="14" width="1" height="1" fill="#E6CDAB"/>
+                <rect x="3"  y="13" width="1" height="1" fill="#C9B68E" opacity=".7"/>
+                <rect x="5"  y="14" width="2" height="1" fill="#E6CDAB" opacity=".75"/>
+                <rect x="6"  y="13" width="1" height="1" fill="#A99268" opacity=".65"/>
+                <rect x="8"  y="14" width="2" height="1" fill="#E6CDAB" opacity=".55"/>
+                <rect x="9"  y="13" width="1" height="1" fill="#C9B68E" opacity=".7"/>
+                <rect x="11" y="14" width="1" height="1" fill="#A99268" opacity=".45"/>
+              </g>
+
+              <!-- 远景云 -->
               <rect x="10" y="1" width="4" height="1" fill="#FFFCEC" opacity=".9"/>
               <rect x="9"  y="2" width="6" height="1" fill="#FFFCEC" opacity=".9"/>
 
-              <!-- 问号块 · 左上 5x5 金棕色立体块 -->
+              <!-- 问号块 -->
               <rect x="3" y="3" width="5" height="5" fill="#F2C14E"/>
               <rect x="3" y="3" width="5" height="1" fill="#FFE08A"/>
               <rect x="3" y="7" width="5" height="1" fill="#A37A1E"/>
               <rect x="3" y="3" width="1" height="5" fill="#A37A1E"/>
               <rect x="7" y="3" width="1" height="5" fill="#D9A93A"/>
-              <!-- ? 像素字 -->
               <rect x="4" y="4" width="3" height="1" fill="#FFFCEC"/>
               <rect x="6" y="5" width="1" height="1" fill="#FFFCEC"/>
               <rect x="5" y="6" width="1" height="1" fill="#FFFCEC"/>
               <rect x="5" y="7" width="1" height="1" fill="#FFFCEC"/>
 
-              <!-- 马里奥跳跃姿势 · 中心偏左 13-21 x 1-15 -->
-              <!-- 红帽顶 -->
+              <!-- ★ 后翼（小羽毛样式） -->
+              <rect x="13" y="5"  width="1" height="1" fill="#F2C14E"/>
+              <rect x="12" y="6"  width="2" height="2" fill="#FFFCEC"/>
+              <rect x="11" y="7"  width="2" height="2" fill="#FFFFFF"/>
+              <rect x="12" y="9"  width="2" height="2" fill="#FFFCEC"/>
+              <rect x="13" y="10" width="1" height="1" fill="#F2C14E"/>
+              <rect x="11" y="11" width="1" height="1" fill="#FFFCEC" opacity=".85"/>
+              <rect x="13" y="11" width="1" height="1" fill="#F2C14E" opacity=".85"/>
+
+              <!-- 红帽 -->
               <rect x="15" y="1" width="5" height="1" fill="#E84C3D"/>
               <rect x="14" y="2" width="7" height="1" fill="#E84C3D"/>
               <rect x="14" y="3" width="7" height="1" fill="#E84C3D"/>
@@ -1105,7 +1181,7 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
               <rect x="14" y="4" width="7" height="3" fill="#F6C9A0"/>
               <rect x="14" y="4" width="1" height="3" fill="#6B3E1E"/>
               <rect x="20" y="4" width="1" height="3" fill="#6B3E1E"/>
-              <!-- 仰视眼（看上方金币） -->
+              <!-- 仰视眼 -->
               <rect x="16" y="5" width="1" height="1" fill="#2B2B2B"/>
               <rect x="19" y="5" width="1" height="1" fill="#2B2B2B"/>
               <!-- 鼻 -->
@@ -1114,10 +1190,10 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
               <rect x="15" y="7" width="6" height="1" fill="#6B3E1E"/>
               <rect x="13" y="7" width="1" height="1" fill="#6B3E1E"/>
               <rect x="21" y="7" width="1" height="1" fill="#6B3E1E"/>
-              <!-- 右手（向上伸·够金币）-->
+              <!-- 右手 -->
               <rect x="20" y="5" width="1" height="3" fill="#F6C9A0"/>
-              <rect x="21" y="4" width="1" height="1" fill="#F2C14E"/>  <!-- 手指方向金色的"瞄准金币"提示 -->
-              <!-- 衣服肩/红衣 -->
+              <rect x="21" y="4" width="1" height="1" fill="#F2C14E"/>
+              <!-- 红衣 -->
               <rect x="14" y="8" width="7" height="3" fill="#E84C3D"/>
               <rect x="13" y="9" width="1" height="2" fill="#E84C3D"/>
               <rect x="21" y="9" width="1" height="2" fill="#E84C3D"/>
@@ -1130,28 +1206,26 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
               <!-- 黄扣 -->
               <rect x="16" y="12" width="1" height="1" fill="#F2C14E"/>
               <rect x="18" y="12" width="1" height="1" fill="#F2C14E"/>
-              <!-- 跳跃腾空腿（一前一后·不沾地） -->
+              <!-- 腾空腿 -->
               <rect x="13" y="11" width="1" height="1" fill="#6B3E1E"/>
               <rect x="13" y="12" width="2" height="1" fill="#6B3E1E"/>
               <rect x="21" y="12" width="2" height="1" fill="#6B3E1E"/>
               <rect x="13" y="13" width="1" height="1" fill="#6B3E1E"/>
               <rect x="22" y="13" width="1" height="1" fill="#6B3E1E"/>
 
-              <!-- 金币 · 右上 5x5 立体圆块（带"?"块被打出的飞旋感） -->
+              <!-- 金币 -->
               <rect x="24" y="2" width="5" height="5" fill="#F2C14E"/>
               <rect x="24" y="2" width="5" height="1" fill="#FFE08A"/>
               <rect x="24" y="6" width="5" height="1" fill="#A37A1E"/>
               <rect x="24" y="2" width="1" height="5" fill="#A37A1E"/>
               <rect x="28" y="2" width="1" height="5" fill="#D9A93A"/>
-              <!-- M 标记（金币中央暗金） -->
               <rect x="25" y="3" width="3" height="1" fill="#A37A1E"/>
               <rect x="25" y="4" width="1" height="1" fill="#A37A1E"/>
               <rect x="27" y="4" width="1" height="1" fill="#A37A1E"/>
               <rect x="25" y="5" width="3" height="1" fill="#A37A1E"/>
-              <!-- 闪光点（右上角 1 像素白） -->
               <rect x="28" y="2" width="1" height="1" fill="#FFFCEC"/>
 
-              <!-- 砖地 · 底部 1 行 32 列全宽（深棕） -->
+              <!-- 砖地 -->
               <rect x="0" y="15" width="32" height="1" fill="#3B1F0E"/>
             </svg>
             <div class="ko-hero-main">
@@ -1526,6 +1600,7 @@ const pad=n=>String(n).padStart(2,'0');
 const dstr=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const today=()=>dstr(new Date());
 const dAdd=(ds,n)=>{const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()+n);return dstr(d)};
+const el=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const isSameWeek=(d1,d2)=>{const a=new Date(d1+'T12:00:00'),b=new Date(d2+'T12:00:00');const m=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return dstr(x)};return m(a)===m(b)};
 /* 休息日 = 周六/周日 + 2026 法定节假日（剔除调休上班日）。来源：国务院办公厅2026年放假安排通知 */
@@ -2512,14 +2587,7 @@ const EN_PHRASE=[
   hl:'old-world;charm',p:'old-world = 古色古香的（形容词）;charm = 魅力（不可数）',
   s:'怀旧表达 · 感叹 how 从句',m:'我喜欢这座老城保有古色古香的韵味。'}
 ];
-function enDayForStreak(){
-  /* 复用 renderToday 里计算 streak 的同一份算法（有 K.checks 里 study 分组的最新一次日期）。
-     简单实现：直接调用最佳连续；为了每日一句按"打卡的第 N 天"取句，用最近 N 天依次取。 */
-  const habits=g(K.habits,[]);const checks=g(K.checks,{});
-  const studyIds=new Set(habits.filter(h=>h.grp==='study').map(h=>h.id));
-  const days=Object.entries(checks).filter(([,rec])=>Object.keys(rec).some(k=>studyIds.has(k))).map(([d])=>d).sort();
-  return days.length;
-}
+function enDayForStreak(){return enCur().dn}
 function enPhraseIdx(dn){const n=EN_PHRASE.length;return ((dn-1)%n+n)%n}
 function enWeekPhrase(){
   /* 本周 7 句：基于当前 streak 长度 d，从 d-6 .. d 顺取 7 天各自的句；不足 7 天则回退到首句 */
@@ -2893,8 +2961,8 @@ function hbPoints(){
   Object.keys(HB_PT_RULE.streak).forEach(k=>{ if(best>=+k)p+=HB_PT_RULE.streak[k] });
   return p;
 }
-function gpPoints(){return koPoints()+hbPoints()}
-function gpSpent(){return +g(K.siKoSpent,0)||0}
+function gpPoints(){return koPoints()+hbPoints()+enPoints()}
+function gpSpent(){return (+g(K.siKoSpent,0)||0)+(+g(K.siEnSpent,0)||0)}
 function gpBalance(){return Math.max(0,gpPoints()-gpSpent())}
 function gotoReward(){
   if(typeof showPage==='function')showPage('selfimp');
@@ -2987,9 +3055,27 @@ function renderRev(){
   }).join('');
 }
 
-/* ================= 英语 ================= */
-function setExamDate(){const set=g(K.set,{});const v=prompt('雅思考试日期 (YYYY-MM-DD)',set.examDate||'2026-12-05');
-  if(v&&/^\d{4}-\d{2}-\d{2}$/.test(v)){set.examDate=v;sv(K.set,set);renderEng();renderToday()}}
+/* ================= 英语 =================
+   学习计划：默认 2026-09-01 开始 · 与韩语 koSetStart 同 UX（教学仿造）
+   取消「雅思考试日期」语义：英语是日常积累不是应试冲刺，目标改为「开始学习那天」。
+   逻辑：开始日 → 第 N 天 → 取每日素材句 + 计 streak + 计积分。 */
+const EN_DEFAULT_START='2026-09-01';
+function enStart(){return g(K.siEnStart,'')||EN_DEFAULT_START}
+function enSetStart(){
+  const v=prompt('英语学习开始日期 (YYYY-MM-DD)',enStart());
+  if(!v)return;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(v.trim()))return toast('格式不对，例：2026-09-01');
+  sv(K.siEnStart,v.trim());renderEng();renderToday();
+  toast('开始日期已更新，从今天开始 Day '+(enCur().dn));
+}
+/* 复用 koCur 同样的「学习第 N 天」算法：开始日 = Day 1；同日多次 save 只算 1 天 */
+function enCur(){
+  const s=enStart(),t=today();
+  const a=new Date(s+'T00:00:00'),b=new Date(t+'T00:00:00');
+  const dn=Math.max(1,Math.floor((b-a)/864e5)+1);
+  const w=Math.floor((dn-1)/7)+1,m=Math.floor((dn-1)/28)+1;
+  return {s:s,dn:dn,w:w,m:m};
+}
 function openStudySheet(){document.getElementById('stDate').value=today();document.getElementById('stTask').value='';document.getElementById('stMask').classList.add('show')}
 function saveStudy(){const task=document.getElementById('stTask').value.trim();if(!task)return toast('写个任务先');
   const ss=g(K.study,[]);ss.push({id:uid(),type:document.getElementById('stType').value,task,date:document.getElementById('stDate').value||today(),done:false});
@@ -3002,42 +3088,194 @@ function saveMat(){const t=document.getElementById('mtText').value.trim();if(!t)
   sv(K.mats,ms);closeMask('mtMask');toast('已收进素材库');render()}
 function delMat(id){sv(K.mats,g(K.mats,[]).filter(x=>x.id!==id));render();toast('已删除')}
 function renderEng(){
-  const set=g(K.set,{});
-  if(set.examDate){const dd=Math.max(0,Math.ceil((new Date(set.examDate)-new Date(today()))/864e5));
-    document.getElementById('cdLabel').textContent='ENGLISH COUNTDOWN';
-    document.getElementById('cdDays').textContent=dd;
-    document.getElementById('cdDate').textContent='距离 '+set.examDate+' 考试'+(dd===0?' · 就是今天！':' 天');
-  }else{
-    // 未设考期：显示英语学习累计（按「学习」分组习惯的打卡天数）
-    const checks=g(K.checks,{}),studyIds=new Set(g(K.habits,[]).filter(h=>h.grp==='study').map(h=>h.id));
-    let days=0;Object.values(checks).forEach(rec=>{if(Object.keys(rec).some(k=>studyIds.has(k)))days++});
-    const hrs=Math.round(days*0.5*10)/10;
-    document.getElementById('cdLabel').textContent='ENGLISH STREAK · 英语积累中';
-    document.getElementById('cdDays').textContent=days;
-    document.getElementById('cdDate').textContent=days?`已打卡学习 ${days} 天 · 累计约 ${hrs} 小时`:'还没开始打卡，今天就是第 1 天';
-  }
-  const ss=[...g(K.study,[])].sort((a,b)=>a.done-b.done||(a.date<b.date?-1:1)),t=today();
-  // 副信息（仍用旧学习任务统计作背景信息）
-  const doneT=ss.filter(x=>x.done&&x.doneDate===t).length,totalT=ss.length;
-  document.getElementById('cdSub').textContent=totalT?`今日完成 ${doneT} · 总任务 ${totalT} 个`:'今日英语打卡见下方 💪';
-  /* 老学习任务列表（保留兼容） */
-  document.getElementById('studyList').innerHTML=ss.map(x=>{
-    const od=!x.done&&x.date<t;
-    return `<div class="todo-item${od?' overdue':''}">
-      <span class="task-type">${esc(x.type)}</span>
-      <div class="tt" style="${x.done?'text-decoration:line-through;color:var(--muted)':''}">${esc(x.task)}
-        <div class="ds">${x.done?'已完成 '+x.doneDate:od?'已逾期 · '+x.date:'截止 '+x.date}</div></div>
-      ${x.done?'':`<button class="btn btn-sm ${od?'btn-danger':'btn-g'}" onclick="doneStudy('${x.id}')">完成</button>`}
-      <button style="color:var(--muted);min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center" onclick="if(confirm('删除这个任务？'))delStudy('${x.id}')"><svg class="ic" style="width:14px;height:14px"><use href="#i-trash"/></svg></button></div>`}).join('')||'<div class="empty">暂无任务</div>';
-  /* 新模块三件套 */
+  /* 顶部学习计划信息：开始日 → 第 N 天 · 距今 · 累计 */
+  const cur=enCur(),t=today();
+  const lbl=document.getElementById('cdLabel');
+  const days=document.getElementById('cdDays');
+  const date=document.getElementById('cdDate');
+  const sub=document.getElementById('cdSub');
+  if(lbl)lbl.textContent='ENGLISH POWER-UP · 英语学习计划';
+  if(days)days.textContent=cur.dn;
+  if(date)date.textContent='Day '+cur.dn+' · 开始于 '+enStart();
+  const rec=enTodayRec(),doneNow=(rec.word?1:0)+(rec.luke?1:0);
+  if(sub)sub.textContent=doneNow<2?`今日 ${doneNow}/2 · 全部勾完自动加 streak`:`今日 ${doneNow}/2 ✓ 全打卡完成`;
+
   renderEnDailyPhrase();
   renderEnTodayChecks();
-  renderEnSaved();
+  renderEnBanner();
+  renderEnStats();
+  renderEnHeat();
+  renderEnReward();
 }
 
-/* ============ EN · 每日一句口语素材 ============
-   数据：EN_PHRASE 56 句 / 8 主题（已在 KO 之前定义）
-   模型：按英语学习天数 enDayForStreak() 取模；合集按尾部 7 天；同样零存储 */
+/* ============ EN · 今日打卡状态横幅 · 仿韩语 ko-banner ============ */
+function renderEnBanner(){
+  const b=el('enBanner');if(!b)return;
+  const rec=enTodayRec(),done=(rec.word?1:0)+(rec.luke?1:0);
+  const sk=Math.max(1,enBestStreak());
+  if(done===2){
+    b.className='en-banner ok';
+    b.innerHTML='<svg class="ic"><use href="#i-check"/></svg> 今日英语两标都打完 ✓ · 已累计 '+enPoints()+' P · 连击 <b>'+sk+'</b> 天 🔥';
+  }else if(done===1){
+    b.className='en-banner';
+    b.innerHTML='<svg class="ic"><use href="#i-flame"/></svg> 今日已打 '+(rec.word?'单词':'Luke 学院')+' · 还差一标，连续 <b>'+sk+'</b> 天，保住 streak';
+  }else{
+    b.className='en-banner';
+    b.innerHTML='<svg class="ic"><use href="#i-flame"/></svg> 今天还没打卡 —— 学单词 30min 或 Luke 学院 30min，两标都完成才算数';
+  }
+}
+
+/* ============ EN · 月历热力图 + 概览统计 ============
+   4 周 = 28 格，按一~日列排，亮绿色 = 当日打过两标，棕色 = 当日未打卡 */
+function renderEnStats(){
+  const box=el('enStats');if(!box)return;
+  const log=g(K.enLog,[]),byD={};log.forEach(x=>{byD[x.d]=x});
+  const days=Object.keys(byD).length;
+  const total=log.reduce(function(a,x){return a+(x.word?1:0)+(x.luke?1:0)},0);
+  const hrs=Math.round(total*0.5*10)/10;
+  const sk=enBestStreak();
+  box.innerHTML='<div class="en-stat"><b>'+days+'</b><span>累计打卡（天）</span></div>'
+    +'<div class="en-stat"><b>'+total+'</b><span>累计完成（次）</span></div>'
+    +'<div class="en-stat"><b>'+hrs+'h</b><span>累计学习时长</span></div>'
+    +'<div class="en-stat"><b>'+sk+' 天</b><span>历史最长连击</span></div>';
+}
+function renderEnHeat(){
+  const box=el('enHeat');if(!box)return;
+  const set=new Set(g(K.enLog,[]).map(x=>x.d)),t=today();
+  const now=new Date(t+'T00:00:00'),dw=(now.getDay()+6)%7;
+  const start=new Date(now);start.setDate(now.getDate()-dw-21);
+  let h='';
+  for(let i=0;i<28;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);const ds=dstr(d);
+    h+='<i class="'+(set.has(ds)?'on':'')+(ds===t?' tdy':'')+(ds>t?' fut':'')+'">'+d.getDate()+'</i>';
+  }
+  box.innerHTML=h;
+}
+
+/* ============ EN · 积分 / 等级 / 徽章 / 奖励（三件套 · 共享 KO 的 LEVEL 表） ============
+   设计要点（沿用韩语铁律）：积分不存总额，从 enLog 实时反推。
+   等级门槛继承 KO_LEVEL（10 级），与韩语处于同一共享积分池；只要 enLog 增长，level 会跳。
+   徽章定义专属英语成就；奖励独立列表（与 KO 不互通）。 */
+const EN_PT_RULE={
+  full:10,         // 当日 word + luke 都勾完
+  single:6,        // 只勾了一个
+  streak:{7:30,14:60,30:140,60:240,100:380,180:600,270:800,365:1200}
+};
+const EN_BADGES=[
+  {id:'efirst',e:'🌱',n:'启程',f:s=>s.total>=1},
+  {id:'ew7',e:'🔁',n:'一周',f:s=>s.best>=7},
+  {id:'ew14',e:'🌿',n:'两周',f:s=>s.best>=14},
+  {id:'ew30',e:'💪',n:'满月',f:s=>s.best>=30},
+  {id:'ew100',e:'💯',n:'百日',f:s=>s.best>=100},
+  {id:'et20',e:'📚',n:'二十天',f:s=>s.total>=20},
+  {id:'et50',e:'📖',n:'五十天',f:s=>s.total>=50},
+  {id:'eL5',e:'⭐',n:'Lv5 飞跃',f:s=>s.lv>=5},
+  {id:'eL8',e:'🏅',n:'Lv8 自律',f:s=>s.lv>=8},
+  {id:'eL10',e:'🏆',n:'Lv10 大师',f:s=>s.lv>=10}
+];
+const EN_REWARD_DEF=[
+  {id:'er1',e:'☕',n:'一杯喜欢的奶茶 / 咖啡',c:120},
+  {id:'er2',e:'🎬',n:'一集英文剧（关字幕挑战）',c:200},
+  {id:'er3',e:'🎧',n:'一个月 Spotify / Apple Music',c:400},
+  {id:'er4',e:'📚',n:'买一本想看的英文原版',c:600},
+  {id:'er5',e:'✈️',n:'老外出差基金 +100 元',c:2000}
+];
+
+function enBestStreak(){
+  const arr=g(K.enLog,[]);if(!arr.length)return 0;
+  const ds=[];const set={};arr.forEach(x=>{if(!set[x.d]){set[x.d]=1;ds.push(x.d)}});
+  ds.sort();let best=0,cur=0,prev=null;
+  ds.forEach(d=>{ cur=(prev&&dAdd(prev,1)===d)?cur+1:1; if(cur>best)best=cur; prev=d });
+  return best;
+}
+function enPoints(){
+  const log=g(K.enLog,[]),byD={};
+  log.forEach(x=>{byD[x.d]=x});
+  let p=0;
+  Object.keys(byD).forEach(d=>{
+    const r=byD[d],n=(r.word?1:0)+(r.luke?1:0);
+    if(n===2)p+=EN_PT_RULE.full;else if(n===1)p+=EN_PT_RULE.single;
+  });
+  const best=enBestStreak();
+  Object.keys(EN_PT_RULE.streak).forEach(k=>{ if(best>=+k)p+=EN_PT_RULE.streak[k] });
+  return p;
+}
+function enBalance(){return Math.max(0,enPoints()-(+g(K.siEnSpent,0)||0))}
+function enBadgeState(){
+  const log=g(K.enLog,[]),byD={};log.forEach(x=>{byD[x.d]=x});
+  const total=Object.keys(byD).length,best=enBestStreak();
+  return {total:total,best:best,lv:0};
+}
+function enGain(txt){
+  let b=document.getElementById('enGain');
+  if(!b){b=document.createElement('div');b.id='enGain';b.className='ko-gain';document.body.appendChild(b)}
+  b.textContent=txt;b.classList.add('show');
+  clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('show'),1800);
+}
+function seedEnRewardOnce(){
+  if(g(K.siEnReward,null)!==null)return;
+  sv(K.siEnReward,EN_REWARD_DEF.map(x=>({id:x.id,e:x.e,n:x.n,c:x.c})));
+}
+function openEnReward(){
+  const n=prompt('奖励名称（想怎么犒劳自己）');if(!n||!n.trim())return;
+  const c=parseInt(prompt('需要多少积分？','300'),10);
+  if(!c||c<=0)return toast('积分得是正数');
+  const arr=g(K.siEnReward,[]);arr.push({id:uid(),e:'🎁',n:n.trim(),c:c});
+  sv(K.siEnReward,arr);renderEnReward();toast('已添加');
+}
+function delEnReward(id){
+  if(!confirm('删掉这个奖励？（已兑换记录不受影响）'))return;
+  sv(K.siEnReward,g(K.siEnReward,[]).filter(x=>x.id!==id));renderEnReward();toast('已删除');
+}
+function redeemEnReward(id){
+  const r=(g(K.siEnReward,[])||[]).find(x=>x.id===id);if(!r)return;
+  /* 共享池：跨英语+韩语可用同一个余额扣，更接近真实"积分经济" */
+  const bal=gpBalance();
+  if(bal<r.c)return toast('积分不够，还差 '+(r.c-bal)+' P（英语 + 韩语 + 习惯共享同一积分池）');
+  if(!confirm('用 '+r.c+' P 兑换「'+r.n+'」？\n\n兑完记得真的去做 🎁'))return;
+  sv(K.siEnSpent,(+g(K.siEnSpent,0)||0)+r.c);
+  /* 把这笔兑换同步记入共享 siKoSpent，确保全局余额正确扣减 */
+  sv(K.siKoSpent,(+g(K.siKoSpent,0)||0)+r.c);
+  const h=g(K.siEnRedeem,[])||[];h.unshift({id:uid(),n:r.n,e:r.e,c:r.c,d:today()});
+  sv(K.siEnRedeem,h);renderEnReward();enGain('🎉 兑换成功 · '+r.n);
+}
+function renderEnReward(){
+  const hero=el('enRwHero');if(!hero)return;
+  seedEnRewardOnce();
+  const koPt=koPoints(),hbPt=hbPoints(),enPt=enPoints();
+  const tot=koPt+hbPt+enPt,bal=Math.max(0,tot-gpSpent());
+  /* enBadgeState().lv 实际拿的是累计 level（共享 pool 的 level），传一个累计 pts 进去算 lv */
+  const li=koLevel(tot),lv=KO_LEVEL[li],next=KO_LEVEL[li+1];
+  const pct=next?Math.max(0,Math.min(100,Math.round((tot-lv.p)/(next.p-lv.p)*100))):100;
+  hero.innerHTML='<div class="ko-rw-top">'
+    +'<div class="ko-rw-lv"><b>'+(li+1)+'</b><span>LV</span></div>'
+    +'<div class="ko-rw-mid"><div class="ko-rw-name">'+esc(lv.n)+' · '+esc(lv.cn)+'</div>'
+    +'<div class="ko-rw-sub">英语 '+enPt+' P + 韩语 '+koPt+' P + 习惯 '+hbPt+' P ＝ 累计 '+tot+' P · 已兑出 '+gpSpent()+' P</div></div>'
+    +'<div class="ko-rw-bal"><b>'+bal+'</b><span>可用积分</span></div></div>'
+    +'<div class="ko-rw-bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="ko-rw-bar-t">'+(next?('距 Lv'+(li+2)+' '+esc(next.n)+' 还差 '+(next.p-tot)+' P'):'🏆 已达成最高等级')+'</div>';
+
+  /* 徽章：在共享积分池的 lv 基础上展示 EN 自己的徽章 */
+  const st={total:enBadgeState().total,best:enBadgeState().best,lv:li};
+  const bg=el('enBadges');
+  if(bg)bg.innerHTML=EN_BADGES.map(b=>{
+    const got=!!b.f(st);
+    return '<div class="ko-bdg'+(got?' got':'')+'" title="'+esc(b.n)+(got?'（已解锁）':'（未解锁）')+'"><i>'+b.e+'</i><span>'+esc(b.n)+'</span></div>';
+  }).join('');
+
+  const rw=g(K.siEnReward,[])||[],box=el('enRewardList');
+  if(box)box.innerHTML=rw.length?rw.map(r=>{
+    const ok=bal>=r.c;
+    return '<div class="ko-rw"><div class="ko-rw-ic">'+esc(r.e||'🎁')+'</div>'
+      +'<div class="ko-rw-info"><div class="ko-rw-nm">'+esc(r.n)+'</div>'
+      +'<div class="ko-rw-ct'+(ok?'':' no')+'">'+r.c+' P'+(ok?'':' · 还差 '+(r.c-bal)+' P')+'</div></div>'
+      +'<button class="ko-btn-rw"'+(ok?'':' disabled')+' onclick="redeemEnReward(\''+r.id+'\')">兑换</button>'
+      +'<button class="ko-btn-del" onclick="delEnReward(\''+r.id+'\')">×</button></div>';
+  }).join(''):'<div class="ko-empty">还没有奖励，点右上角加一个你想犒劳自己的东西</div>';
+
+  const h=g(K.siEnRedeem,[])||[],hb=el('enRedeemHist');
+  if(hb)hb.innerHTML=h.length?'<details class="sd-details" style="margin-top:11px"><summary>📜 兑换历史（'+h.length+'）</summary><div style="margin-top:7px">'+h.map(x=>'<div class="ko-saved-item"><div>'+esc(x.e||'🎁')+' '+esc(x.n)+'</div><div class="src"><span class="src-meta">'+esc(x.d)+' · 用 '+esc(x.c)+' P 兑换</span></div></div>').join('')+'</div></details>':'';
+}
 
 /* 高亮一句中的短语搭配（用 hl 里的关键短语做 case-insensitive 高亮） */
 function enHl(en, hl){
