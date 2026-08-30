@@ -978,11 +978,12 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
           <svg class="en-mario-scene-svg" viewBox="0 0 32 16" shape-rendering="crispEdges" aria-hidden="true">
             <!-- ★ 学分递进标签（从地面 → 金币，5 段递进，红→金→橙渐变，shape-rendering=auto 避免被 crispEdges 误伤）★ -->
             <g font-family="ui-monospace,Consolas,monospace" font-weight="900" shape-rendering="auto" paint-order="stroke" text-anchor="middle">
-              <text x="9"  y="14"   font-size="2.6" fill="#FFD3B0" stroke="#3B1F0E" stroke-width=".35">100</text>
-              <text x="12" y="11.6" font-size="2.2" fill="#FFD24A" stroke="#3B1F0E" stroke-width=".30">200</text>
-              <text x="15" y="9.4"  font-size="1.9" fill="#F2C14E" stroke="#3B1F0E" stroke-width=".27">400</text>
-              <text x="18" y="7.4"  font-size="1.6" fill="#E6A92F" stroke="#3B1F0E" stroke-width=".23">800</text>
-              <text x="21" y="5.6"  font-size="1.4" fill="#D96B2D" stroke="#3B1F0E" stroke-width=".21">1000</text>
+              <!-- ★ 学分递进数字移到马里奥右侧空白列（x=20-22），避免与人物重叠造成"渲染错乱"观感 ★ -->
+              <text x="20"   y="14"   font-size="2.6" fill="#FFD3B0" stroke="#3B1F0E" stroke-width=".35">100</text>
+              <text x="20.5" y="11.6" font-size="2.2" fill="#FFD24A" stroke="#3B1F0E" stroke-width=".30">200</text>
+              <text x="21"   y="9.4"  font-size="1.9" fill="#F2C14E" stroke="#3B1F0E" stroke-width=".27">400</text>
+              <text x="21.5" y="7.4"  font-size="1.6" fill="#E6A92F" stroke="#3B1F0E" stroke-width=".23">800</text>
+              <text x="22"   y="5.6"  font-size="1.4" fill="#D96B2D" stroke="#3B1F0E" stroke-width=".21">1000</text>
             </g>
 
             <!-- ★ 冲刺尘土粒子（马里奥起跳点留下）★ -->
