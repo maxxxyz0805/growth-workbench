@@ -3060,12 +3060,18 @@ function renderRev(){
    学习计划：默认 2026-09-01 开始 · 与韩语 koSetStart 同 UX（教学仿造）
    取消「雅思考试日期」语义：英语是日常积累不是应试冲刺，目标改为「开始学习那天」。
    逻辑：开始日 → 第 N 天 → 取每日素材句 + 计 streak + 计积分。 */
-const EN_DEFAULT_START='2026-09-01';
-function enStart(){return g(K.siEnStart,'')||EN_DEFAULT_START}
+const EN_DEFAULT_START='2026-08-31';
+function enStart(){
+  // 兜底：即使 localStorage 里的值被污染成 "true" / "" / "null" 等非日期，也强制用默认开始日
+  const v=g(K.siEnStart,'');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return EN_DEFAULT_START;
+  const d=new Date(v+'T00:00:00');
+  return isNaN(d.getTime())?EN_DEFAULT_START:v;
+}
 function enSetStart(){
   const v=prompt('英语学习开始日期 (YYYY-MM-DD)',enStart());
   if(!v)return;
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(v.trim()))return toast('格式不对，例：2026-09-01');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(v.trim()))return toast('格式不对，例：2026-08-31');
   sv(K.siEnStart,v.trim());renderEng();renderToday();
   toast('开始日期已更新，从今天开始 Day '+(enCur().dn));
 }
