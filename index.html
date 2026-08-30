@@ -517,6 +517,36 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
 .ko-hist b{color:var(--ink);font-weight:600}
 .ko-gain{position:fixed;left:50%;top:26%;transform:translateX(-50%);background:#E84C3D;color:#fff;padding:11px 22px;border:3px solid #2B2B2B;border-radius:0;font-weight:800;font-size:.95rem;z-index:9999;pointer-events:none;opacity:0;transition:opacity .3s,top .5s}
 .ko-gain.show{opacity:1;top:22%}
+/* ---------- 韩语 · 旅行应急每日一句（马里奥 NES 像素风） ---------- */
+.ko-phr-card{background:#FDF6E3;border:3px solid #2B2B2B;border-radius:0;box-shadow:5px 5px 0 0 #2B2B2B;padding:14px}
+.ko-phr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ko-phr-cat{background:#5BC0EB;color:#2B2B2B;border:2px solid #2B2B2B;font-size:.68rem;font-weight:800;padding:2px 7px;letter-spacing:.5px}
+.ko-phr-no{font-size:.7rem;color:#7A6A50;font-weight:700}
+.ko-phr-k{font-size:1.45rem;font-weight:800;color:#2B2B2B;line-height:1.35;margin:6px 0 4px;word-break:keep-all}
+.ko-phr-r{font-size:.86rem;color:#E84C3D;font-weight:800;letter-spacing:.3px;word-break:break-all}
+.ko-phr-z{font-size:.78rem;color:#7A6A50;margin-top:3px}
+.ko-phr-m{font-size:.92rem;color:#2B2B2B;margin-top:9px;padding-top:9px;border-top:2px dashed #D8CDB4}
+.ko-phr-act{display:flex;gap:8px;margin-top:11px}
+.ko-btn-spk,.ko-btn-cp{flex:1;border:2px solid #2B2B2B;background:#F2C14E;color:#2B2B2B;font-weight:800;font-size:.82rem;padding:9px 6px;cursor:pointer;border-radius:0;box-shadow:3px 3px 0 0 #2B2B2B;font-family:inherit}
+.ko-btn-cp{background:#43B047;color:#fff}
+.ko-btn-spk:active,.ko-btn-cp:active{transform:translate(3px,3px);box-shadow:0 0 0 0 #2B2B2B}
+.ko-phr-wk{margin-top:11px;border:2px solid #2B2B2B;background:#fff}
+.ko-phr-wkh{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#E84C3D;color:#fff;font-size:.78rem;font-weight:800;cursor:pointer}
+.ko-phr-arw{font-size:.72rem;opacity:.92}
+.ko-phr-wkb{display:none;padding:8px}
+.ko-phr-wk.open .ko-phr-wkb{display:block}
+.ko-phr-wi{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px dashed #E4DCC8}
+.ko-phr-wi:last-child{border-bottom:none}
+.ko-phr-wi.now{background:#FDF3D9;outline:2px solid #F2C14E}
+.ko-phr-wd{flex-shrink:0;width:19px;height:19px;line-height:19px;text-align:center;background:#2B2B2B;color:#F2C14E;font-size:.66rem;font-weight:800}
+.ko-phr-wt{flex:1;min-width:0}
+.ko-phr-wk2{display:block;font-size:.9rem;font-weight:800;color:#2B2B2B;line-height:1.4;word-break:keep-all}
+.ko-phr-wr{display:block;font-size:.7rem;color:#E84C3D;font-weight:700;word-break:break-all}
+.ko-phr-wm{display:block;font-size:.74rem;color:#6B5F4E;margin-top:2px}
+.ko-phr-ws{flex-shrink:0;border:2px solid #2B2B2B;background:#FDF6E3;color:#2B2B2B;font-size:.72rem;font-weight:800;padding:4px 7px;cursor:pointer;border-radius:0;font-family:inherit}
+.ko-phr-ws:active{transform:translate(2px,2px)}
+.ko-btn-save{width:100%;margin-top:8px;border:2px solid #2B2B2B;background:#5BC0EB;color:#2B2B2B;font-weight:800;font-size:.8rem;padding:8px 6px;cursor:pointer;border-radius:0;box-shadow:3px 3px 0 0 #2B2B2B;font-family:inherit}
+.ko-btn-save:active{transform:translate(3px,3px);box-shadow:0 0 0 0 #2B2B2B}
 /* ---- 韩语像素风增强：更粗描边 + 硬阴影像素感 + 砖纹 ---- */
 .ko-hero{display:flex;align-items:flex-end;gap:12px}
 .ko-hero-main{flex:1;min-width:0}
@@ -911,6 +941,14 @@ label.f{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 5px}
             <div class="ko-bar"><span id="koBarIn"></span></div>
             <div class="row between"><div class="ko-bar-t" id="koBarTxt">总进度 0%</div><div class="ko-bar-t" style="cursor:pointer;text-decoration:underline;flex-shrink:0;margin-left:10px" onclick="koSetStart()">改开始日期</div></div>
             </div>
+          </div>
+
+          <div class="card">
+            <div class="row between">
+              <h3 style="margin:0"><svg class="ic" style="color:var(--si-d)"><use href="#i-book"/></svg>旅行应急 · 每日一句</h3>
+              <span class="muted" style="font-size:.74rem">点 🔊 听韩语发音</span>
+            </div>
+            <div class="mt" id="koPhraseBox"></div>
           </div>
 
           <div class="card">
@@ -1980,6 +2018,148 @@ const KO_PLAN=[
   {w:41,s:4,m:11,sp:8,t:'完成延世3；台词复述；播客持续输入；TOPIK3‑4 自测',c:'生活化韩剧接近无字幕'}
 ];
 let _koMode=60,_koHideDone=false,_koNoteBound=false;
+/* ---------- 韩语 · 旅行应急短句库（72 句 / 8 大场景）----------
+   取句规则：按「学习第 N 天」确定性取模 (dn-1)%72 —— 刷新不变、零存储、改开始日期自动重排。
+   c=场景 k=韩语 r=罗马音 z=中文谐音 m=中文意思 */
+const KO_PHRASE=[
+{c:'问候',k:'안녕하세요',r:'annyeonghaseyo',z:'安娘哈塞哟',m:'你好（最通用，见人就用）'},
+{c:'问候',k:'감사합니다',r:'gamsahamnida',z:'康桑哈密达',m:'谢谢（正式 / 通用）'},
+{c:'问候',k:'죄송합니다',r:'joesonghamnida',z:'罪松哈密达',m:'对不起（正式道歉）'},
+{c:'问候',k:'네 / 아니요',r:'ne / aniyo',z:'内 / 阿尼哟',m:'是 / 不是'},
+{c:'问候',k:'괜찮아요',r:'gwaenchanayo',z:'官擦那哟',m:'没关系 / 可以 / 还行'},
+{c:'问候',k:'실례합니다',r:'sillyehamnida',z:'西尔列哈密达',m:'打扰一下（借过、搭话前）'},
+{c:'问候',k:'안녕히 가세요',r:'annyeonghi gaseyo',z:'安娘hi 卡塞哟',m:'再见（对要走的人说）'},
+{c:'问候',k:'잘 부탁드립니다',r:'jal butakdeureumnida',z:'察尔 普它得楞尼达',m:'请多关照（初次见面 / 求助）'},
+{c:'问候',k:'처음 뵙겠습니다',r:'cheoeum boepgesseumnida',z:'错恩 陪p该森尼达',m:'初次见面（正式）'},
+{c:'问路',k:'화장실이 어디예요?',r:'hwajangsiri eodiyeyo?',z:'花酱西里 额迪耶哟',m:'洗手间在哪里？（最高频）'},
+{c:'问路',k:'지하철역이 어디예요?',r:'jihacheollyeogi eodiyeyo?',z:'几哈错列给 额迪耶哟',m:'地铁站在哪里？'},
+{c:'问路',k:'버스 정류장이 어디예요?',r:'beoseu jeongnyujangi eodiyeyo?',z:'波丝 穷纽酱一 额迪耶哟',m:'公交站在哪里？'},
+{c:'问路',k:'이 주소로 가 주세요',r:'i jusoro ga juseyo',z:'一 租所罗 卡 租塞哟',m:'请去这个地址（给司机看）'},
+{c:'问路',k:'여기서 내려 주세요',r:'yeogiseo naeryeo juseyo',z:'要给所 内列 租塞哟',m:'请在这里下车'},
+{c:'问路',k:'여기가 어디예요?',r:'yeogiga eodiyeyo?',z:'要给嘎 额迪耶哟',m:'这里是哪里？（迷路时）'},
+{c:'问路',k:'얼마나 걸려요?',r:'eolmana geollyeoyo?',z:'额尔马那 靠儿列哟',m:'需要多久？（走路 / 坐车都行）'},
+{c:'问路',k:'직진 / 왼쪽 / 오른쪽',r:'jikjin / oenjjok / oreunjjok',z:'几gin / 温jo / 哦楞jo',m:'直走 / 左 / 右（听关键词）'},
+{c:'问路',k:'가까워요?',r:'gakkawoyo?',z:'卡嘎我哟',m:'近吗？'},
+{c:'住宿',k:'체크인하고 싶어요',r:'chekeuinhago sipeoyo',z:'切可因哈果 西坡哟',m:'我想办理入住'},
+{c:'住宿',k:'예약했어요',r:'yeyakhaesseoyo',z:'耶呀k黑所哟',m:'我预约了（报名字前先说）'},
+{c:'住宿',k:'방을 바꿀 수 있어요?',r:'bangeul bakkul su isseoyo?',z:'庞尔 巴古尔 苏 一所哟',m:'可以换房间吗？'},
+{c:'住宿',k:'와이파이 비밀번호가 뭐예요?',r:'waipai bimilbeonhoga mwoyeyo?',z:'歪派 皮密儿本诺嘎 莫耶哟',m:'WiFi 密码是多少？'},
+{c:'住宿',k:'체크아웃은 몇 시예요?',r:'chekeuauteun myeot siyeyo?',z:'切可啊屋特 棉 西耶哟',m:'几点退房？'},
+{c:'住宿',k:'짐을 맡길 수 있어요?',r:'jimeul matgil su isseoyo?',z:'几姆 马gil 苏 一所哟',m:'可以寄存行李吗？'},
+{c:'住宿',k:'수건을 더 주세요',r:'sugeoneul deo juseyo',z:'苏干尔 套 租塞哟',m:'请再给我毛巾'},
+{c:'住宿',k:'방이 너무 시끄러워요',r:'bangi neomu sikkeureowoyo',z:'庞一 闹木 西哥罗我哟',m:'房间太吵了'},
+{c:'住宿',k:'온수가 안 나와요',r:'onsuga an nawayo',z:'哦n苏嘎 安 那哇哟',m:'没有热水'},
+{c:'餐饮',k:'메뉴판 주세요',r:'menyupan juseyo',z:'没纽潘 租塞哟',m:'请给我菜单'},
+{c:'餐饮',k:'이거 주세요',r:'igeo juseyo',z:'一哥 租塞哟',m:'请给我这个（手指菜单）'},
+{c:'餐饮',k:'물 주세요',r:'mul juseyo',z:'木尔 租塞哟',m:'请给我水'},
+{c:'餐饮',k:'맛있어요',r:'masisseoyo',z:'马西所哟',m:'好吃（夸人必备）'},
+{c:'餐饮',k:'매운 거 못 먹어요',r:'maeun geo mot meogeoyo',z:'买温 哥 蒙 么哥哟',m:'我不能吃辣的'},
+{c:'餐饮',k:'알레르기가 있어요',r:'allereugiga isseoyo',z:'阿儿列勒给嘎 一所哟',m:'我有过敏'},
+{c:'餐饮',k:'계산서 주세요',r:'gyesanseo juseyo',z:'该散所 租塞哟',m:'请给我账单（买单）'},
+{c:'餐饮',k:'카드 돼요?',r:'kadeu dwaeyo?',z:'卡的 对哟',m:'可以刷卡吗？'},
+{c:'餐饮',k:'포장해 주세요',r:'pojanghae juseyo',z:'破酱黑 租塞哟',m:'请帮我打包'},
+{c:'购物',k:'얼마예요?',r:'eolmayeyo?',z:'额尔马耶哟',m:'多少钱？（买东西必问）'},
+{c:'购物',k:'비싸요',r:'bissayo',z:'比撒哟',m:'太贵了（砍价开场）'},
+{c:'购物',k:'깎아 주세요',r:'kkakka juseyo',z:'嘎嘎 租塞哟',m:'请便宜一点'},
+{c:'购物',k:'다른 색 있어요?',r:'dareun saek isseoyo?',z:'塔楞 赛 一所哟',m:'有其他颜色吗？'},
+{c:'购物',k:'입어 봐도 돼요?',r:'ibeo bwado dwaeyo?',z:'一波 把多 对哟',m:'可以试穿吗？'},
+{c:'购物',k:'그냥 볼게요',r:'geunyang bolgeyo',z:'哥娘 破儿该哟',m:'我只是看看（挡店员）'},
+{c:'购物',k:'이걸로 할게요',r:'igeollo halgeyo',z:'一哥儿罗 哈尔该哟',m:'我要这个（决定买）'},
+{c:'购物',k:'영수증 주세요',r:'yeongsujeung juseyo',z:'英苏增 租塞哟',m:'请给我收据（退税要用）'},
+{c:'购物',k:'환불할 수 있어요?',r:'hwanbulhal su isseoyo?',z:'换不儿哈尔 苏 一所哟',m:'可以退款吗？'},
+{c:'紧急',k:'도와주세요!',r:'dowajuseyo!',z:'多哇租塞哟',m:'请帮帮我！（求救）'},
+{c:'紧急',k:'경찰을 불러 주세요',r:'gyeongchareul bulleo juseyo',z:'更擦勒 不儿罗 租塞哟',m:'请帮我叫警察'},
+{c:'紧急',k:'병원에 가고 싶어요',r:'byeongwone gago sipeoyo',z:'并我捏 卡果 西坡哟',m:'我想去医院'},
+{c:'紧急',k:'여기가 아파요',r:'yeogiga apayo',z:'要给嘎 阿帕哟',m:'这里疼（指着部位说）'},
+{c:'紧急',k:'지갑을 잃어버렸어요',r:'jigabeul ireobeoryeosseoyo',z:'几嘎不 一罗波列所哟',m:'我丢了钱包'},
+{c:'紧急',k:'여권을 잃어버렸어요',r:'yeogwoneul ireobeoryeosseoyo',z:'要管恩 一罗波列所哟',m:'我丢了护照'},
+{c:'紧急',k:'한국어 못 해요',r:'hangugeo mot haeyo',z:'韩古哥 蒙 黑哟',m:'我不会韩语'},
+{c:'紧急',k:'영어 하실 수 있어요?',r:'yeongeo hasil su isseoyo?',z:'英哥 哈西尔 苏 一所哟',m:'您会说英语吗？'},
+{c:'紧急',k:'중국 대사관은 어디예요?',r:'jungguk daesagwaneun eodiyeyo?',z:'中古 得撒管恩 额迪耶哟',m:'中国大使馆在哪里？'},
+{c:'数字',k:'하나 둘 셋',r:'hana dul set',z:'哈那 图尔 赛',m:'一 二 三'},
+{c:'数字',k:'지금 몇 시예요?',r:'jigeum myeot siyeyo?',z:'几格木 棉 西耶哟',m:'现在几点？'},
+{c:'数字',k:'오늘 / 내일',r:'oneul / naeil',z:'哦嫩 / 内一尔',m:'今天 / 明天'},
+{c:'数字',k:'천 원 / 만 원',r:'cheon won / man won',z:'错恩 万 / 曼 万',m:'一千韩元 / 一万韩元'},
+{c:'数字',k:'현금으로 낼게요',r:'hyeongeumeuro naelgeyo',z:'贤格木罗 内尔该哟',m:'我用现金付'},
+{c:'数字',k:'잔돈 주세요',r:'jandon juseyo',z:'赞敦 租塞哟',m:'请找我零钱'},
+{c:'数字',k:'언제 열어요?',r:'eonje yeoreoyo?',z:'恩杰 要罗哟',m:'什么时候开门？'},
+{c:'数字',k:'환전하고 싶어요',r:'hwanjeonhago sipeoyo',z:'换穷哈果 西坡哟',m:'我想换钱'},
+{c:'数字',k:'하나 더 주세요',r:'hana deo juseyo',z:'哈那 套 租塞哟',m:'请再给我一个（加菜 / 加货）'},
+{c:'闲聊',k:'이름이 뭐예요?',r:'ireumi mwoyeyo?',z:'一勒米 莫耶哟',m:'你叫什么名字？'},
+{c:'闲聊',k:'저는 중국에서 왔어요',r:'jeoneun junggugeseo wasseoyo',z:'错嫩 中古该所 哇所哟',m:'我来自中国'},
+{c:'闲聊',k:'처음 왔어요',r:'cheoeum wasseoyo',z:'错恩 哇所哟',m:'我是第一次来'},
+{c:'闲聊',k:'한국 음식 좋아해요',r:'hanguk eumsik joahaeyo',z:'韩古 恩西 走阿黑哟',m:'我喜欢韩国菜'},
+{c:'闲聊',k:'사진 찍어 주세요',r:'sajin jjigeo juseyo',z:'撒金 几哥 租塞哟',m:'请帮我拍张照'},
+{c:'闲聊',k:'정말 예뻐요',r:'jeongmal yeppeoyo',z:'穷马尔 耶波哟',m:'真漂亮（夸景色 / 东西）'},
+{c:'闲聊',k:'천천히 말해 주세요',r:'cheoncheonhi malhae juseyo',z:'前前hi 马列 租塞哟',m:'请说慢一点'},
+{c:'闲聊',k:'다시 한 번 말해 주세요',r:'dasi han beon malhae juseyo',z:'塔西 汉 本 马列 租塞哟',m:'请再说一遍'},
+{c:'闲聊',k:'이해 못 했어요',r:'ihae mot haesseoyo',z:'一黑 蒙 黑所哟',m:'我没听懂'}
+];
+/* 按学习第 N 天确定性取句索引（刷新不变、零存储） */
+function koPhraseIdx(dn){const n=KO_PHRASE.length;return ((dn-1)%n+n)%n}
+/* 本周（学习周，非自然周）7 句索引 */
+function koWeekPhrase(){const w=koCur().w,o=[];for(let i=0;i<7;i++)o.push(koPhraseIdx((w-1)*7+1+i));return o}
+/* 朗读：Web Speech API，零依赖零流量（无 ko-KR 语音包的设备会静默，属正常） */
+function koSpeakPhr(i){
+  const p=KO_PHRASE[i];if(!p)return;
+  if(!('speechSynthesis' in window)){toast('当前浏览器不支持朗读，照罗马音念就行');return}
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(p.k);u.lang='ko-KR';u.rate=.85;speechSynthesis.speak(u)}
+  catch(e){toast('朗读失败：'+((e&&e.message)||e))}
+}
+function koCopyPhr(i){
+  const p=KO_PHRASE[i];if(!p)return;
+  const t=p.k+'\n'+p.r+' · '+p.z+'\n'+p.m;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(()=>toast('已复制：韩语 + 罗马音 + 意思')).catch(()=>prompt('手动复制',t));
+  }else prompt('手动复制',t);
+}
+function koToggleWeek(h){
+  const w=h.parentNode;w.classList.toggle('open');
+  const a=w.querySelector('.ko-phr-arw');if(a)a.textContent=w.classList.contains('open')?'收起 ▲':'展开 ▼';
+}
+/* 把每日推荐的一句收进「我的短句本」（复用既有 siKoPhrase 存储，与手动添加的句子同池） */
+function koSavePhr(i){
+  const p=KO_PHRASE[i];if(!p)return;
+  const arr=g(K.siKoPhrase,[]);
+  if(arr.some(function(x){return x.k===p.k})){toast('这句已经在短句本里了');return}
+  arr.unshift({id:uid(),k:p.k,m:p.m});
+  sv(K.siKoPhrase,arr);renderKoDailyPhrase();toast('已收进「我的短句本」');
+}
+function renderKoDailyPhrase(){
+  const box=document.getElementById('koPhraseBox');if(!box)return;
+  const cur=koCur(),i=koPhraseIdx(cur.dn),p=KO_PHRASE[i];
+  const dow=new Date(today()+'T00:00:00').getDay(),wknd=(dow===0||dow===6);
+  const wl=koWeekPhrase();
+  box.innerHTML=
+   '<div class="ko-phr-card">'
+   +'<div class="ko-phr-top"><span class="ko-phr-cat">'+esc(p.c)+'</span>'
+   +'<span class="ko-phr-no">Day '+cur.dn+' · 第 '+cur.w+' 周</span></div>'
+   +'<div class="ko-phr-k">'+esc(p.k)+'</div>'
+   +'<div class="ko-phr-r">'+esc(p.r)+'</div>'
+   +'<div class="ko-phr-z">谐音 '+esc(p.z)+'</div>'
+   +'<div class="ko-phr-m">'+esc(p.m)+'</div>'
+   +'<div class="ko-phr-act">'
+   +'<button class="ko-btn-spk" onclick="koSpeakPhr('+i+')">🔊 听发音</button>'
+   +'<button class="ko-btn-cp" onclick="koCopyPhr('+i+')">📋 复制</button>'
+   +'</div>'
+   +'<button class="ko-btn-save" onclick="koSavePhr('+i+')">➕ 收进我的短句本</button>'
+   +'</div>'
+   +'<div class="ko-phr-wk'+(wknd?' open':'')+'">'
+   +'<div class="ko-phr-wkh" onclick="koToggleWeek(this)">'
+   +'<span>📅 本周合集 · 第 '+cur.w+' 周'+(wknd?' · 周末复习':'')+'</span>'
+   +'<span class="ko-phr-arw">'+(wknd?'收起 ▲':'展开 ▼')+'</span></div>'
+   +'<div class="ko-phr-wkb">'
+   +wl.map(function(ix,k){
+      const q=KO_PHRASE[ix];
+      return '<div class="ko-phr-wi'+(ix===i?' now':'')+'">'
+        +'<span class="ko-phr-wd">'+(k+1)+'</span>'
+        +'<span class="ko-phr-wt"><span class="ko-phr-wk2">'+esc(q.k)+'</span>'
+        +'<span class="ko-phr-wr">'+esc(q.r)+'</span>'
+        +'<span class="ko-phr-wm">'+esc(q.m)+'</span></span>'
+        +'<button class="ko-phr-ws" onclick="koSpeakPhr('+ix+')">🔊</button></div>';
+    }).join('')
+   +'</div></div>';
+}
 function koStart(){return g(K.siKoStart,'')||KO_DEFAULT_START}
 function koSetStart(){const v=prompt('韩语学习开始日期 (YYYY-MM-DD)',koStart());if(!v)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(v.trim()))return toast('格式不对，例：2026-08-30');sv(K.siKoStart,v.trim());renderKorean();toast('已更新开始日期')}
 function koCur(){
@@ -2277,6 +2457,7 @@ function renderKorean(){
   el('koMonWeek').textContent=`第 ${cur.m} 月 · 第 ${((cur.w-1)%4)+1} 周`;
   el('koDayNum').textContent='Day '+cur.dn;
   el('koDateLbl').textContent=today()+' · 第 '+cur.dn+' 天';
+  renderKoDailyPhrase();
   const done=g(K.siKoWeek,{}),dn=KO_PLAN.filter(x=>done[x.w]).length;
   const pct=Math.round(dn/KO_PLAN.length*100);
   el('koBarIn').style.width=pct+'%';
